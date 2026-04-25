@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>行业作战室 · rhcloud Tokens 销售作战学院</title>
+  <meta name="description" content="12大行业速查·拜访前10分钟掌握全部行业资料">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── 行业作战室主入口专属样式 ── */
+    .industry-hero {
+      background: linear-gradient(135deg, rgba(20,121,255,0.12) 0%, rgba(255,106,0,0.06) 100%);
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-xl);
+      padding: 36px 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .industry-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(20,121,255,0.15), transparent 70%);
+      pointer-events: none;
+    }
+    .industry-hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--orange-dim);
+      border: 1px solid rgba(255,106,0,0.3);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: var(--orange);
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .industry-hero__title {
+      font-size: 30px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .industry-hero__title span { color: var(--primary); }
+    .industry-hero__desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      max-width: 600px;
+      line-height: 1.8;
+    }
+    .industry-hero__stats {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .industry-hero__stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .industry-hero__stat-num {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .industry-hero__stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* 行业卡片网格 */
+    .industry-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .industry-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px 18px;
+      cursor: pointer;
+      transition: all var(--trans);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .industry-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--card-color, var(--primary));
+      border-radius: 3px 0 0 3px;
+    }
+    .industry-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      background: var(--bg3);
+    }
+    .industry-card__header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .industry-card__icon {
+      width: 44px; height: 44px;
+      background: var(--icon-bg, var(--primary-dim));
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--card-color, var(--primary));
+      flex-shrink: 0;
+    }
+    .industry-card__meta { flex: 1; }
+    .industry-card__name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .industry-card__tagline {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .industry-card__num {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--card-color, var(--primary));
+      background: var(--icon-bg, var(--primary-dim));
+      border-radius: 4px;
+      padding: 2px 7px;
+      flex-shrink: 0;
+    }
+    .industry-card__pains {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 14px;
+      flex: 1;
+    }
+    .industry-card__pain {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      line-height: 1.5;
+    }
+    .industry-card__pain::before {
+      content: '•';
+      color: var(--danger);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .industry-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .industry-card__model {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .industry-card__btn {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--card-color, var(--primary));
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap var(--trans);
+    }
+    .industry-card:hover .industry-card__btn { gap: 8px; }
+
+    /* 快速使用指南 */
+    .usage-guide {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .usage-step {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 16px;
+      text-align: center;
+      position: relative;
+    }
+    .usage-step__num {
+      width: 28px; height: 28px;
+      background: var(--primary-dim);
+      border: 1px solid var(--primary-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0 auto 10px;
+    }
+    .usage-step__title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .usage-step__desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* 红线 banner */
+    .redline-banner {
+      background: linear-gradient(135deg, rgba(255,77,79,0.10), rgba(255,77,79,0.05));
+      border: 1px solid var(--danger-border);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .redline-banner i { color: var(--danger); font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+    .redline-banner__title { font-size: 13px; font-weight: 700; color: var(--danger); margin-bottom: 5px; }
+    .redline-banner__row { font-size: 13px; line-height: 1.8; }
+    .redline-banner__yes { color: #6EE77D; }
+    .redline-banner__no  { color: #FF8888; }
+
+    @media (max-width: 960px) {
+      .industry-grid { grid-template-columns: repeat(2, 1fr); }
+      .usage-guide { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .industry-grid { grid-template-columns: 1fr; }
+      .usage-guide { grid-template-columns: 1fr; }
+      .industry-hero__title { font-size: 22px; }
+      .industry-hero { padding: 24px 18px; }
+      .industry-hero__stats { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ 密码弹窗 ══════════════ -->
+<div id="pwd-overlay" class="hidden">
+  <div class="pwd-modal">
+    <div class="pwd-modal__logo">rh<span>cloud</span></div>
+    <div class="pwd-modal__subtitle">Tokens 销售作战学院 · 内部系统</div>
+    <div class="pwd-modal__label">请输入访问密码</div>
+    <input type="password" id="pwd-input" class="pwd-modal__input" placeholder="••••••" autocomplete="off">
+    <div id="pwd-error" class="pwd-modal__err"></div>
+    <div id="pwd-lock"  class="pwd-modal__lock"></div>
+    <button id="pwd-submit" class="btn btn-primary btn-block">进入作战学院</button>
+    <div class="pwd-modal__footer">如无密码，请联系培训负责人获取 · © rhcloud</div>
+  </div>
+</div>
+
+<!-- ══════════════ 顶部导航 ══════════════ -->
+<nav class="nav-top">
+  <div class="nav-top__logo">
+    <span class="nav-top__logo-dot"></span>
+    rhcloud 作战学院
+  </div>
+  <div class="nav-top__links">
+    <a href="index.html"     class="nav-top__link" data-page="index.html">首页</a>
+    <a href="basic.html"     class="nav-top__link" data-page="basic.html">基础认知</a>
+    <a href="business.html"  class="nav-top__link" data-page="business.html">业务认知</a>
+    <a href="target.html"    class="nav-top__link" data-page="target.html">目标客户</a>
+    <a href="prospect.html"  class="nav-top__link" data-page="prospect.html">客户挖掘</a>
+    <a href="industry.html"  class="nav-top__link" data-page="industry.html">行业作战室</a>
+    <a href="playbook.html"  class="nav-top__link" data-page="playbook.html">销售方法论</a>
+    <a href="scripts.html"   class="nav-top__link" data-page="scripts.html">话术库</a>
+    <a href="advantage.html" class="nav-top__link" data-page="advantage.html">平台优势</a>
+    <a href="tools.html"     class="nav-top__link" data-page="tools.html">实战工具</a>
+  </div>
+  <div class="nav-top__search">
+    <i class="fas fa-search nav-top__search-icon"></i>
+    <input type="text" id="search-input" placeholder="搜索话术、行业、术语…">
+    <div id="search-dropdown" class="search-dropdown"></div>
+  </div>
+</nav>
+
+<!-- ══════════════ 主内容 ══════════════ -->
+<main class="page">
+
+  <!-- Hero 区块 -->
+  <div class="industry-hero">
+    <div class="industry-hero__badge">
+      <i class="fas fa-crosshairs"></i> 核心模块
+    </div>
+    <div class="industry-hero__title">行业 <span>作战室</span></div>
+    <div class="industry-hero__desc">
+      覆盖 12 大高价值行业，帮销售在拜访前 <strong style="color:var(--text)">10 分钟</strong> 速查完整行业资料。
+      每个行业包含：客户群画像、核心使用场景、业务痛点、解决方案、推荐模型和成交话术。
+    </div>
+    <div class="industry-hero__stats">
+      <div class="industry-hero__stat">
+        <div class="industry-hero__stat-num">12</div>
+        <div class="industry-hero__stat-label">大行业<br>全覆盖</div>
+      </div>
+      <div class="industry-hero__stat">
+        <div class="industry-hero__stat-num">6</div>
+        <div class="industry-hero__stat-label">区块<br>每个行业</div>
+      </div>
+      <div class="industry-hero__stat">
+        <div class="industry-hero__stat-num">48+</div>
+        <div class="industry-hero__stat-label">可一键<br>复制话术</div>
+      </div>
+      <div class="industry-hero__stat">
+        <div class="industry-hero__stat-num">10<span style="font-size:14px">min</span></div>
+        <div class="industry-hero__stat-label">速查完<br>全部资料</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 行业切换快速导航 -->
+  <div class="industry-nav" style="margin-bottom:20px">
+    <span class="industry-tag active">全部行业</span>
+    <a href="industry-ai-video.html"       class="industry-tag">🎬 AI视频创作</a>
+    <a href="industry-video-platform.html" class="industry-tag">📺 视频聚合平台</a>
+    <a href="industry-education.html"      class="industry-tag">🎓 在线教育</a>
+    <a href="industry-short-drama.html"    class="industry-tag">📖 短剧/漫剧</a>
+    <a href="industry-ai-image.html"       class="industry-tag">🖼️ AI影像工具</a>
+    <a href="industry-ai-social.html"      class="industry-tag">💬 AI社交陪伴</a>
+    <a href="industry-game-npc.html"       class="industry-tag">🎮 游戏NPC</a>
+    <a href="industry-live-ecommerce.html" class="industry-tag">📡 直播电商</a>
+    <a href="industry-security.html"       class="industry-tag">🛡️ 安防/巡检</a>
+    <a href="industry-credit.html"         class="industry-tag">📊 企业征信</a>
+    <a href="industry-logistics.html"      class="industry-tag">🚛 智慧物流</a>
+    <a href="industry-hr.html"             class="industry-tag">👥 招聘/HR</a>
+  </div>
+
+  <!-- 准入红线 -->
+  <div class="redline-banner">
+    <i class="fas fa-shield-halved"></i>
+    <div>
+      <div class="redline-banner__title">⚡ 客户准入红线 · 每个行业均适用</div>
+      <div class="redline-banner__row">
+        <span class="redline-banner__yes">✅ 只做：</span>已在使用 Tokens 的中小企业 · 有AI业务落地 · 月用量 10万～5000万 Tokens · 决策链短
+      </div>
+      <div class="redline-banner__row">
+        <span class="redline-banner__no">❌ 不做：</span>个人开发者 · 政府/国企 · 头部互联网大厂 · 大模型研发原厂（如 OpenAI/DeepSeek 原厂）
+      </div>
+    </div>
+  </div>
+
+  <!-- 使用指南 -->
+  <div class="section">
+    <div class="section-title"><i class="fas fa-map text-primary"></i> 作战室使用指南</div>
+    <div class="usage-guide">
+      <div class="usage-step">
+        <div class="usage-step__num">1</div>
+        <div class="usage-step__title">确认行业</div>
+        <div class="usage-step__desc">拜访前确认客户所属行业，点击对应行业卡片</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-step__num">2</div>
+        <div class="usage-step__title">速查痛点</div>
+        <div class="usage-step__desc">重点阅读"业务痛点"区块，记住2个量化数据</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-step__num">3</div>
+        <div class="usage-step__title">记住方案</div>
+        <div class="usage-step__desc">对照解决方案，强调平台能力和ROI数据</div>
+      </div>
+      <div class="usage-step">
+        <div class="usage-step__num">4</div>
+        <div class="usage-step__title">复制话术</div>
+        <div class="usage-step__desc">一键复制成交话术，微信/电话直接发送使用</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 行业卡片 -->
+  <div class="section">
+    <div class="section-title"><i class="fas fa-building text-orange"></i> 12 大行业 · 点击进入作战页</div>
+    <p class="section-desc">每个行业包含 6 个区块，建议拜访前速读 1 遍，重点记住痛点数据和成交话术</p>
+
+    <div class="industry-grid">
+
+      <!-- 1. AI视频创作 -->
+      <a href="industry-ai-video.html" class="industry-card" style="--card-color:#1479FF;--icon-bg:rgba(20,121,255,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-video"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">AI 视频创作</div>
+            <div class="industry-card__tagline">视频生成 · 批量制作 · 成本优化</div>
+          </div>
+          <div class="industry-card__num">01</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">高峰排队&gt;15分钟，错失商机</div>
+          <div class="industry-card__pain">月Tokens成本占营收18%+</div>
+          <div class="industry-card__pain">批量生成角色一致性差</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud视频生成版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <!-- 2. 视频聚合平台 -->
+      <a href="industry-video-platform.html" class="industry-card" style="--card-color:#6742FF;--icon-bg:rgba(103,66,255,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-tv"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">视频聚合平台</div>
+            <div class="industry-card__tagline">内容审核 · 智能推荐 · 合规管控</div>
+          </div>
+          <div class="industry-card__num">02</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">审核延迟&gt;2s，用户投诉率高</div>
+          <div class="industry-card__pain">违规漏审率&gt;0.5%，监管风险</div>
+          <div class="industry-card__pain">高峰期审核积压，人工成本高</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud内容安全版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <!-- 3. 在线教育 -->
+      <a href="industry-education.html" class="industry-card" style="--card-color:#1DB7B5;--icon-bg:rgba(29,183,181,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-graduation-cap"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">在线教育/题库</div>
+            <div class="industry-card__tagline">数学推理 · 智能出题 · 个性辅导</div>
+          </div>
+          <div class="industry-card__num">03</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">数学推理准确率不足85%</div>
+          <div class="industry-card__pain">晚高峰延迟&gt;3s，用户投诉多</div>
+          <div class="industry-card__pain">题目重复率高，题库多样性差</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud推理增强版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <!-- 4. 短剧/漫剧 -->
+      <a href="industry-short-drama.html" class="industry-card" style="--card-color:#FC5308;--icon-bg:rgba(252,83,8,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-book-open"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">短剧/漫剧</div>
+            <div class="industry-card__tagline">长文本 · 角色一致 · IP批量生产</div>
+          </div>
+          <div class="industry-card__num">04</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">第5集后角色性格"漂移"</div>
+          <div class="industry-card__pain">单集AI生成成本&gt;200元</div>
+          <div class="industry-card__pain">长文本上下文丢失，剧情断层</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud长文本创作版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <!-- 5. AI影像工具 -->
+      <a href="industry-ai-image.html" class="industry-card" style="--card-color:#FAAD14;--icon-bg:rgba(250,173,20,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-image"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">AI 影像工具</div>
+            <div class="industry-card__tagline">图像增强 · 修复 · 风格迁移</div>
+          </div>
+          <div class="industry-card__num">05</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">高峰处理延迟&gt;8s，用户流失</div>
+          <div class="industry-card__pain">图像成本占营收22%</div>
+          <div class="industry-card__pain">B端批量处理需求无法满足</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud图像增强版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <!-- 6. AI社交陪伴 -->
+      <a href="industry-ai-social.html" class="industry-card" style="--card-color:#FF6A9B;--icon-bg:rgba(255,106,155,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-heart"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">AI 社交陪伴</div>
+            <div class="industry-card__tagline">情感对话 · 长期记忆 · 角色稳定</div>
+          </div>
+          <div class="industry-card__num">06</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">7日留存率&lt;30%，"AI不懂我"</div>
+          <div class="industry-card__pain">多轮对话后角色设定崩塌</div>
+          <div class="industry-card__pain">高峰响应&gt;2s，沉浸感破坏</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud情感对话版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <!-- 7. 游戏NPC -->
+      <a href="industry-game-npc.html" class="industry-card" style="--card-color:#46BC15;--icon-bg:rgba(70,188,21,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-gamepad"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">游戏 NPC</div>
+            <div class="industry-card__tagline">低延迟 · 低成本 · 百万并发</div>
+          </div>
+          <div class="industry-card__num">07</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">NPC脚本化，玩家新鲜感低</div>
+          <div class="industry-card__pain">开服/活动期延迟&gt;1s</div>
+          <div class="industry-card__pain">万级NPC成本超预算50%</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud对话轻量版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <!-- 8. 直播电商 -->
+      <a href="industry-live-ecommerce.html" class="industry-card" style="--card-color:#FF6A00;--icon-bg:rgba(255,106,0,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-broadcast-tower"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">直播电商</div>
+            <div class="industry-card__tagline">实时合规 · 话术辅助 · 大促稳定</div>
+          </div>
+          <div class="industry-card__num">08</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">违规弹幕响应&gt;2s，整改风险</div>
+          <div class="industry-card__pain">大促期系统崩溃，直播中断</div>
+          <div class="industry-card__pain">极限词频繁出现，罚款风险</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud实时合规版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <!-- 9. 安防/巡检 -->
+      <a href="industry-security.html" class="industry-card" style="--card-color:#1479FF;--icon-bg:rgba(20,121,255,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-shield-halved"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">安防/巡检</div>
+            <div class="industry-card__tagline">多模态视觉 · 千路并发 · 自动报告</div>
+          </div>
+          <div class="industry-card__num">09</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">识别准确率&lt;90%，误报率高</div>
+          <div class="industry-card__pain">人工巡检报告每份&gt;30分钟</div>
+          <div class="industry-card__pain">千路视频并发延迟&gt;5s</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud多模态视觉版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <!-- 10. 企业征信 -->
+      <a href="industry-credit.html" class="industry-card" style="--card-color:#1DB7B5;--icon-bg:rgba(29,183,181,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-chart-line"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">企业征信</div>
+            <div class="industry-card__tagline">风控报告 · 数据分析 · 舆情监测</div>
+          </div>
+          <div class="industry-card__num">10</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">报告人工生成耗时&gt;10分钟</div>
+          <div class="industry-card__pain">分析成本超预算40%</div>
+          <div class="industry-card__pain">报告标准化程度低，质量参差</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud数据分析版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <!-- 11. 智慧物流 -->
+      <a href="industry-logistics.html" class="industry-card" style="--card-color:#6742FF;--icon-bg:rgba(103,66,255,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-truck"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">智慧物流/供应链</div>
+            <div class="industry-card__tagline">单据识别 · 路径规划 · 异常预警</div>
+          </div>
+          <div class="industry-card__num">11</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">单据手录错误率&gt;3%，赔偿高</div>
+          <div class="industry-card__pain">异常发现滞后&gt;2小时，损失扩大</div>
+          <div class="industry-card__pain">多系统数据孤岛，分析难</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud视觉识别版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <!-- 12. 招聘/HR -->
+      <a href="industry-hr.html" class="industry-card" style="--card-color:#FC5308;--icon-bg:rgba(252,83,8,0.12)">
+        <div class="industry-card__header">
+          <div class="industry-card__icon"><i class="fas fa-users"></i></div>
+          <div class="industry-card__meta">
+            <div class="industry-card__name">招聘/HR Tech</div>
+            <div class="industry-card__tagline">简历批处理 · 人才画像 · JD生成</div>
+          </div>
+          <div class="industry-card__num">12</div>
+        </div>
+        <div class="industry-card__pains">
+          <div class="industry-card__pain">简历筛选每份&gt;5分钟，效率低</div>
+          <div class="industry-card__pain">人才匹配准确率&lt;65%</div>
+          <div class="industry-card__pain">校招季批量处理系统崩溃</div>
+        </div>
+        <div class="industry-card__footer">
+          <span class="industry-card__model"><i class="fas fa-microchip" style="margin-right:4px"></i>rhcloud简历分析版</span>
+          <span class="industry-card__btn">进入作战 <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ROI 工具快捷入口 -->
+  <div class="section">
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:24px 28px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:48px;height:48px;background:var(--orange-dim);border:1px solid rgba(255,106,0,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:22px;flex-shrink:0">
+          <i class="fas fa-calculator"></i>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:3px">ROI 计算器 · 当场算给客户看</div>
+          <div style="font-size:13px;color:var(--text-muted)">输入客户当前月消耗量，1分钟输出节省金额与性能提升数据</div>
+        </div>
+      </div>
+      <a href="tools.html#roi" class="btn btn-primary" style="flex-shrink:0">
+        <i class="fas fa-calculator"></i> 立即计算 ROI
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- 移动端底部导航 -->
+<nav class="nav-bottom">
+  <a href="index.html"    class="nav-bottom__item" data-page="index.html"><i class="fas fa-house"></i><span>首页</span></a>
+  <a href="industry.html" class="nav-bottom__item" data-page="industry.html"><i class="fas fa-building"></i><span>行业</span></a>
+  <a href="scripts.html"  class="nav-bottom__item" data-page="scripts.html"><i class="fas fa-comment-dots"></i><span>话术</span></a>
+  <a href="tools.html"    class="nav-bottom__item" data-page="tools.html"><i class="fas fa-calculator"></i><span>工具</span></a>
+  <a href="playbook.html" class="nav-bottom__item" data-page="playbook.html"><i class="fas fa-chess"></i><span>方法论</span></a>
+</nav>
+
+<div id="back-top" title="返回顶部"><i class="fas fa-chevron-up"></i></div>
+<div id="toast-container"></div>
+
+<footer class="footer">
+  <div style="margin-bottom:6px">© 2026 rhcloud · 阿里云核心代理商 · 大模型Tokens专业服务商</div>
+  <div>内部培训系统 · 请勿外传</div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  RHCloud.init('industry');
+});
+</script>
+</body>
+</html>

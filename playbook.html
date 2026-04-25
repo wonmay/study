@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>销售方法论 · rhcloud Tokens 销售作战学院</title>
+  <meta name="description" content="四步成交SOP · 跟单节奏 · 谈判技巧 · 闭坑指南 — 让零基础销售30天内开单">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* ══════════════════════════════════════
+       playbook.html 专属样式
+    ══════════════════════════════════════ */
+
+    /* ── 页面英雄区 ── */
+    .pb-hero {
+      background: linear-gradient(135deg, rgba(20,121,255,0.08) 0%, rgba(103,66,255,0.06) 50%, rgba(255,106,0,0.06) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 40px 40px 36px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pb-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(20,121,255,0.12), transparent 70%);
+      pointer-events: none;
+    }
+    .pb-hero__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-dim);
+      border: 1px solid var(--primary-border);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: #6AABFF;
+      font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+    .pb-hero__title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .pb-hero__title span { color: var(--primary); }
+    .pb-hero__desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 620px;
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+    .pb-hero__stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .pb-hero__stat { text-align: center; }
+    .pb-hero__stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--orange);
+      line-height: 1;
+    }
+    .pb-hero__stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── Tab 导航 ── */
+    .tab-nav {
+      display: flex;
+      gap: 6px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 6px;
+      margin-bottom: 28px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tab-nav::-webkit-scrollbar { display: none; }
+    .tab-nav__item {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--trans);
+      border: none;
+      background: none;
+      font-family: var(--font);
+      white-space: nowrap;
+    }
+    .tab-nav__item:hover { color: var(--text); background: var(--bg3); }
+    .tab-nav__item.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(20,121,255,0.35);
+    }
+    .tab-nav__item i { font-size: 14px; }
+    .tab-nav__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(255,255,255,0.15);
+    }
+    .tab-nav__item.active .tab-nav__num { background: rgba(255,255,255,0.25); }
+
+    /* ── Tab 内容 ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ══════════════════════════════════════
+       子页面 1 · 四步成交 SOP
+    ══════════════════════════════════════ */
+
+    /* 主流程图 */
+    .sop-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-bottom: 36px;
+      position: relative;
+    }
+    .sop-flow::before {
+      content: '';
+      position: absolute;
+      top: 56px;
+      left: calc(12.5% + 20px);
+      right: calc(12.5% + 20px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--orange));
+      z-index: 0;
+    }
+    .sop-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 10px;
+      position: relative;
+      z-index: 1;
+      cursor: pointer;
+    }
+    .sop-step__circle {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 14px;
+      border: 2px solid transparent;
+      transition: all var(--trans);
+      position: relative;
+    }
+    .sop-step__num {
+      position: absolute;
+      top: -6px; right: -6px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--bg);
+    }
+    .sop-step__label {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .sop-step__sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .sop-step.active .sop-step__circle {
+      transform: scale(1.1);
+      box-shadow: 0 0 24px rgba(20,121,255,0.4);
+    }
+    .sop-step[data-color="blue"] .sop-step__circle  { background: rgba(20,121,255,0.15);  border-color: var(--primary);  }
+    .sop-step[data-color="blue"] .sop-step__circle i { color: var(--primary); }
+    .sop-step[data-color="blue"] .sop-step__num      { background: var(--primary); color:#fff; }
+
+    .sop-step[data-color="purple"] .sop-step__circle { background: rgba(103,66,255,0.15); border-color: #6742FF; }
+    .sop-step[data-color="purple"] .sop-step__circle i { color: #9B7FFF; }
+    .sop-step[data-color="purple"] .sop-step__num    { background: #6742FF; color:#fff; }
+
+    .sop-step[data-color="orange"] .sop-step__circle { background: rgba(255,106,0,0.15); border-color: var(--orange); }
+    .sop-step[data-color="orange"] .sop-step__circle i { color: var(--orange); }
+    .sop-step[data-color="orange"] .sop-step__num    { background: var(--orange); color:#fff; }
+
+    .sop-step[data-color="green"] .sop-step__circle  { background: rgba(82,196,26,0.15); border-color: var(--success); }
+    .sop-step[data-color="green"] .sop-step__circle i { color: var(--success); }
+    .sop-step[data-color="green"] .sop-step__num     { background: var(--success); color:#fff; }
+
+    /* 步骤详情卡 */
+    .sop-detail {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      margin-bottom: 28px;
+      display: none;
+    }
+    .sop-detail.active { display: block; animation: fadeSlideIn 0.25s ease; }
+    @keyframes fadeSlideIn {
+      from { opacity:0; transform: translateY(8px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    .sop-detail__header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sop-detail__icon {
+      width: 52px; height: 52px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .sop-detail__title { font-size: 20px; font-weight: 800; color: var(--text); }
+    .sop-detail__goal  { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+    .sop-detail__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .sop-item {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+    .sop-item__label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sop-item__list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .sop-item__row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .sop-item__row i {
+      flex-shrink: 0;
+      margin-top: 3px;
+      font-size: 12px;
+    }
+
+    /* 话术卡 */
+    .script-box {
+      background: var(--bg3);
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      position: relative;
+    }
+    .script-box__label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .script-box__text {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.9;
+    }
+    .script-box__copy {
+      position: absolute;
+      top: 14px; right: 14px;
+      background: var(--primary-dim);
+      border: 1px solid var(--primary-border);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 12px;
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font);
+      font-weight: 600;
+      transition: all var(--trans);
+    }
+    .script-box__copy:hover { background: var(--primary); color: #fff; }
+    .script-box__copy.copied { background: var(--success-bg); border-color: var(--success-border); color: var(--success); }
+
+    /* 成功信号 & 常见错误 */
+    .signal-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .signal-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .signal-pill--success { background: var(--success-bg); border: 1px solid var(--success-border); color: #8FD65D; }
+    .signal-pill--danger  { background: var(--danger-bg);  border: 1px solid var(--danger-border);  color: #FF8888; }
+
+    /* ══════════════════════════════════════
+       子页面 2 · 跟单节奏
+    ══════════════════════════════════════ */
+    .timeline {
+      position: relative;
+      padding-left: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 15px; top: 28px; bottom: 28px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary), var(--orange), var(--success));
+    }
+    .timeline-item {
+      position: relative;
+      padding: 0 0 24px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -29px; top: 20px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      z-index: 1;
+    }
+    .timeline-item[data-urgency="high"]::before   { background: var(--danger); }
+    .timeline-item[data-urgency="medium"]::before { background: var(--orange); }
+    .timeline-item[data-urgency="low"]::before    { background: var(--primary); }
+    .timeline-item[data-urgency="close"]::before  { background: var(--success); }
+
+    .timeline-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      transition: border-color var(--trans), box-shadow var(--trans);
+    }
+    .timeline-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow);
+    }
+    .timeline-card__head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .timeline-day {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary);
+      background: var(--primary-dim);
+      border: 1px solid var(--primary-border);
+      border-radius: 6px;
+      padding: 4px 12px;
+      white-space: nowrap;
+    }
+    .timeline-card__title { font-size: 16px; font-weight: 700; color: var(--text); }
+    .timeline-card__goal  { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; }
+
+    .timeline-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .timeline-action {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--bg3);
+      border-radius: var(--radius);
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .timeline-action i { color: var(--primary); flex-shrink:0; margin-top:3px; }
+
+    /* ══════════════════════════════════════
+       子页面 3 · 谈判技巧
+    ══════════════════════════════════════ */
+    .negotiation-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .nego-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform var(--trans), box-shadow var(--trans), border-color var(--trans);
+    }
+    .nego-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: var(--border-hover);
+    }
+    .nego-card__objection {
+      background: var(--danger-bg);
+      border-bottom: 1px solid var(--danger-border);
+      padding: 16px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .nego-card__objection-icon {
+      color: var(--danger);
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .nego-card__objection-text {
+      font-size: 14px;
+      color: #FF9999;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    .nego-card__response {
+      padding: 18px 20px;
+    }
+    .nego-card__response-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--success);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nego-card__response-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    .nego-card__script {
+      background: var(--bg3);
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.8;
+      position: relative;
+    }
+    .nego-card__copy {
+      position: absolute;
+      top: 8px; right: 8px;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px;
+      transition: color var(--trans);
+    }
+    .nego-card__copy:hover { color: var(--primary); }
+
+    /* 销售原则卡 */
+    .principle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .principle-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      text-align: center;
+      transition: transform var(--trans), border-color var(--trans);
+    }
+    .principle-card:hover { transform: translateY(-2px); border-color: var(--primary-border); }
+    .principle-card__icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    .principle-card__title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .principle-card__desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .principle-card__tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-dim);
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* ══════════════════════════════════════
+       子页面 4 · 闭坑指南
+    ══════════════════════════════════════ */
+    .pitfall-section { margin-bottom: 32px; }
+    .pitfall-section__title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .forbidden-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .forbidden-item {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      border-left-width: 4px;
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+    }
+    .forbidden-item__bad {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .forbidden-item__bad-text {
+      font-size: 14px;
+      color: #FF8888;
+      font-weight: 600;
+      text-decoration: line-through;
+      text-decoration-color: rgba(255,77,79,0.6);
+      line-height: 1.5;
+    }
+    .forbidden-item__good {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .forbidden-item__good-text {
+      font-size: 13px;
+      color: #8FD65D;
+      line-height: 1.6;
+    }
+    .forbidden-item__reason {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-dim);
+      padding-top: 10px;
+      border-top: 1px solid var(--danger-border);
+      line-height: 1.6;
+    }
+
+    .warning-scenario {
+      background: linear-gradient(135deg, rgba(255,106,0,0.08), rgba(255,77,79,0.06));
+      border: 1px solid rgba(255,106,0,0.3);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .warning-scenario__icon {
+      font-size: 22px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .warning-scenario__title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--orange);
+      margin-bottom: 8px;
+    }
+    .warning-scenario__desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .warning-scenario__action {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text);
+      background: rgba(255,255,255,0.05);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+    }
+    .warning-scenario__action strong { color: var(--success); }
+
+    /* ══════════════════════════════════════
+       通用辅助
+    ══════════════════════════════════════ */
+    .section-header {
+      margin-bottom: 24px;
+    }
+    .section-header__title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-header__desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    /* 心态培训 / 信念框 */
+    .mindset-banner {
+      background: linear-gradient(135deg, rgba(20,121,255,0.1), rgba(103,66,255,0.08));
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-xl);
+      padding: 28px 32px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .mindset-banner__quote {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .mindset-banner__quote em {
+      font-style: normal;
+      color: var(--primary);
+    }
+    .mindset-banner__sub {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* 粘性侧边 SOP 导览（桌面） */
+    .layout-with-toc {
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      gap: 24px;
+      align-items: flex-start;
+    }
+    .toc-sticky {
+      position: sticky;
+      top: calc(var(--nav-h) + 20px);
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+    .toc-sticky__title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .toc-sticky__item {
+      display: block;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--trans);
+      text-decoration: none;
+      margin-bottom: 2px;
+    }
+    .toc-sticky__item:hover, .toc-sticky__item.active {
+      color: var(--primary);
+      background: var(--primary-dim);
+    }
+
+    /* 进度章节线 */
+    .read-progress {
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      height: 3px;
+      background: var(--bg3);
+      z-index: 999;
+    }
+    .read-progress__bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--orange));
+      width: 0;
+      transition: width 0.1s;
+    }
+
+    /* Responsive */
+    @media (max-width: 1000px) {
+      .layout-with-toc { grid-template-columns: 1fr; }
+      .toc-sticky { display: none; }
+    }
+    @media (max-width: 768px) {
+      .pb-hero { padding: 28px 20px; }
+      .pb-hero__title { font-size: 22px; }
+      .pb-hero__stats { gap: 20px; }
+      .sop-flow { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .sop-flow::before { display: none; }
+      .sop-detail__grid { grid-template-columns: 1fr; }
+      .negotiation-grid { grid-template-columns: 1fr; }
+      .principle-grid { grid-template-columns: repeat(2, 1fr); }
+      .forbidden-grid { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .sop-flow { grid-template-columns: 1fr; }
+      .principle-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 阅读进度条 -->
+<div class="read-progress"><div class="read-progress__bar" id="readBar"></div></div>
+
+<!-- ══════════════════════════════════════════════════
+  密码弹窗
+══════════════════════════════════════════════════ -->
+<div id="pwd-overlay" class="hidden">
+  <div class="pwd-modal">
+    <div class="pwd-modal__logo">rh<span>cloud</span></div>
+    <div class="pwd-modal__subtitle">Tokens 销售作战学院 · 内部系统</div>
+    <div class="pwd-modal__label">请输入访问密码</div>
+    <input type="password" id="pwd-input" class="pwd-modal__input" placeholder="••••••" autocomplete="off">
+    <div id="pwd-error" class="pwd-modal__err"></div>
+    <div id="pwd-lock"  class="pwd-modal__lock"></div>
+    <button id="pwd-submit" class="btn btn-primary btn-block">进入作战学院</button>
+    <div class="pwd-modal__footer">如无密码，请联系培训负责人获取 · © rhcloud</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+  顶部导航
+══════════════════════════════════════════════════ -->
+<nav class="nav-top">
+  <div class="nav-top__logo">
+    <span class="nav-top__logo-dot"></span>
+    rhcloud 作战学院
+  </div>
+  <div class="nav-top__links">
+    <a href="index.html"     class="nav-top__link" data-page="index.html">首页</a>
+    <a href="basic.html"     class="nav-top__link" data-page="basic.html">基础认知</a>
+    <a href="business.html"  class="nav-top__link" data-page="business.html">业务认知</a>
+    <a href="target.html"    class="nav-top__link" data-page="target.html">目标客户</a>
+    <a href="prospect.html"  class="nav-top__link" data-page="prospect.html">客户挖掘</a>
+    <a href="industry.html"  class="nav-top__link" data-page="industry.html">行业作战室</a>
+    <a href="playbook.html"  class="nav-top__link active" data-page="playbook.html">销售方法论</a>
+    <a href="scripts.html"   class="nav-top__link" data-page="scripts.html">话术库</a>
+    <a href="advantage.html" class="nav-top__link" data-page="advantage.html">平台优势</a>
+    <a href="tools.html"     class="nav-top__link" data-page="tools.html">实战工具</a>
+  </div>
+  <div class="nav-top__search">
+    <i class="fas fa-search nav-top__search-icon"></i>
+    <input type="text" id="search-input" placeholder="搜索话术、行业、术语…">
+    <div id="search-dropdown" class="search-dropdown"></div>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════════════
+  主内容
+══════════════════════════════════════════════════ -->
+<main class="page">
+
+  <!-- ① 准入红线 -->
+  <div class="alert alert-danger" style="margin-bottom:24px">
+    <div class="alert__label"><i class="fas fa-ban"></i> 准入红线 · 此模块面向已在用 Tokens 的客户</div>
+    <span style="font-size:13px">
+      ✅ 只做：月用量 10万～5000万 Tokens 的中小企业 &nbsp;|&nbsp; 有AI业务落地 &nbsp;|&nbsp; 决策链短（CTO/技术总监可直接决策）<br>
+      ❌ 不做：个人开发者 &nbsp;|&nbsp; 政府/国企 &nbsp;|&nbsp; 大厂（字节/百度/腾讯技术团队）&nbsp;|&nbsp; 大模型原厂
+    </span>
+  </div>
+
+  <!-- ② 英雄区 -->
+  <div class="pb-hero">
+    <div class="pb-hero__tag"><i class="fas fa-chess"></i> 销售作战方法论 · 实战版</div>
+    <h1 class="pb-hero__title">从 0 到成单的<span>四步作战体系</span></h1>
+    <p class="pb-hero__desc">
+      本套方法论基于全球顶级 SPIN、挑战式销售、MEDDIC 框架深度改造，
+      专为中国中小企业大模型 Tokens 转售场景定制。掌握这套打法，
+      零基础销售 7 天可开口，30 天内完成首单。
+    </p>
+    <div class="pb-hero__stats">
+      <div class="pb-hero__stat">
+        <div class="pb-hero__stat-num">4</div>
+        <div class="pb-hero__stat-label">核心步骤</div>
+      </div>
+      <div class="pb-hero__stat">
+        <div class="pb-hero__stat-num">15天</div>
+        <div class="pb-hero__stat-label">标准成单周期</div>
+      </div>
+      <div class="pb-hero__stat">
+        <div class="pb-hero__stat-num">12+</div>
+        <div class="pb-hero__stat-label">异议处理方案</div>
+      </div>
+      <div class="pb-hero__stat">
+        <div class="pb-hero__stat-num">30%↑</div>
+        <div class="pb-hero__stat-label">客户成本降幅</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ Tab 导航 -->
+  <div class="tab-nav" role="tablist">
+    <button class="tab-nav__item active" data-tab="sop" role="tab">
+      <i class="fas fa-route"></i> 四步成交 SOP
+      <span class="tab-nav__num">1</span>
+    </button>
+    <button class="tab-nav__item" data-tab="rhythm" role="tab">
+      <i class="fas fa-calendar-days"></i> 跟单节奏管理
+      <span class="tab-nav__num">2</span>
+    </button>
+    <button class="tab-nav__item" data-tab="negotiation" role="tab">
+      <i class="fas fa-handshake"></i> 谈判技巧
+      <span class="tab-nav__num">3</span>
+    </button>
+    <button class="tab-nav__item" data-tab="pitfall" role="tab">
+      <i class="fas fa-triangle-exclamation"></i> 闭坑指南
+      <span class="tab-nav__num">4</span>
+    </button>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+    子页面 1 · 四步成交 SOP
+  ══════════════════════════════════════ -->
+  <div class="tab-panel active" id="tab-sop">
+
+    <div class="section-header">
+      <h2 class="section-header__title">
+        <i class="fas fa-route" style="color:var(--primary)"></i>
+        四步成交 SOP
+      </h2>
+      <p class="section-header__desc">点击每个步骤查看核心目标、关键动作、必备话术、常见错误与成功信号</p>
+    </div>
+
+    <!-- 流程步骤图 -->
+    <div class="sop-flow" id="sopFlow">
+      <div class="sop-step active" data-step="1" data-color="blue" onclick="showSopDetail(1)">
+        <div class="sop-step__circle">
+          <i class="fas fa-crosshairs"></i>
+          <span class="sop-step__num">1</span>
+        </div>
+        <div class="sop-step__label">识别目标客户</div>
+        <div class="sop-step__sub">判断是否在用<br>Tokens，锁定决策人</div>
+      </div>
+      <div class="sop-step" data-step="2" data-color="purple" onclick="showSopDetail(2)">
+        <div class="sop-step__circle">
+          <i class="fas fa-bullseye"></i>
+          <span class="sop-step__num">2</span>
+        </div>
+        <div class="sop-step__label">直击业务痛点</div>
+        <div class="sop-step__sub">引导客户说出<br>稳定/成本/速度痛点</div>
+      </div>
+      <div class="sop-step" data-step="3" data-color="orange" onclick="showSopDetail(3)">
+        <div class="sop-step__circle">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <span class="sop-step__num">3</span>
+        </div>
+        <div class="sop-step__label">给出平台方案</div>
+        <div class="sop-step__sub">精准匹配方案，<br>呈现 ROI 数据</div>
+      </div>
+      <div class="sop-step" data-step="4" data-color="green" onclick="showSopDetail(4)">
+        <div class="sop-step__circle">
+          <i class="fas fa-rocket"></i>
+          <span class="sop-step__num">4</span>
+        </div>
+        <div class="sop-step__label">推动迁移转化</div>
+        <div class="sop-step__sub">小流量 POC 先行，<br>低风险驱动签约</div>
+      </div>
+    </div>
+
+    <!-- SOP 详情 Step 1 -->
+    <div class="sop-detail active" id="sop-detail-1">
+      <div class="sop-detail__header">
+        <div class="sop-detail__icon" style="background:rgba(20,121,255,0.15)">
+          <i class="fas fa-crosshairs" style="color:var(--primary)"></i>
+        </div>
+        <div>
+          <div class="sop-detail__title">第一步：识别目标客户</div>
+          <div class="sop-detail__goal">核心目标：用 3 分钟内判断对方是否是值得深入跟进的目标客户</div>
+        </div>
+        <span class="badge badge-blue" style="margin-left:auto;align-self:flex-start">Day 1</span>
+      </div>
+
+      <div class="sop-detail__grid">
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--primary)">
+            <i class="fas fa-list-check"></i> 关键动作
+          </div>
+          <div class="sop-item__list">
+            <div class="sop-item__row"><i class="fas fa-circle-dot" style="color:var(--primary)"></i>电话前10秒确认对方身份：是否为CTO/技术总监/AI负责人</div>
+            <div class="sop-item__row"><i class="fas fa-circle-dot" style="color:var(--primary)"></i>用一句话切入：以"AI服务优化顾问"身份而非推销员</div>
+            <div class="sop-item__row"><i class="fas fa-circle-dot" style="color:var(--primary)"></i>问关键问题："贵公司现在有在调用大模型 API 吗？"</div>
+            <div class="sop-item__row"><i class="fas fa-circle-dot" style="color:var(--primary)"></i>快速判断月消耗级别：≥10万 Tokens = 继续，否则礼貌结束</div>
+            <div class="sop-item__row"><i class="fas fa-circle-dot" style="color:var(--primary)"></i>约定下次沟通时间，获取微信（加好友比电话更高效）</div>
+          </div>
+        </div>
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--danger)">
+            <i class="fas fa-circle-xmark"></i> 常见错误
+          </div>
+          <div class="sop-item__list">
+            <div class="sop-item__row"><i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>一上来就说"我们比官网便宜"→ 立即被挂断</div>
+            <div class="sop-item__row"><i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>没确认是否在用 Tokens 就狂讲方案 → 浪费双方时间</div>
+            <div class="sop-item__row"><i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>找到前台/HR → 没有决策权，直接放弃这条线</div>
+            <div class="sop-item__row"><i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>10分钟内无法确认月消耗级别 → 本次价值存疑</div>
+            <div class="sop-item__row"><i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>介绍产品超过3分钟 → 客户失去耐心</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 话术卡 -->
+      <div class="script-box">
+        <button class="script-box__copy" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制</button>
+        <div class="script-box__label"><i class="fas fa-comment-quote"></i> 必备话术 · 电话切入开场白</div>
+        <div class="script-box__text" data-script="您好，我是rhcloud AI服务团队的XX，我们专注帮做AI业务的中小企业优化大模型调用成本和稳定性。我看到贵公司在AI方向有一些布局，所以冒昧联系一下——请问您这边现在有在调用大模型API吗？大概月均是什么量级？">
+          "您好，我是 rhcloud AI 服务团队的 XX，我们专注帮做 AI 业务的中小企业优化大模型调用成本和稳定性。
+          我看到贵公司在 AI 方向有一些布局，所以冒昧联系一下——请问您这边现在有在调用大模型 API 吗？大概月均是什么量级？"
+        </div>
+      </div>
+
+      <!-- 成功信号 -->
+      <div style="margin-top:16px">
+        <div style="font-size:12px;color:var(--text-dim);font-weight:600;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">✅ 成功信号（出现以下信号立即进入下一步）</div>
+        <div class="signal-row">
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 确认在用 Tokens</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 月消耗 ≥ 10万</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 决策人本人接听</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 主动问"你们平台怎么样"</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 同意约下次见面</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOP 详情 Step 2 -->
+    <div class="sop-detail" id="sop-detail-2">
+      <div class="sop-detail__header">
+        <div class="sop-detail__icon" style="background:rgba(103,66,255,0.15)">
+          <i class="fas fa-bullseye" style="color:#9B7FFF"></i>
+        </div>
+        <div>
+          <div class="sop-detail__title">第二步：直击业务痛点</div>
+          <div class="sop-detail__goal">核心目标：让客户自己说出痛苦——稳定性、成本或速度，至少命中其一</div>
+        </div>
+        <span class="badge badge-orange" style="margin-left:auto;align-self:flex-start">Day 1~3</span>
+      </div>
+
+      <div class="alert alert-info" style="margin-bottom:20px">
+        <div class="alert__label"><i class="fas fa-lightbulb"></i> 核心销售原则</div>
+        SPIN 法则：先问现状（Situation）→ 问问题（Problem）→ 放大影响（Implication）→ 引导需求（Need-payoff）。
+        不是你去"讲"痛点，而是引导客户自己"说"出来，他说出的比你说的更有力量。
+      </div>
+
+      <div class="sop-detail__grid">
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:#9B7FFF">
+            <i class="fas fa-comments"></i> 三大痛点挖掘路径
+          </div>
+          <div class="sop-item__list">
+            <div class="sop-item__row"><i class="fas fa-bolt" style="color:var(--danger)"></i><strong style="color:var(--text)">稳定性路径</strong>：问"高峰期推理延迟有没有影响到用户体验？"</div>
+            <div class="sop-item__row"><i class="fas fa-coins" style="color:var(--warning)"></i><strong style="color:var(--text)">成本路径</strong>：问"现在大模型 API 的费用大概占整体运营成本多少比例？"</div>
+            <div class="sop-item__row"><i class="fas fa-gauge-high" style="color:#9B7FFF"></i><strong style="color:var(--text)">速度路径</strong>：问"用户输入到看到第一个字的响应时间大概多少秒？"</div>
+            <div class="sop-item__row"><i class="fas fa-layer-group" style="color:var(--primary)"></i><strong style="color:var(--text)">多模型路径</strong>：问"现在只用一家的模型吗？有没有想过切换时的麻烦？"</div>
+          </div>
+        </div>
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--danger)">
+            <i class="fas fa-circle-xmark"></i> 绝对不能做的事
+          </div>
+          <div class="sop-item__list">
+            <div class="sop-item__row"><i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>不要替客户描述痛点（"你们肯定延迟很高吧"→ 引发抵触）</div>
+            <div class="sop-item__row"><i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>痛点挖掘阶段不讲方案（先挖坑，再填坑）</div>
+            <div class="sop-item__row"><i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>痛点没挖深就报价 → 客户没有"必须买"的理由</div>
+            <div class="sop-item__row"><i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>一次问超过3个问题 → 像审讯，客户关闭心防</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-box">
+        <button class="script-box__copy" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制</button>
+        <div class="script-box__label"><i class="fas fa-comment-quote"></i> 必备话术 · 痛点深挖三连问</div>
+        <div class="script-box__text" data-script="我先了解一下您们现在的使用情况——高峰期的时候，大模型响应速度大概是多少秒？有没有出现过超时或报错的情况？这对您们的业务有影响吗？如果这个问题能解决掉，您觉得对业务帮助有多大？">
+          "我先了解一下您们现在的使用情况——高峰期的时候，大模型响应速度大概是多少秒？
+          有没有出现过超时或报错的情况？这对您们的业务有影响吗？
+          如果这个问题能解决掉，您觉得对业务帮助有多大？"
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div style="font-size:12px;color:var(--text-dim);font-weight:600;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">✅ 成功信号</div>
+        <div class="signal-row">
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 客户主动抱怨过稳定性</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 客户说"成本确实有点高"</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 客户问"你们能解决这个问题吗"</span>
+          <span class="signal-pill signal-pill--danger"><i class="fas fa-times"></i> 客户说"目前没什么问题"→慎重，需要继续挖</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOP 详情 Step 3 -->
+    <div class="sop-detail" id="sop-detail-3">
+      <div class="sop-detail__header">
+        <div class="sop-detail__icon" style="background:rgba(255,106,0,0.15)">
+          <i class="fas fa-file-invoice-dollar" style="color:var(--orange)"></i>
+        </div>
+        <div>
+          <div class="sop-detail__title">第三步：给出平台方案</div>
+          <div class="sop-detail__goal">核心目标：精准对应客户痛点给出方案，用 ROI 数字而非功能列表说话</div>
+        </div>
+        <span class="badge badge-orange" style="margin-left:auto;align-self:flex-start">Day 3~7</span>
+      </div>
+
+      <div class="alert alert-warning" style="margin-bottom:20px">
+        <div class="alert__label"><i class="fas fa-star"></i> 黄金法则</div>
+        方案不是"我们有什么"，而是"你的问题 → 我们怎么解决 → 解决后你能得到什么（数字）"。
+        永远用 ROI 收益而不是技术参数说话。
+      </div>
+
+      <div class="sop-detail__grid">
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--orange)">
+            <i class="fas fa-arrow-right-arrow-left"></i> 痛点 → 方案对应关系
+          </div>
+          <div class="sop-item__list">
+            <div class="sop-item__row"><i class="fas fa-bolt" style="color:var(--danger)"></i>稳定性差 → 专有集群方案，<strong style="color:var(--success)">稳定性 99.9%+</strong></div>
+            <div class="sop-item__row"><i class="fas fa-coins" style="color:var(--warning)"></i>成本偏高 → 智能路由自动选最优性价比，<strong style="color:var(--success)">综合降本 30%</strong></div>
+            <div class="sop-item__row"><i class="fas fa-gauge-high" style="color:#9B7FFF"></i>响应慢 → 高 <span class="term-tooltip" data-tip="每分钟可处理的Tokens数量，数字越大AI吐字越快，相当于高速公路的车道数">TPM</span> 专有通道，<strong style="color:var(--success)">速度提升 60%</strong></div>
+            <div class="sop-item__row"><i class="fas fa-layer-group" style="color:var(--primary)"></i>多模型切换麻烦 → 统一接口，<strong style="color:var(--success)">10+ 模型一键切换</strong></div>
+            <div class="sop-item__row"><i class="fas fa-code" style="color:var(--success)"></i>迁移风险 → 只改一行 base_url，<strong style="color:var(--success)">无需重构系统</strong></div>
+          </div>
+        </div>
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--primary)">
+            <i class="fas fa-calculator"></i> 现场 ROI 快算法
+          </div>
+          <div class="sop-item__list">
+            <div class="sop-item__row"><i class="fas fa-circle-1" style="color:var(--primary)"></i>问客户月均 Token 消耗量</div>
+            <div class="sop-item__row"><i class="fas fa-circle-2" style="color:var(--primary)"></i>问现有单价（元/百万 Tokens）</div>
+            <div class="sop-item__row"><i class="fas fa-circle-3" style="color:var(--primary)"></i>当场计算：节省额 = 月用量 × 单价差 × 12</div>
+            <div class="sop-item__row"><i class="fas fa-circle-4" style="color:var(--primary)"></i>加上稳定性收益（宕机损失估算）</div>
+            <div class="sop-item__row"><i class="fas fa-star" style="color:var(--warning)"></i>一句话总结：<strong style="color:var(--text)">"您每年能省 XX 万，同时稳定性提升"</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-box">
+        <button class="script-box__copy" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制</button>
+        <div class="script-box__label"><i class="fas fa-comment-quote"></i> 必备话术 · 方案呈现+ROI引导</div>
+        <div class="script-box__text" data-script="根据您刚才说的情况，我给您梳理一下。您现在的问题主要是两个：一是高峰期响应不稳，二是成本有点高。我们的方案是这样的：第一，给您接入专有集群，不跟其他用户共享，高峰期照常稳定；第二，我们的智能路由会自动帮您选最划算的模型，综合下来成本能降30%左右。按您每月XX万Tokens的量算，一年能省XX万。最重要的是，迁移只要改一行代码，您的技术团队当天就能搞定，零风险。您觉得先做个小测试怎么样？">
+          "根据您刚才说的情况，我给您梳理一下。您现在的问题主要是两个：一是高峰期响应不稳，二是成本有点高。
+          我们的方案是这样的：第一，给您接入专有集群，不跟其他用户共享，高峰期照常稳定；
+          第二，我们的智能路由会自动帮您选最划算的模型，综合下来成本能降 30% 左右。
+          按您每月 XX 万 Tokens 的量算，一年能省 XX 万。最重要的是，迁移只要改一行代码，
+          您的技术团队当天就能搞定，零风险。您觉得先做个小测试怎么样？"
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div style="font-size:12px;color:var(--text-dim);font-weight:600;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">✅ 成功信号</div>
+        <div class="signal-row">
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 客户问"怎么接入"</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 客户问"测试账号怎么申请"</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 主动问"合同怎么签"</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 让技术同事一起加入沟通</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOP 详情 Step 4 -->
+    <div class="sop-detail" id="sop-detail-4">
+      <div class="sop-detail__header">
+        <div class="sop-detail__icon" style="background:rgba(82,196,26,0.15)">
+          <i class="fas fa-rocket" style="color:var(--success)"></i>
+        </div>
+        <div>
+          <div class="sop-detail__title">第四步：推动迁移转化</div>
+          <div class="sop-detail__goal">核心目标：以小流量 POC 测试降低客户决策风险，用数据说话驱动正式签约</div>
+        </div>
+        <span class="badge badge-green" style="margin-left:auto;align-self:flex-start">Day 7~15</span>
+      </div>
+
+      <div class="alert alert-success" style="margin-bottom:20px">
+        <div class="alert__label"><i class="fas fa-lightbulb"></i> 核心策略：小步快跑，数据驱动</div>
+        不要让客户一次性把所有流量都迁过来。建议"先迁 1% → 跑 3 天 → 看数据 → 再扩量"。
+        数据会替你说话，客户自己看到效果就会主动要求全量迁移。
+      </div>
+
+      <div class="sop-detail__grid">
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--success)">
+            <i class="fas fa-stairs"></i> POC 推进三步法
+          </div>
+          <div class="sop-item__list">
+            <div class="sop-item__row"><i class="fas fa-circle-1" style="color:var(--success)"></i>提供 <span class="term-tooltip" data-tip="先小范围测试验证，再大规模使用，降低风险">POC</span> 测试账号，免费体验 7 天专有集群</div>
+            <div class="sop-item__row"><i class="fas fa-circle-2" style="color:var(--success)"></i>帮客户技术团队接入（只改 base_url 一行代码）</div>
+            <div class="sop-item__row"><i class="fas fa-circle-3" style="color:var(--success)"></i>先迁移 1% 流量，观察延迟、稳定性、成本数据</div>
+            <div class="sop-item__row"><i class="fas fa-circle-4" style="color:var(--success)"></i>3天后发送数据对比报告，客户自己看结果</div>
+            <div class="sop-item__row"><i class="fas fa-circle-5" style="color:var(--success)"></i>锁定价格：限时额度或阶梯价，推动签约</div>
+          </div>
+        </div>
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--warning)">
+            <i class="fas fa-hourglass-half"></i> 逼单技巧（正确使用）
+          </div>
+          <div class="sop-item__list">
+            <div class="sop-item__row"><i class="fas fa-star" style="color:var(--warning)"></i>限时额度：本月额外赠送 XX 万 Tokens 测试包</div>
+            <div class="sop-item__row"><i class="fas fa-star" style="color:var(--warning)"></i>阶梯价锁定：本季度签约享受优先价格</div>
+            <div class="sop-item__row"><i class="fas fa-star" style="color:var(--warning)"></i>稀缺性："专有集群节点资源有限，建议优先锁定"</div>
+            <div class="sop-item__row"><i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>不要说"快要结束了"之类的假话 → 伤信任</div>
+            <div class="sop-item__row"><i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>不要每天催 → 让客户觉得产品不好卖</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="script-box">
+        <button class="script-box__copy" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制</button>
+        <div class="script-box__label"><i class="fas fa-comment-quote"></i> 必备话术 · POC 邀请 + 锁定</div>
+        <div class="script-box__text" data-script="我给您申请一个7天的专有集群测试账号，您的技术同学只需要改一行代码就能接入，完全不影响现有业务。先把1%的流量切过来跑3天，我帮您对比一下延迟、稳定性和成本数据，您看完数据再决定要不要全量迁移。本月我们还有额外的测试Tokens赠送，您看什么时候方便让技术团队对接一下？">
+          "我给您申请一个 7 天的专有集群测试账号，您的技术同学只需要改一行代码就能接入，完全不影响现有业务。
+          先把 1% 的流量切过来跑 3 天，我帮您对比一下延迟、稳定性和成本数据，
+          您看完数据再决定要不要全量迁移。
+          本月我们还有额外的测试 Tokens 赠送，您看什么时候方便让技术团队对接一下？"
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div style="font-size:12px;color:var(--text-dim);font-weight:600;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">✅ 成功信号</div>
+        <div class="signal-row">
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 同意 POC 测试</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 拉入技术负责人群</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 测试数据超预期</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 主动问报价和合同</span>
+          <span class="signal-pill signal-pill--success"><i class="fas fa-check"></i> 同意阶梯价格方案</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 核心信念横幅 -->
+    <div class="mindset-banner" style="margin-top:32px">
+      <div class="mindset-banner__quote">
+        销售不是说服，是<em>帮助客户发现他自己的问题</em>，<em>并给出他本就需要的解决方案</em>
+      </div>
+      <div class="mindset-banner__sub">每一次被拒绝都是因为你还没找到客户的真实痛点 · 坚持挖，成单只是时间问题</div>
+    </div>
+
+  </div>
+  <!-- end tab-sop -->
+
+
+  <!-- ══════════════════════════════════════
+    子页面 2 · 跟单节奏管理
+  ══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-rhythm">
+
+    <div class="section-header">
+      <h2 class="section-header__title">
+        <i class="fas fa-calendar-days" style="color:var(--primary)"></i>
+        跟单节奏管理
+      </h2>
+      <p class="section-header__desc">每个时间节点的精准动作、目标与配套话术，15 天从初接触到签约</p>
+    </div>
+
+    <div class="alert alert-info" style="margin-bottom:28px">
+      <div class="alert__label"><i class="fas fa-clock"></i> 节奏黄金原则</div>
+      太快 = 给客户压力引发抵触；太慢 = 客户遗忘、竞品趁虚而入。每次跟进必须带新价值（数据/案例/优惠），不做无意义"催单"。
+    </div>
+
+    <div class="timeline">
+
+      <div class="timeline-item" data-urgency="high">
+        <div class="timeline-card">
+          <div class="timeline-card__head">
+            <span class="timeline-day">Day 1 · 初次触达</span>
+            <span class="timeline-card__title">电话切入 · 建立联系</span>
+            <span class="badge badge-blue">必须完成</span>
+          </div>
+          <div class="timeline-card__goal">目标：判断是否目标客户，建立初步信任，获取微信/企业微信</div>
+          <div class="timeline-actions">
+            <div class="timeline-action"><i class="fas fa-phone"></i>打电话，用开场话术确认是否在用 Tokens，对方身份是否 CTO/技术负责人</div>
+            <div class="timeline-action"><i class="fas fa-comments"></i>通话结束后立即发微信：发送公司简介一张图 + 核心价值3行字</div>
+            <div class="timeline-action"><i class="fas fa-clipboard-list"></i>CRM 记录：月用量级别、决策人姓名、主要痛点关键词</div>
+          </div>
+          <div class="script-box">
+            <button class="script-box__copy" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制</button>
+            <div class="script-box__label"><i class="fas fa-comment-quote"></i> 微信跟进话术（通话后1小时内发送）</div>
+            <div class="script-box__text" data-script="您好，我是刚才通话的XX。我们rhcloud是阿里云核心代理商，专注帮AI业务团队优化大模型成本和稳定性。根据您的情况，我整理了一份「大模型成本优化方案」，待您有空看一眼。如有问题随时沟通😊">
+              "您好，我是刚才通话的 XX。我们 rhcloud 是阿里云核心代理商，专注帮 AI 业务团队优化大模型成本和稳定性。
+              根据您的情况，我整理了一份「大模型成本优化方案」，待您有空看一眼。如有问题随时沟通 😊"
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-urgency="medium">
+        <div class="timeline-card">
+          <div class="timeline-card__head">
+            <span class="timeline-day">Day 3 · 二次跟进</span>
+            <span class="timeline-card__title">发送 ROI 对比 + 行业案例</span>
+            <span class="badge badge-orange">价值输出</span>
+          </div>
+          <div class="timeline-card__goal">目标：让客户产生"这对我有价值"的认知，引发深入交流兴趣</div>
+          <div class="timeline-actions">
+            <div class="timeline-action"><i class="fas fa-chart-bar"></i>发送该客户所在行业的 ROI 对比数据（从行业作战室获取）</div>
+            <div class="timeline-action"><i class="fas fa-building"></i>发送同行业已有客户的脱敏案例（月省 XX 万、延迟降低 XX%）</div>
+            <div class="timeline-action"><i class="fas fa-question-circle"></i>结尾轻量提问，引导回复（避免石沉大海）</div>
+          </div>
+          <div class="script-box">
+            <button class="script-box__copy" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制</button>
+            <div class="script-box__label"><i class="fas fa-comment-quote"></i> Day 3 跟进话术</div>
+            <div class="script-box__text" data-script="王总好！我整理了一份同行业客户的对比数据，供您参考：某AI视频公司接入我们平台后，高峰期延迟从平均2.8秒降到0.9秒，月Token成本降了31%。我估算了一下，按您们的月用量，一年大约能优化XX万成本。不知道贵公司对稳定性和成本这块关注度大吗？方便的话我们约个20分钟的视频沟通？">
+              "王总好！我整理了一份同行业客户的对比数据，供您参考：某 AI 视频公司接入我们平台后，
+              高峰期延迟从平均 2.8 秒降到 0.9 秒，月 Token 成本降了 31%。
+              我估算了一下，按您们的月用量，一年大约能优化 XX 万成本。
+              不知道贵公司对稳定性和成本这块关注度大吗？方便的话我们约个 20 分钟的视频沟通？"
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-urgency="low">
+        <div class="timeline-card">
+          <div class="timeline-card__head">
+            <span class="timeline-day">Day 7 · 面谈/视频会议</span>
+            <span class="timeline-card__title">展示"无感迁移"方案，解除顾虑</span>
+            <span class="badge badge-blue">关键节点</span>
+          </div>
+          <div class="timeline-card__goal">目标：消除客户最大顾虑（迁移麻烦、数据风险），建立深度信任</div>
+          <div class="timeline-actions">
+            <div class="timeline-action"><i class="fas fa-desktop"></i>准备 5 页演示材料：问题确认 → 方案对应 → ROI 测算 → 迁移说明 → 下一步</div>
+            <div class="timeline-action"><i class="fas fa-code"></i>展示迁移代码对比图：只改 base_url 一行，其他代码 100% 不动</div>
+            <div class="timeline-action"><i class="fas fa-shield-halved"></i>承诺 POC 测试：7 天免费专有集群体验，先跑 1% 流量</div>
+            <div class="timeline-action"><i class="fas fa-users"></i>邀请技术负责人参与（帮销售锁定真实决策人）</div>
+          </div>
+          <div class="script-box">
+            <button class="script-box__copy" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制</button>
+            <div class="script-box__label"><i class="fas fa-comment-quote"></i> 面谈结束时的话术</div>
+            <div class="script-box__text" data-script="我今天带了一个7天免费测试账号，您的技术同学今天就能接入，只需要改一行代码——base_url换成我们的地址，其他什么都不用动。先切1%的流量过来，跑3天，我给您一份详细的对比报告。没有任何风险，您看要不要现在就开始？">
+              "我今天带了一个 7 天免费测试账号，您的技术同学今天就能接入，只需要改一行代码——
+              base_url 换成我们的地址，其他什么都不用动。先切 1% 的流量过来，跑 3 天，
+              我给您一份详细的对比报告。没有任何风险，您看要不要现在就开始？"
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-urgency="low">
+        <div class="timeline-card">
+          <div class="timeline-card__head">
+            <span class="timeline-day">Day 10 · POC 测试中</span>
+            <span class="timeline-card__title">主动提供数据报告，建立信任感</span>
+            <span class="badge badge-gray">数据说话</span>
+          </div>
+          <div class="timeline-card__goal">目标：用 POC 实测数据替代销售说辞，数字比话术更有力量</div>
+          <div class="timeline-actions">
+            <div class="timeline-action"><i class="fas fa-chart-line"></i>主动生成对比报告：平均响应时间、成功率、成本估算</div>
+            <div class="timeline-action"><i class="fas fa-comments"></i>每 2 天主动更新数据，显示专业态度</div>
+            <div class="timeline-action"><i class="fas fa-wrench"></i>如有任何技术问题，4 小时内必须响应解决</div>
+          </div>
+          <div class="script-box">
+            <button class="script-box__copy" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制</button>
+            <div class="script-box__label"><i class="fas fa-comment-quote"></i> POC 阶段数据汇报话术</div>
+            <div class="script-box__text" data-script="王总，POC跑了48小时，给您汇报一下数据：平均响应时间从2.4秒降到0.8秒，成功率99.97%，按这个表现折算月成本大约能省XX%。数据都有日志，随时可以调阅。您这边技术团队有什么反馈吗？">
+              "王总，POC 跑了 48 小时，给您汇报一下数据：平均响应时间从 2.4 秒降到 0.8 秒，
+              成功率 99.97%，按这个表现折算月成本大约能省 XX%。
+              数据都有日志，随时可以调阅。您这边技术团队有什么反馈吗？"
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-urgency="close">
+        <div class="timeline-card">
+          <div class="timeline-card__head">
+            <span class="timeline-day">Day 15 · 逼单</span>
+            <span class="timeline-card__title">限时额度/阶梯价锁定，推动签约</span>
+            <span class="badge badge-green">成单冲刺</span>
+          </div>
+          <div class="timeline-card__goal">目标：在客户信任高点、POC 数据已验证时，用限时优惠促成签约</div>
+          <div class="timeline-actions">
+            <div class="timeline-action"><i class="fas fa-tag"></i>提出限时优惠：本季度签约享受阶梯优先价 + 额外 Tokens 赠送</div>
+            <div class="timeline-action"><i class="fas fa-file-contract"></i>提前准备好合同草案，减少客户"等一等"的理由</div>
+            <div class="timeline-action"><i class="fas fa-user-tie"></i>如有必要，申请邀请上级一起拜访（增加重视感）</div>
+          </div>
+          <div class="script-box">
+            <button class="script-box__copy" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制</button>
+            <div class="script-box__label"><i class="fas fa-comment-quote"></i> 逼单话术（在 POC 数据超预期后使用）</div>
+            <div class="script-box__text" data-script="王总，POC结果很好，您技术团队也认可了。我这边整理了一个方案，本季度签约可以锁定优先价，还额外赠送XX万Tokens的测试额度，相当于帮您多省了一笔。我们合同很标准，一般2天就能走完。您看本周能确定下来吗？我今天就把合同草案发您。">
+              "王总，POC 结果很好，您技术团队也认可了。我这边整理了一个方案，
+              本季度签约可以锁定优先价，还额外赠送 XX 万 Tokens 的测试额度，
+              相当于帮您多省了一笔。我们合同很标准，一般 2 天就能走完。
+              您看本周能确定下来吗？我今天就把合同草案发您。"
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 节奏总结卡 -->
+    <div class="card card--highlight" style="margin-top:28px;padding:24px">
+      <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px">
+        <i class="fas fa-clock" style="color:var(--primary)"></i> 跟单节奏速查表
+      </div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border)">
+              <th style="padding:10px 12px;text-align:left;color:var(--text-dim);font-weight:600;white-space:nowrap">节点</th>
+              <th style="padding:10px 12px;text-align:left;color:var(--text-dim);font-weight:600;white-space:nowrap">核心动作</th>
+              <th style="padding:10px 12px;text-align:left;color:var(--text-dim);font-weight:600;white-space:nowrap">目标</th>
+              <th style="padding:10px 12px;text-align:left;color:var(--text-dim);font-weight:600;white-space:nowrap">成功判断</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;white-space:nowrap"><span class="badge badge-blue">Day 1</span></td>
+              <td style="padding:10px 12px;color:var(--text-muted)">电话切入+加微信</td>
+              <td style="padding:10px 12px;color:var(--text-muted)">建立联系</td>
+              <td style="padding:10px 12px;color:var(--success)">加上微信</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;white-space:nowrap"><span class="badge badge-orange">Day 3</span></td>
+              <td style="padding:10px 12px;color:var(--text-muted)">发ROI数据+案例</td>
+              <td style="padding:10px 12px;color:var(--text-muted)">引发兴趣</td>
+              <td style="padding:10px 12px;color:var(--success)">客户回复询问</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;white-space:nowrap"><span class="badge badge-blue">Day 7</span></td>
+              <td style="padding:10px 12px;color:var(--text-muted)">面谈/视频沟通</td>
+              <td style="padding:10px 12px;color:var(--text-muted)">解除顾虑</td>
+              <td style="padding:10px 12px;color:var(--success)">同意POC测试</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;white-space:nowrap"><span class="badge badge-gray">Day 10</span></td>
+              <td style="padding:10px 12px;color:var(--text-muted)">发POC数据报告</td>
+              <td style="padding:10px 12px;color:var(--text-muted)">建立信任</td>
+              <td style="padding:10px 12px;color:var(--success)">数据超预期</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;white-space:nowrap"><span class="badge badge-green">Day 15</span></td>
+              <td style="padding:10px 12px;color:var(--text-muted)">限时优惠+发合同</td>
+              <td style="padding:10px 12px;color:var(--text-muted)">推动签约</td>
+              <td style="padding:10px 12px;color:var(--success)">签约成功</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <!-- end tab-rhythm -->
+
+
+  <!-- ══════════════════════════════════════
+    子页面 3 · 谈判技巧
+  ══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-negotiation">
+
+    <div class="section-header">
+      <h2 class="section-header__title">
+        <i class="fas fa-handshake" style="color:var(--primary)"></i>
+        谈判技巧 · 异议处理
+      </h2>
+      <p class="section-header__desc">客户每一个"拒绝"背后都藏着一个"需求"，掌握这12种翻转话术，将异议变成成交契机</p>
+    </div>
+
+    <!-- 核心销售原则 -->
+    <div class="principle-grid" style="margin-bottom:32px">
+      <div class="principle-card">
+        <div class="principle-card__icon">🔍</div>
+        <div class="principle-card__title">先认同，再转折</div>
+        <div class="principle-card__desc">永远先表示理解客户的顾虑，再引出你的解决角度。"您说得有道理，不过……"比直接反驳效果高 3 倍。</div>
+        <span class="principle-card__tag">情感账户优先</span>
+      </div>
+      <div class="principle-card">
+        <div class="principle-card__icon">💡</div>
+        <div class="principle-card__title">用数字说话</div>
+        <div class="principle-card__desc">任何主张都要有数据支撑。"更稳"不如"高峰期 99.9% 可用率"，"更省"不如"月均降本 30%"。</div>
+        <span class="principle-card__tag">量化优势</span>
+      </div>
+      <div class="principle-card">
+        <div class="principle-card__icon">🧪</div>
+        <div class="principle-card__title">POC 化解一切</div>
+        <div class="principle-card__desc">遇到任何疑虑，第一反应是"我们先测试验证"，测试数据比销售语言更有说服力，客户自己看到就信了。</div>
+        <span class="principle-card__tag">数据胜于言辞</span>
+      </div>
+      <div class="principle-card">
+        <div class="principle-card__icon">🎯</div>
+        <div class="principle-card__title">聚焦价值不聚焦价格</div>
+        <div class="principle-card__desc">客户说贵时，立即把对话拉回价值：节省的钱 + 稳定带来的收益。让"贵"的感觉消失在 ROI 里。</div>
+        <span class="principle-card__tag">价值优先</span>
+      </div>
+      <div class="principle-card">
+        <div class="principle-card__icon">⏳</div>
+        <div class="principle-card__title">降低决策风险</div>
+        <div class="principle-card__desc">客户犹豫 = 风险感太高。你的任务是把风险降到最低："先迁 1%，不影响现有业务，随时可以回滚"。</div>
+        <span class="principle-card__tag">风险管理</span>
+      </div>
+      <div class="principle-card">
+        <div class="principle-card__icon">🤝</div>
+        <div class="principle-card__title">服务感 > 推销感</div>
+        <div class="principle-card__desc">始终以"我来帮您解决问题"的顾问心态，而非"我要卖给你东西"的推销心态。客户感受到服务温度，信任自然建立。</div>
+        <span class="principle-card__tag">顾问式销售</span>
+      </div>
+    </div>
+
+    <!-- 异议处理 -->
+    <div style="font-size:17px;font-weight:800;color:var(--text);margin-bottom:20px;display:flex;align-items:center;gap:10px">
+      <i class="fas fa-comments" style="color:var(--orange)"></i>
+      高频异议翻转卡
+    </div>
+
+    <div class="negotiation-grid">
+
+      <div class="nego-card">
+        <div class="nego-card__objection">
+          <i class="fas fa-quote-left nego-card__objection-icon"></i>
+          <div class="nego-card__objection-text">"官网直接用就挺好的，为什么要换？"</div>
+        </div>
+        <div class="nego-card__response">
+          <div class="nego-card__response-label"><i class="fas fa-shield-halved"></i> 标准应对思路</div>
+          <div class="nego-card__response-text">
+            官网采用共享集群，高峰期所有用户争抢同一资源。我们提供专有集群，独占通道，
+            高峰不降速、不排队。等到客户因为宕机损失了一笔收入，再换就晚了。
+          </div>
+          <div class="nego-card__script">
+            <button class="nego-card__copy" onclick="copyNego(this)"><i class="fas fa-copy"></i></button>
+            "官网确实方便，很多公司早期都这样用。但是您有没有注意到，每次高峰期——比如促销活动、内容爆发期——AI响应速度会有明显下降？那是因为官网是共享集群，大家一起用。我们提供专有集群，就像给您开了一条专用车道，别人堵车不影响您。我们先跑个测试对比，您自己看数据更直观。"
+          </div>
+        </div>
+      </div>
+
+      <div class="nego-card">
+        <div class="nego-card__objection">
+          <i class="fas fa-quote-left nego-card__objection-icon"></i>
+          <div class="nego-card__objection-text">"价格太贵了，官网价格比你们低。"</div>
+        </div>
+        <div class="nego-card__response">
+          <div class="nego-card__response-label"><i class="fas fa-shield-halved"></i> 标准应对思路</div>
+          <div class="nego-card__response-text">
+            不直接降价，把对话转移到总体成本：我们的智能路由 + 智能记忆层可以综合降本 30%，
+            再加上稳定性带来的业务收益，实际 TCO（总拥有成本）远低于官网。
+          </div>
+          <div class="nego-card__script">
+            <button class="nego-card__copy" onclick="copyNego(this)"><i class="fas fa-copy"></i></button>
+            "您说的单价，我们确实不是最低的。但我想帮您算一笔账：我们的智能路由会自动选最优性价比的模型，智能记忆层对相似请求复用结果——这两项加起来，实际调用成本平均降30%。按您每月XX万Tokens的量，一年节省的金额比价差大多了。我们先测试7天，按实际数据来谈，更有说服力。"
+          </div>
+        </div>
+      </div>
+
+      <div class="nego-card">
+        <div class="nego-card__objection">
+          <i class="fas fa-quote-left nego-card__objection-icon"></i>
+          <div class="nego-card__objection-text">"迁移太麻烦了，我们不想改代码。"</div>
+        </div>
+        <div class="nego-card__response">
+          <div class="nego-card__response-label"><i class="fas fa-shield-halved"></i> 标准应对思路</div>
+          <div class="nego-card__response-text">
+            迁移只需要改一行代码：把 base_url 换成我们的地址，其他接口参数、请求格式完全一致，
+            技术团队 10 分钟内完成，不影响任何现有业务。
+          </div>
+          <div class="nego-card__script">
+            <button class="nego-card__copy" onclick="copyNego(this)"><i class="fas fa-copy"></i></button>
+            "我理解您的顾虑——改代码确实是个风险。但实际上，我们的接入方式和官网 API 完全兼容，唯一要改的就是一行代码：把请求地址换成我们的。字面上就是改一个 URL，其他所有参数、返回格式都不变。我们还提供接入说明文档，您的技术同学10分钟就能搞定。您看要不要让技术负责人加一下我，我直接给他发文档？"
+          </div>
+        </div>
+      </div>
+
+      <div class="nego-card">
+        <div class="nego-card__objection">
+          <i class="fas fa-quote-left nego-card__objection-icon"></i>
+          <div class="nego-card__objection-text">"我们自己有技术团队，能直接对接官网。"</div>
+        </div>
+        <div class="nego-card__response">
+          <div class="nego-card__response-label"><i class="fas fa-shield-halved"></i> 标准应对思路</div>
+          <div class="nego-card__response-text">
+            自建技术能力是优势，但多模型管理、智能路由、故障切换这些工作需要大量工程投入。
+            我们帮客户省掉这个成本，让技术团队聚焦核心业务，而非维护基础设施。
+          </div>
+          <div class="nego-card__script">
+            <button class="nego-card__copy" onclick="copyNego(this)"><i class="fas fa-copy"></i></button>
+            "您的技术团队很强，这是好事。问题是，维护多模型接入、做智能路由、处理故障切换——这些工作本身就是一个独立的工程项目，需要持续投入人力。我们把这些都做好了，您的技术团队可以把精力放在产品本身。相当于您节省了一个工程师的成本，同时还得到了更好的稳定性和更低的调用成本。"
+          </div>
+        </div>
+      </div>
+
+      <div class="nego-card">
+        <div class="nego-card__objection">
+          <i class="fas fa-quote-left nego-card__objection-icon"></i>
+          <div class="nego-card__objection-text">"我们现在没有预算，下个季度再说。"</div>
+        </div>
+        <div class="nego-card__response">
+          <div class="nego-card__response-label"><i class="fas fa-shield-halved"></i> 标准应对思路</div>
+          <div class="nego-card__response-text">
+            先跑 POC 不需要预算，等下季度预算到位时，已有 3 个月的数据支撑，
+            内部审批更容易，还能锁定当前的价格。
+          </div>
+          <div class="nego-card__script">
+            <button class="nego-card__copy" onclick="copyNego(this)"><i class="fas fa-copy"></i></button>
+            "完全理解，预算这块要等审批。不过有个建议：POC 测试是免费的，不占预算。先跑起来，等您下季度申请预算时，手里有3个月的实测数据，比光凭我说好用要有说服力得多，审批通过率也高很多。您觉得先把测试跑起来怎么样？"
+          </div>
+        </div>
+      </div>
+
+      <div class="nego-card">
+        <div class="nego-card__objection">
+          <i class="fas fa-quote-left nego-card__objection-icon"></i>
+          <div class="nego-card__objection-text">"我们的数据很敏感，不敢放到第三方平台。"</div>
+        </div>
+        <div class="nego-card__response">
+          <div class="nego-card__response-label"><i class="fas fa-shield-halved"></i> 标准应对思路</div>
+          <div class="nego-card__response-text">
+            我们是阿里云核心代理商，底层仍然是阿里云基础设施，同等安全级别。
+            业务数据只是 Tokens 请求的路由转发，不存储客户的业务内容。
+          </div>
+          <div class="nego-card__script">
+            <button class="nego-card__copy" onclick="copyNego(this)"><i class="fas fa-copy"></i></button>
+            "数据安全这块完全理解，这是最重要的。我们的架构是这样的：底层是阿里云基础设施，安全合规和官网直采是同一标准。我们做的是请求路由层，相当于一个中转站——Tokens 请求经过我们的调度层发往模型，我们不存储您的业务数据内容。我们可以提供架构白皮书，您的安全团队可以评估。"
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 谈判高阶技巧 -->
+    <div class="card" style="margin-top:8px;padding:28px">
+      <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:20px;display:flex;align-items:center;gap:8px">
+        <i class="fas fa-chess-queen" style="color:var(--orange)"></i>
+        高阶谈判动作 · 推进决策的5个技巧
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--orange)"><i class="fas fa-1"></i> 假设性提问</div>
+          <div class="sop-item__row"><i class="fas fa-lightbulb" style="color:var(--warning)"></i>
+            "如果测试数据达到您的预期，您这边决策大概需要多长时间走完流程？"——帮助销售提前了解决策链，同时激活客户的"假设成真"心理。
+          </div>
+        </div>
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--orange)"><i class="fas fa-2"></i> 紧迫感制造（真实的）</div>
+          <div class="sop-item__row"><i class="fas fa-clock" style="color:var(--warning)"></i>
+            "本季度末专有集群价格会随成本调整，现在签约可以锁定当前价。"只用真实的优惠或资源稀缺性，不夸大，不造假。
+          </div>
+        </div>
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--orange)"><i class="fas fa-3"></i> 第三方背书</div>
+          <div class="sop-item__row"><i class="fas fa-building" style="color:var(--warning)"></i>
+            "同行的某AI公司上个月刚迁过来，CTO亲自说延迟降了65%。"同类企业的真实案例比任何广告都有效，优先使用同行业案例。
+          </div>
+        </div>
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--orange)"><i class="fas fa-4"></i> 微承诺积累</div>
+          <div class="sop-item__row"><i class="fas fa-stairs" style="color:var(--warning)"></i>
+            从"加个微信" → "看一份资料" → "约个视频" → "跑个测试"，每一步都是小承诺，小承诺积累到 POC，签单就是顺水推舟。
+          </div>
+        </div>
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--orange)"><i class="fas fa-5"></i> 沉默是金</div>
+          <div class="sop-item__row"><i class="fas fa-pause" style="color:var(--warning)"></i>
+            报价或提关键问题后，保持沉默，等客户先开口。很多销售因为紧张而自己打破沉默，反而削弱了谈判筹码。沉默往往会带来更好的条件。
+          </div>
+        </div>
+        <div class="sop-item">
+          <div class="sop-item__label" style="color:var(--danger)"><i class="fas fa-ban"></i> 绝对禁止</div>
+          <div class="sop-item__list">
+            <div class="sop-item__row"><i class="fas fa-times" style="color:var(--danger)"></i>不说"我们比阿里云便宜" → 违反合规，且给客户错误定位</div>
+            <div class="sop-item__row"><i class="fas fa-times" style="color:var(--danger)"></i>不说"官网很卡" → 贬低上游，伤害代理商形象</div>
+            <div class="sop-item__row"><i class="fas fa-times" style="color:var(--danger)"></i>不承诺"100%不掉线" → 无法兑现，伤害信任</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- end tab-negotiation -->
+
+
+  <!-- ══════════════════════════════════════
+    子页面 4 · 闭坑指南
+  ══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-pitfall">
+
+    <div class="section-header">
+      <h2 class="section-header__title">
+        <i class="fas fa-triangle-exclamation" style="color:var(--danger)"></i>
+        闭坑指南
+      </h2>
+      <p class="section-header__desc">先人踩过的坑，你不必再踩一遍。以下是造成丢单最多的高危场景与行为，牢记于心</p>
+    </div>
+
+    <!-- 禁止说的话 vs 应该说的话 -->
+    <div class="pitfall-section">
+      <div class="pitfall-section__title">
+        <i class="fas fa-comment-slash" style="color:var(--danger)"></i>
+        话语雷区 · 禁止说 vs 必须这样说
+      </div>
+
+      <div class="forbidden-grid">
+        <div class="forbidden-item">
+          <div class="forbidden-item__bad">
+            <i class="fas fa-times-circle" style="color:var(--danger);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__bad-text">"我们比阿里云便宜！"</div>
+          </div>
+          <div class="forbidden-item__good">
+            <i class="fas fa-check-circle" style="color:var(--success);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__good-text">"我们帮您优化成本结构，综合下来每年能省 XX 万。"</div>
+          </div>
+          <div class="forbidden-item__reason">
+            ⚠️ 危险原因：代理商不能公开与上游竞价，且会让客户认为你只是靠便宜吃饭，一旦有更便宜的立即被替换。
+          </div>
+        </div>
+
+        <div class="forbidden-item">
+          <div class="forbidden-item__bad">
+            <i class="fas fa-times-circle" style="color:var(--danger);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__bad-text">"官网很卡，经常出问题！"</div>
+          </div>
+          <div class="forbidden-item__good">
+            <i class="fas fa-check-circle" style="color:var(--success);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__good-text">"共享集群在高峰期资源是有限的，我们的专有集群能给您独立保障。"</div>
+          </div>
+          <div class="forbidden-item__reason">
+            ⚠️ 危险原因：贬低阿里云官网会反噬代理商信誉，客户会质疑你的专业性和合规性。
+          </div>
+        </div>
+
+        <div class="forbidden-item">
+          <div class="forbidden-item__bad">
+            <i class="fas fa-times-circle" style="color:var(--danger);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__bad-text">"保证 100% 不掉线，永不故障！"</div>
+          </div>
+          <div class="forbidden-item__good">
+            <i class="fas fa-check-circle" style="color:var(--success);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__good-text">"多重架构保障，SLA 承诺 99.9%+ 可用率，故障时自动切换备用节点。"</div>
+          </div>
+          <div class="forbidden-item__reason">
+            ⚠️ 危险原因：无法兑现的承诺一旦出问题，客户投诉、退款、口碑破产，一单变成负资产。
+          </div>
+        </div>
+
+        <div class="forbidden-item">
+          <div class="forbidden-item__bad">
+            <i class="fas fa-times-circle" style="color:var(--danger);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__bad-text">"我们是市场上最便宜的！"</div>
+          </div>
+          <div class="forbidden-item__good">
+            <i class="fas fa-check-circle" style="color:var(--success);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__good-text">"我们的定价在市场上有竞争力，加上专有集群和智能路由，综合性价比很高。"</div>
+          </div>
+          <div class="forbidden-item__reason">
+            ⚠️ 危险原因："最便宜"定位会吸引价格敏感型客户，忠诚度极低，且拉低品牌价值。
+          </div>
+        </div>
+
+        <div class="forbidden-item">
+          <div class="forbidden-item__bad">
+            <i class="fas fa-times-circle" style="color:var(--danger);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__bad-text">"这个我不太清楚，我回去问问。"（每次都这样）</div>
+          </div>
+          <div class="forbidden-item__good">
+            <i class="fas fa-check-circle" style="color:var(--success);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__good-text">"这个技术细节我稍后让技术同事直接和您确认，今天先把核心方案敲定。"</div>
+          </div>
+          <div class="forbidden-item__reason">
+            ⚠️ 危险原因：频繁说"不知道"会让客户失去信心。先稳住节奏，及时跟进，而不是当场暴露无知。
+          </div>
+        </div>
+
+        <div class="forbidden-item">
+          <div class="forbidden-item__bad">
+            <i class="fas fa-times-circle" style="color:var(--danger);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__bad-text">"您考虑一下，想好了联系我。"（然后消失）</div>
+          </div>
+          <div class="forbidden-item__good">
+            <i class="fas fa-check-circle" style="color:var(--success);flex-shrink:0;font-size:15px;margin-top:2px"></i>
+            <div class="forbidden-item__good-text">"您考虑方面，我周三发您一份数据报告，您看完有问题随时找我。"（锁定下次接触）</div>
+          </div>
+          <div class="forbidden-item__reason">
+            ⚠️ 危险原因："等客户联系你"是销售自杀行为，优质客户的注意力极其短暂，3天没跟进就凉了。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 常见丢单场景警示 -->
+    <div class="pitfall-section">
+      <div class="pitfall-section__title">
+        <i class="fas fa-exclamation-triangle" style="color:var(--orange)"></i>
+        高危丢单场景 · 识别 + 应对
+      </div>
+
+      <div class="warning-scenario">
+        <div class="warning-scenario__icon">🎯</div>
+        <div>
+          <div class="warning-scenario__title">场景一：客户根本没在用 Tokens</div>
+          <div class="warning-scenario__desc">
+            打了30分钟电话，对方说"AI我们还在研究阶段，现在没有调用"。这不是目标客户，
+            是浪费时间的大坑。不要试图"培育"他，当前阶段没有购买决策能力。
+          </div>
+          <div class="warning-scenario__action">
+            <strong>正确处理：</strong>礼貌结束，加入"培育名单"，3个月后再回访。立即转移精力到真正在用 Tokens 的客户。
+          </div>
+        </div>
+      </div>
+
+      <div class="warning-scenario">
+        <div class="warning-scenario__icon">💰</div>
+        <div>
+          <div class="warning-scenario__title">场景二：一上来就谈价格</div>
+          <div class="warning-scenario__desc">
+            客户第一句话就问"你们多少钱一百万 Tokens？"。如果你直接报价，会陷入纯价格竞争，
+            你将永远赢不了比你更便宜的竞争对手。
+          </div>
+          <div class="warning-scenario__action">
+            <strong>正确处理：</strong>先说"价格根据用量和配置不同，让我先了解一下您的场景，我给您出一个最优方案，报价才有参考意义"，把对话引向需求挖掘。
+          </div>
+        </div>
+      </div>
+
+      <div class="warning-scenario">
+        <div class="warning-scenario__icon">🧱</div>
+        <div>
+          <div class="warning-scenario__title">场景三：只联系到执行层，找不到决策人</div>
+          <div class="warning-scenario__desc">
+            和技术工程师聊了很久，对方很感兴趣，但采购决策权在 CTO 或技术总监，
+            工程师无法推动，客户陷入"研究中"状态，永远没有下文。
+          </div>
+          <div class="warning-scenario__action">
+            <strong>正确处理：</strong>让工程师帮你"向上传递"——"您看能不能帮我约一下 CTO/技术总监，我来给他直接演示方案，这样您内部推进也更容易"。让内部人帮你搭桥。
+          </div>
+        </div>
+      </div>
+
+      <div class="warning-scenario">
+        <div class="warning-scenario__icon">😴</div>
+        <div>
+          <div class="warning-scenario__title">场景四：方案讲得太复杂，客户听不懂</div>
+          <div class="warning-scenario__desc">
+            花了20分钟讲架构、TPM、专有集群、智能路由……客户沉默，其实是听不懂。
+            技术名词多了，客户只会觉得麻烦、风险高，更不敢迁移。
+          </div>
+          <div class="warning-scenario__action">
+            <strong>正确处理：</strong>只讲三个数字：快多少%、省多少钱、迁移多简单。其他技术细节留给客户技术团队对接时再说，销售阶段永远只打"业务价值"。
+          </div>
+        </div>
+      </div>
+
+      <div class="warning-scenario">
+        <div class="warning-scenario__icon">⚡</div>
+        <div>
+          <div class="warning-scenario__title">场景五：POC 跑得不好，数据没达预期</div>
+          <div class="warning-scenario__desc">
+            测试期间出现延迟偏高、偶发错误，客户对结果不满意，信任急速下降，
+            丢单概率极高。这是最致命的场景，一旦发生必须立即响应。
+          </div>
+          <div class="warning-scenario__action">
+            <strong>正确处理：</strong>第一时间联系技术支持，4小时内给出定位原因+优化方案；主动向客户说明+道歉；提出延长测试期补偿。绝不沉默，主动出击挽回。
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 必须这样说 -->
+    <div class="pitfall-section">
+      <div class="pitfall-section__title">
+        <i class="fas fa-check-double" style="color:var(--success)"></i>
+        关键场景 · 必须这样说
+      </div>
+
+      <div class="two-col">
+        <div class="alert alert-success">
+          <div class="alert__label"><i class="fas fa-comments"></i> 建立信任感</div>
+          "我们帮您免费测试，看完数据再做决定，完全没有压力。"<br>
+          "迁移期间出任何问题，我 4 小时内响应，您有专属对接人。"<br>
+          "您可以随时回滚，一行代码的事，完全不影响现有业务。"
+        </div>
+        <div class="alert alert-success">
+          <div class="alert__label"><i class="fas fa-rocket"></i> 推动行动</div>
+          "您看这周什么时候方便让技术同学接入测试账号？"<br>
+          "我帮您把 ROI 计算好，您直接拿给领导看，审批更容易过。"<br>
+          "同行的 XX 公司上周刚接完，效果很好，您要不要我拉个三方微信群聊聊？"
+        </div>
+        <div class="alert alert-warning">
+          <div class="alert__label"><i class="fas fa-shield-halved"></i> 稳定性话术</div>
+          "多重架构保障，主节点故障时自动切换备用节点，业务无感知。"<br>
+          "专有集群不与其他用户共享资源，高峰期您的 <span class="term-tooltip" data-tip="每分钟可处理的Tokens数量，数字越大AI吐字越快">TPM</span> 不受影响。"
+        </div>
+        <div class="alert alert-info">
+          <div class="alert__label"><i class="fas fa-coins"></i> 成本话术</div>
+          "智能路由自动为您选最优性价比模型，不需要手动干预。"<br>
+          "智能记忆层对相似请求复用结果，重复调用成本大幅下降。"
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- end tab-pitfall -->
+
+</main>
+
+
+<!-- ══════════════════════════════════════════════════
+  移动端底部导航
+══════════════════════════════════════════════════ -->
+<nav class="nav-bottom">
+  <a href="index.html"     class="nav-bottom__item" data-page="index.html">
+    <i class="fas fa-house"></i><span>首页</span>
+  </a>
+  <a href="industry.html"  class="nav-bottom__item" data-page="industry.html">
+    <i class="fas fa-building"></i><span>行业</span>
+  </a>
+  <a href="scripts.html"   class="nav-bottom__item" data-page="scripts.html">
+    <i class="fas fa-comment-dots"></i><span>话术</span>
+  </a>
+  <a href="tools.html"     class="nav-bottom__item" data-page="tools.html">
+    <i class="fas fa-calculator"></i><span>工具</span>
+  </a>
+  <a href="playbook.html"  class="nav-bottom__item active" data-page="playbook.html">
+    <i class="fas fa-chess"></i><span>方法论</span>
+  </a>
+</nav>
+
+
+<!-- 返回顶部 -->
+<div id="back-top" title="返回顶部"><i class="fas fa-chevron-up"></i></div>
+
+<!-- Toast -->
+<div id="toast-container"></div>
+
+
+<!-- ══════════════════════════════════════════════════
+  页脚
+══════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div style="margin-bottom:6px">
+    © 2026 rhcloud · 阿里云核心代理商 · 大模型Tokens专业服务商
+  </div>
+  <div>
+    培训负责人：training@rhcloud.com
+    &nbsp;|&nbsp;
+    内部系统 · 请勿外传
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════════════════
+  脚本
+══════════════════════════════════════════════════ -->
+<script src="js/main.js"></script>
+<script>
+/* ─────────────────────────────────────────────
+   playbook.html 专属脚本
+───────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function () {
+
+  // 初始化全局功能
+  RHCloud.init('playbook');
+
+  // ── Tab 切换 ──
+  const tabBtns  = document.querySelectorAll('.tab-nav__item');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const target = btn.dataset.tab;
+
+      tabBtns.forEach(function (b)  { b.classList.remove('active'); });
+      tabPanels.forEach(function (p) { p.classList.remove('active'); });
+
+      btn.classList.add('active');
+      const panel = document.getElementById('tab-' + target);
+      if (panel) panel.classList.add('active');
+
+      // 滚动到顶部
+      window.scrollTo({ top: 80, behavior: 'smooth' });
+    });
+  });
+
+  // ── SOP 步骤详情切换 ──
+  window.showSopDetail = function (stepNum) {
+    // 步骤高亮
+    document.querySelectorAll('.sop-step').forEach(function (s) {
+      s.classList.remove('active');
+    });
+    const activeStep = document.querySelector('.sop-step[data-step="' + stepNum + '"]');
+    if (activeStep) activeStep.classList.add('active');
+
+    // 详情展示
+    document.querySelectorAll('.sop-detail').forEach(function (d) {
+      d.classList.remove('active');
+    });
+    const detail = document.getElementById('sop-detail-' + stepNum);
+    if (detail) {
+      detail.classList.add('active');
+      detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
+  // ── 话术复制（script-box） ──
+  window.copyScript = function (btn) {
+    const box  = btn.closest('.script-box');
+    const text = box.querySelector('[data-script]');
+    const raw  = text ? text.dataset.script : text.textContent.trim();
+    navigator.clipboard.writeText(raw).then(function () {
+      btn.classList.add('copied');
+      btn.innerHTML = '<i class="fas fa-check"></i> 已复制';
+      setTimeout(function () {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<i class="fas fa-copy"></i> 复制';
+      }, 2000);
+      if (window.RHCloud && RHCloud.showToast) {
+        RHCloud.showToast('话术已复制 ✓');
+      }
+    });
+  };
+
+  // ── 话术复制（nego-card） ──
+  window.copyNego = function (btn) {
+    const scriptBox = btn.closest('.nego-card__script');
+    const raw = scriptBox ? scriptBox.textContent.replace(/[\n\r]+/g, ' ').trim() : '';
+    navigator.clipboard.writeText(raw).then(function () {
+      const orig = btn.innerHTML;
+      btn.style.color = 'var(--success)';
+      btn.innerHTML = '<i class="fas fa-check"></i>';
+      setTimeout(function () {
+        btn.style.color = '';
+        btn.innerHTML = orig;
+      }, 2000);
+      if (window.RHCloud && RHCloud.showToast) {
+        RHCloud.showToast('话术已复制 ✓');
+      }
+    });
+  };
+
+  // ── 阅读进度条 ──
+  var readBar = document.getElementById('readBar');
+  window.addEventListener('scroll', function () {
+    var scrollTop    = window.pageYOffset || document.documentElement.scrollTop;
+    var docHeight    = document.documentElement.scrollHeight - window.innerHeight;
+    var pct          = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    if (readBar) readBar.style.width = pct.toFixed(1) + '%';
+  });
+
+  // ── 术语 tooltip 补充初始化（动态内容） ──
+  // main.js 中的全局 tooltip 已处理，这里确保动态渲染的 .term-tooltip 也被纳入
+  if (window.RHCloud && RHCloud.initTooltips) {
+    RHCloud.initTooltips();
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COIN 波动率套利操作手册 V2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: rgba(201,168,76,0.15);
+    --navy: #0D1B2A;
+    --navy-mid: #142232;
+    --navy-card: #1A2D42;
+    --navy-border: #243B55;
+    --text-primary: #EAE6DE;
+    --text-secondary: #A8B8C8;
+    --text-muted: #6A7F94;
+    --red: #E05C5C;
+    --red-dim: rgba(224,92,92,0.12);
+    --orange: #E07B3C;
+    --orange-dim: rgba(224,123,60,0.12);
+    --yellow: #D4B84A;
+    --yellow-dim: rgba(212,184,74,0.12);
+    --green: #5CB87A;
+    --green-dim: rgba(92,184,122,0.12);
+    --blue: #5B8DC8;
+    --blue-dim: rgba(91,141,200,0.12);
+    --radius: 8px;
+    --radius-lg: 14px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --shadow-card: 0 2px 12px rgba(0,0,0,0.3);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--text-primary); font-size: 15px; line-height: 1.75; min-height: 100vh; }
+
+  /* TOOLTIP */
+  .term { border-bottom: 1px dashed var(--gold); color: var(--gold-light); cursor: help; position: relative; display: inline-block; font-weight: 500; }
+  .term::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); background: #0A1520; border: 1px solid var(--gold); color: var(--text-primary); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 400; line-height: 1.6; padding: 10px 14px; border-radius: var(--radius); width: 260px; text-align: left; z-index: 9999; pointer-events: none; opacity: 0; transition: opacity 0.2s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.6); white-space: normal; }
+  .term:hover::after { opacity: 1; }
+  .term::before { content: ''; position: absolute; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--gold); opacity: 0; transition: opacity 0.2s ease; z-index: 9999; }
+  .term:hover::before { opacity: 1; }
+
+  /* LAYOUT */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar { width: 270px; min-width: 270px; background: var(--navy-mid); border-right: 1px solid var(--navy-border); position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 32px 0; flex-shrink: 0; }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--navy-border); border-radius: 2px; }
+  .sidebar-logo { padding: 0 24px 28px; border-bottom: 1px solid var(--navy-border); margin-bottom: 20px; }
+  .sidebar-logo .logo-tag { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 6px; }
+  .sidebar-logo .logo-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--text-primary); line-height: 1.3; }
+  .sidebar-logo .logo-ver { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .nav-section-label { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-muted); padding: 12px 24px 6px; }
+  .nav-item { display: block; padding: 9px 24px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; transition: all 0.15s; border-left: 3px solid transparent; line-height: 1.4; }
+  .nav-item:hover { color: var(--gold-light); background: var(--gold-dim); border-left-color: var(--gold); }
+  .nav-item.sub { padding-left: 38px; font-size: 12.5px; color: var(--text-muted); }
+  .nav-item.sub:hover { color: var(--text-secondary); }
+
+  /* MAIN */
+  .main { flex: 1; max-width: 960px; padding: 48px 52px; overflow-x: hidden; }
+
+  /* HERO */
+  .hero { border: 1px solid var(--navy-border); border-radius: var(--radius-lg); padding: 40px 44px; background: var(--navy-card); position: relative; overflow: hidden; margin-bottom: 48px; }
+  .hero::before { content: 'COIN'; position: absolute; right: -10px; top: -20px; font-family: 'Playfair Display', serif; font-size: 130px; font-weight: 700; color: rgba(201,168,76,0.04); line-height: 1; pointer-events: none; user-select: none; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; line-height: 1.25; color: var(--text-primary); margin-bottom: 16px; }
+  .hero-sub { color: var(--text-secondary); font-size: 15px; max-width: 600px; margin-bottom: 28px; }
+  .hero-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+  .hero-meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .hero-meta-item .label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+  .hero-meta-item .value { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
+
+  /* SECTIONS */
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 28px; padding-bottom: 18px; border-bottom: 1px solid var(--navy-border); }
+  .section-num { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gold); background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.3); border-radius: 6px; padding: 4px 9px; flex-shrink: 0; margin-top: 4px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+  .section-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+  h3 { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; color: var(--gold-light); margin: 28px 0 12px; text-transform: uppercase; letter-spacing: 1px; }
+  h4 { font-size: 14px; font-weight: 600; color: var(--text-primary); margin: 20px 0 8px; }
+  p { color: var(--text-secondary); margin-bottom: 12px; }
+
+  /* CARDS */
+  .card { background: var(--navy-card); border: 1px solid var(--navy-border); border-radius: var(--radius-lg); padding: 24px 28px; margin-bottom: 20px; }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .card-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .stat-card { background: var(--navy-card); border: 1px solid var(--navy-border); border-radius: var(--radius); padding: 18px 20px; }
+  .stat-card .stat-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+  .stat-card .stat-value { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500; color: var(--gold-light); }
+  .stat-card .stat-note { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* CALLOUTS */
+  .callout { border-radius: var(--radius); padding: 16px 20px; margin: 16px 0; display: flex; gap: 12px; align-items: flex-start; font-size: 14px; }
+  .callout-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+  .callout.danger { background: var(--red-dim); border: 1px solid rgba(224,92,92,0.3); color: #F0A0A0; }
+  .callout.warning { background: var(--orange-dim); border: 1px solid rgba(224,123,60,0.3); color: #F0C0A0; }
+  .callout.info { background: var(--blue-dim); border: 1px solid rgba(91,141,200,0.3); color: #A0C0E0; }
+  .callout.success { background: var(--green-dim); border: 1px solid rgba(92,184,122,0.3); color: #A0D4B4; }
+  .callout.gold { background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.3); color: var(--gold-light); }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--navy-border); margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  thead tr { background: rgba(201,168,76,0.08); border-bottom: 1px solid var(--navy-border); }
+  thead th { padding: 13px 16px; text-align: left; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); font-weight: 600; white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid rgba(36,59,85,0.6); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.025); }
+  tbody td { padding: 12px 16px; color: var(--text-secondary); vertical-align: top; line-height: 1.6; }
+  tbody td:first-child { color: var(--text-primary); font-weight: 500; }
+
+  /* BADGES */
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 100px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
+  .badge-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(92,184,122,0.3); }
+  .badge-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(224,92,92,0.3); }
+  .badge-orange { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(224,123,60,0.3); }
+  .badge-yellow { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(212,184,74,0.3); }
+  .badge-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(91,141,200,0.3); }
+  .badge-gold { background: var(--gold-dim); color: var(--gold-light); border: 1px solid rgba(201,168,76,0.3); }
+  .badge-gray { background: rgba(106,127,148,0.15); color: var(--text-muted); border: 1px solid rgba(106,127,148,0.3); }
+
+  /* FORMULA */
+  .formula-box { background: #0A1520; border: 1px solid rgba(201,168,76,0.25); border-radius: var(--radius); padding: 20px 24px; margin: 16px 0; font-family: 'DM Mono', monospace; font-size: 13.5px; color: var(--gold-light); line-height: 2; }
+  .formula-box .comment { color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 12px; font-style: italic; }
+
+  /* FLOW STEPS */
+  .flow-steps { display: flex; flex-direction: column; gap: 0; position: relative; margin: 20px 0; }
+  .flow-steps::before { content: ''; position: absolute; left: 22px; top: 28px; bottom: 28px; width: 2px; background: var(--navy-border); }
+  .flow-step { display: flex; gap: 20px; padding: 14px 0; position: relative; }
+  .flow-step-num { width: 44px; height: 44px; min-width: 44px; background: var(--navy-card); border: 2px solid var(--navy-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--gold); font-weight: 500; z-index: 1; }
+  .flow-step-body { flex: 1; padding-top: 8px; }
+  .flow-step-body strong { display: block; color: var(--text-primary); font-size: 14px; margin-bottom: 4px; }
+  .flow-step-body span { font-size: 13px; color: var(--text-muted); }
+
+  /* STATE CARDS */
+  .state-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+  .state-card { border-radius: var(--radius); padding: 18px 20px; border: 1px solid; }
+  .state-card.state-a { background: var(--green-dim); border-color: rgba(92,184,122,0.3); }
+  .state-card.state-b { background: var(--blue-dim); border-color: rgba(91,141,200,0.3); }
+  .state-card.state-c { background: var(--orange-dim); border-color: rgba(224,123,60,0.3); }
+  .state-card.state-d { background: var(--red-dim); border-color: rgba(224,92,92,0.3); }
+  .state-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .state-badge { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 4px; }
+  .state-a .state-badge { background: rgba(92,184,122,0.2); color: var(--green); }
+  .state-b .state-badge { background: rgba(91,141,200,0.2); color: var(--blue); }
+  .state-c .state-badge { background: rgba(224,123,60,0.2); color: var(--orange); }
+  .state-d .state-badge { background: rgba(224,92,92,0.2); color: var(--red); }
+  .state-card .state-name { font-size: 13px; font-weight: 600; }
+  .state-a .state-name { color: var(--green); }
+  .state-b .state-name { color: var(--blue); }
+  .state-c .state-name { color: var(--orange); }
+  .state-d .state-name { color: var(--red); }
+  .state-card ul { list-style: none; font-size: 13px; display: flex; flex-direction: column; gap: 5px; }
+  .state-card ul li { color: var(--text-secondary); }
+  .state-card ul li::before { content: '›  '; color: var(--text-muted); }
+
+  /* CIRCUIT BREAKER */
+  .circuit-level { border-radius: var(--radius); padding: 20px 22px; margin-bottom: 12px; border: 1px solid; }
+  .circuit-level.l1 { background: var(--yellow-dim); border-color: rgba(212,184,74,0.3); }
+  .circuit-level.l2 { background: var(--orange-dim); border-color: rgba(224,123,60,0.3); }
+  .circuit-level.l3 { background: var(--red-dim); border-color: rgba(224,92,92,0.35); }
+  .circuit-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .circuit-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .l1 .circuit-dot { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+  .l2 .circuit-dot { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
+  .l3 .circuit-dot { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  .circuit-level h4 { margin: 0; }
+  .l1 h4 { color: var(--yellow); }
+  .l2 h4 { color: var(--orange); }
+  .l3 h4 { color: var(--red); }
+  .circuit-body { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 13.5px; }
+  .trigger-list, .action-list { display: flex; flex-direction: column; gap: 6px; }
+  .trigger-list .label, .action-list .label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; display: block; }
+  .trigger-list li, .action-list li { list-style: none; color: var(--text-secondary); padding-left: 14px; position: relative; }
+  .trigger-list li::before { content: '•'; position: absolute; left: 0; color: var(--text-muted); }
+  .action-list li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-size: 11px; top: 2px; }
+
+  /* TIER CARDS */
+  .tier-card { border-radius: var(--radius-lg); border: 1px solid var(--navy-border); overflow: hidden; margin-bottom: 16px; }
+  .tier-header { padding: 16px 22px; display: flex; align-items: center; gap: 14px; }
+  .tier-1 .tier-header { background: rgba(92,184,122,0.07); border-bottom: 1px solid rgba(92,184,122,0.2); }
+  .tier-2 .tier-header { background: rgba(91,141,200,0.07); border-bottom: 1px solid rgba(91,141,200,0.2); }
+  .tier-3 .tier-header { background: rgba(201,168,76,0.07); border-bottom: 1px solid rgba(201,168,76,0.2); }
+  .tier-icon { font-size: 22px; width: 40px; text-align: center; }
+  .tier-header-info .tier-range { font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 500; }
+  .tier-1 .tier-range { color: var(--green); }
+  .tier-2 .tier-range { color: var(--blue); }
+  .tier-3 .tier-range { color: var(--gold-light); }
+  .tier-header-info .tier-desc { font-size: 12px; color: var(--text-muted); }
+  .tier-body { padding: 18px 22px; background: var(--navy-card); }
+
+  /* RED LINES */
+  .redlines { display: flex; flex-direction: column; gap: 10px; }
+  .redline-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 18px; background: var(--red-dim); border: 1px solid rgba(224,92,92,0.25); border-left: 3px solid var(--red); border-radius: var(--radius); }
+  .redline-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--red); background: rgba(224,92,92,0.1); padding: 2px 7px; border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+  .redline-text { font-size: 13.5px; color: #F0A0A0; line-height: 1.6; }
+
+  /* SOP STEPS */
+  .sop-steps { display: flex; flex-direction: column; gap: 12px; }
+  .sop-step { display: flex; gap: 18px; background: var(--navy-card); border: 1px solid var(--navy-border); border-radius: var(--radius); padding: 16px 20px; align-items: flex-start; transition: border-color 0.2s; }
+  .sop-step:hover { border-color: rgba(201,168,76,0.3); }
+  .sop-step-icon { font-size: 20px; width: 38px; text-align: center; flex-shrink: 0; }
+  .sop-step-content strong { display: block; font-size: 14px; color: var(--text-primary); margin-bottom: 4px; }
+  .sop-step-content .time-badge { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--gold); background: var(--gold-dim); padding: 1px 7px; border-radius: 3px; margin-right: 8px; }
+  .sop-step-content p { font-size: 13px; color: var(--text-muted); margin: 6px 0 0; }
+
+  /* LOG TABLE */
+  .log-field { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gold); background: var(--gold-dim); padding: 1px 6px; border-radius: 3px; }
+
+  /* MISC */
+  .divider { border: none; border-top: 1px solid var(--navy-border); margin: 32px 0; }
+  .disclaimer { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: var(--radius); padding: 20px 24px; font-size: 12.5px; color: var(--text-muted); line-height: 1.8; margin-top: 48px; }
+  .disclaimer strong { color: var(--text-secondary); }
+  code { font-family: 'DM Mono', monospace; font-size: 12.5px; background: rgba(201,168,76,0.08); padding: 1px 6px; border-radius: 3px; color: var(--gold-light); }
+  strong { color: var(--text-primary); }
+  .highlight { color: var(--gold-light); font-weight: 500; }
+  .bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; padding: 0; }
+  .bullets li { padding-left: 16px; position: relative; color: var(--text-secondary); font-size: 13.5px; }
+  .bullets li::before { content: '—'; position: absolute; left: 0; color: var(--text-muted); }
+  .checklist { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text-secondary); padding: 10px 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--navy-border); border-radius: var(--radius); }
+  .checklist li::before { content: '☐'; font-size: 15px; color: var(--text-muted); flex-shrink: 0; margin-top: 1px; }
+  .checklist li.required::before { color: var(--gold); }
+
+  @media (max-width: 1100px) { .sidebar { display: none; } .main { max-width: 100%; padding: 32px 24px; } }
+  @media (max-width: 700px) { .card-grid, .card-grid-3, .state-grid, .circuit-body { grid-template-columns: 1fr; } }
+  @media print { .sidebar { display: none; } .term::after, .term::before { display: none; } .main { padding: 20px; } }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-tag">Coinbase Global · NYSE: COIN</span>
+    <div class="logo-title">波动率套利<br>操作手册</div>
+    <div class="logo-ver">V2.0 · 2026-04-12 · 机密</div>
+  </div>
+  <span class="nav-section-label">前提条件</span>
+  <a href="#s01" class="nav-item">01 策略定位与Alpha来源</a>
+  <a href="#s02" class="nav-item">02 NRA 税务框架</a>
+  <a href="#s03" class="nav-item">03 账户架构与权限</a>
+  <span class="nav-section-label">核心引擎</span>
+  <a href="#s04" class="nav-item">04 市场状态引擎</a>
+  <a href="#s05" class="nav-item">05 波动率校准体系</a>
+  <a href="#s06" class="nav-item">06 流动性评分</a>
+  <span class="nav-section-label">策略执行</span>
+  <a href="#s07" class="nav-item">07 三层策略架构</a>
+  <a href="#s07" class="nav-item sub">第一层：Bull Put Spread</a>
+  <a href="#s07" class="nav-item sub">第二层：MSTR代理对冲</a>
+  <a href="#s07" class="nav-item sub">第三层：CME BTC期权</a>
+  <a href="#s08" class="nav-item">08 EV 预期价值计算</a>
+  <a href="#s09" class="nav-item">09 完整执行 SOP</a>
+  <span class="nav-section-label">风险管理</span>
+  <a href="#s10" class="nav-item">10 持仓管理规则</a>
+  <a href="#s11" class="nav-item">11 尾部风险保护</a>
+  <a href="#s12" class="nav-item">12 三级熔断机制</a>
+  <span class="nav-section-label">运营系统</span>
+  <a href="#s13" class="nav-item">13 月度操作清单</a>
+  <a href="#s14" class="nav-item">14 绩效追踪台账</a>
+  <a href="#s15" class="nav-item">15 绝对纪律红线</a>
+</aside>
+
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Coinbase Global Inc. · 跨市场波动率套利 · 分层资金 · Delta中性</div>
+  <h1>COIN 期权增强收益<br>操作手册</h1>
+  <p class="hero-sub">系统化收割 COIN 对 BTC 的隐含波动率溢价，通过三层资金架构实现全规模账户可执行，年化目标 18–45%，最大回撤控制在 15% 以内。</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><span class="label">版本</span><span class="value">V2.0</span></div>
+    <div class="hero-meta-item"><span class="label">制定日期</span><span class="value">2026-04-12</span></div>
+    <div class="hero-meta-item"><span class="label">适用账户规模</span><span class="value">$50,000 – $5,000,000</span></div>
+    <div class="hero-meta-item"><span class="label">适用对象</span><span class="value">NRA 专业期权投资者</span></div>
+    <div class="hero-meta-item"><span class="label">参考价格</span><span class="value">≈ $174（2026-04-01）</span></div>
+  </div>
+</div>
+
+<!-- S01 -->
+<section class="section" id="s01">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <div>
+      <div class="section-title">策略定位与 Alpha 来源</div>
+      <div class="section-subtitle">先理解为什么 COIN 值得做，再谈怎么做</div>
+    </div>
+  </div>
+
+  <p>本策略的核心逻辑是：COIN 的<term class="term" data-tip="隐含波动率（IV）：从当前期权市价反推出的市场对未来波动率的预期。IV 越高代表期权越贵，卖方收取的权利金越丰厚。">隐含波动率（IV）</term>长期系统性地高于 BTC 的 IV（历史比值 1.4–2.5 倍），也长期高于 COIN 自身的历史实现波动率。这意味着期权市场持续高估 COIN 的未来风险，而卖方可以稳定地收割这份<term class="term" data-tip="波动率风险溢价（VRP）：隐含波动率长期高于实际实现波动率的部分。这是市场参与者为规避不确定性支付的「保险溢价」，期权卖方是这份溢价的系统性收割者。">波动率风险溢价（VRP）</term>。</p>
+
+  <div class="card-grid-3">
+    <div class="stat-card">
+      <div class="stat-label">IV/BTC IV 历史区间</div>
+      <div class="stat-value">1.4 – 2.5×</div>
+      <div class="stat-note">COIN IV 长期显著高于 BTC，结构性溢价稳定</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">IV / HRV 历史均值</div>
+      <div class="stat-value">1.25 – 1.45</div>
+      <div class="stat-note">IV 系统性高估实际波动，是卖方正期望的来源</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">年化目标（全账户口径）</div>
+      <div class="stat-value">18 – 45%</div>
+      <div class="stat-note">基于 15% 保证金利用率，视 IVR 环境而定</div>
+    </div>
+  </div>
+
+  <h3>四重 Alpha 叠加</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Alpha 来源</th><th>机制</th><th>可持续性</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>①</td>
+          <td><term class="term" data-tip="VRP（Volatility Risk Premium）：IV 系统性高于 HRV 的差值。COIN 因加密监管不确定性，市场长期高估极端风险，该溢价比普通科技股更为稳定和丰厚。">波动率风险溢价</term></td>
+          <td>卖出高估的 COIN Put，收取期权买方支付的保险溢价</td>
+          <td><span class="badge badge-green">结构性长期</span></td>
+        </tr>
+        <tr>
+          <td>②</td>
+          <td><term class="term" data-tip="Skew（波动率偏斜）：虚值 Put 的 IV 显著高于同等虚值 Call 的现象，反映市场对下跌的过度恐慌。通过卖接近 ATM 的 Put（高 IV）+ 买深度 OTM Put（低 IV），可收割偏斜压缩收益。">Put Skew 套利</term></td>
+          <td>COIN 下行恐慌溢价结构性高估，卖方可收割偏斜压缩</td>
+          <td><span class="badge badge-yellow">情绪依赖</span></td>
+        </tr>
+        <tr>
+          <td>③</td>
+          <td><term class="term" data-tip="Theta 衰减：期权每日自动损耗的时间价值。对卖方而言，每过一天就产生正收益。DTE=30-45 天时每日 Theta 衰减速率最优——既够快（接近到期），又不至于 Gamma 风险失控。">Theta 时间价值衰减</term></td>
+          <td>卖方每日无条件获得时间价值，是策略的稳定现金流基础</td>
+          <td><span class="badge badge-green">每日确定性</span></td>
+        </tr>
+        <tr>
+          <td>④</td>
+          <td>COIN/BTC IV 比值回归</td>
+          <td>当 COIN 独立事件（财报、SEC 诉讼）推高 COIN IV 远超 BTC 时，事件落地后 IV 快速回落，Vega P&amp;L 正贡献</td>
+          <td><span class="badge badge-blue">阶段性机会</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout gold">
+    <span class="callout-icon">★</span>
+    <div><strong>策略定位的本质：</strong>你不是在预测 COIN 或 BTC 的价格方向。你是一家「波动率保险公司」的经营者——向市场恐慌者出售保险（期权），通过精密的对冲将理赔风险控制在统计可控范围内，靠概率优势和时间持续盈利。</div>
+  </div>
+</section>
+
+<!-- S02 -->
+<section class="section" id="s02">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <div>
+      <div class="section-title">NRA 税务框架</div>
+      <div class="section-subtitle">先决条件 — CPA 书面确认前，仅允许执行备兑 Call</div>
+    </div>
+  </div>
+
+  <div class="callout danger">
+    <span class="callout-icon">⚠</span>
+    <div>税务框架是整个策略的<strong>绝对边界条件</strong>，不是附录。以下五项必须在获得持牌 CPA 书面确认后，才能进入全量执行阶段。在确认前，所有账户仅执行<term class="term" data-tip="备兑 Call（Covered Call）：持有股票正股的同时卖出该股票的看涨期权，以收取权利金。是 NRA 最安全的起步操作，税务处理最简单，不涉及接货或复杂损益计算。">备兑 Call（Covered Call）</term>。</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>确认事项</th><th>核心风险点</th><th>操作要求</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>① <term class="term" data-tip="FDAP（Fixed, Determinable, Annual or Periodical）：IRS 对 NRA 的预扣税来源分类。期权权利金通常视为非 FDAP，不触发 30% 预扣税，但须账户层面逐一确认历史记录，不可假设。">权利金预扣税</term></td>
+          <td>COIN 期权权利金通常按非 FDAP 处理，一般不预扣 30%。需确认 IBKR/BBAE 账户历史记录中是否存在预扣，保留全部权利金收入台账。</td>
+          <td>CPA 书面确认 + 保留近 12 个月账户权利金流水</td>
+        </tr>
+        <tr>
+          <td>② 资本利得免税 / <term class="term" data-tip="ECI（Effectively Connected Income，有效关联收入）：若期权交易被 IRS 认定为与在美「贸易或业务」有效关联，则丧失 NRA 豁免地位，须缴纳美国所得税。在美境内发出交易指令、使用美国居民投资顾问均可能触发 ECI。">ECI 风险</term></td>
+          <td>备兑 Call 被行权卖股、Put 接货后再卖股产生的资本利得，是否免美国税？须 CPA 书面确认，并明确评估 ECI 认定边界。</td>
+          <td>CPA 书面意见，专项说明 ECI 风险及规避措施</td>
+        </tr>
+        <tr>
+          <td>③ 中国申报义务</td>
+          <td>若满足中国税务居民认定，中国税务机关可能要求申报全球收入（含期权权利金与股票收益）。台账须同步记录人民币折算金额。</td>
+          <td>中国税务专业人士书面确认 + 台账每笔按交易日银行中间价折算 CNY</td>
+        </tr>
+        <tr>
+          <td>④ <term class="term" data-tip="Wash Sale Rule（冲洗交易规则）：30 天内卖出亏损资产后买入实质相同资产，税务亏损将被递延，无法当期抵税。NRA 同样适用。高危场景：主动减仓 COIN 正股的同时，因 Put 被行权而接货 COIN——两个动作若在 30 天内发生，将触发 Wash Sale。">Wash Sale 规则</term></td>
+          <td>高危场景：主动减仓 COIN 正股 + 同期内 Put 被行权接货，两个动作在 30 天内发生将触发规则，导致税务损失无法当期确认。</td>
+          <td>强制执行：任何主动减仓前，检查过去 30 天内是否存在接货记录</td>
+        </tr>
+        <tr>
+          <td>⑤ <term class="term" data-tip="NRA 遗产税：NRA 持有美国境内资产（含 COIN 美股）的联邦遗产税免税额仅为 $60,000，超额部分最高适用 40% 税率。当 COIN 正股持仓市值超过 $200,000 时，建议通过离岸持股公司（Cayman/新加坡 SPC）持有，使持有主体非 NRA 个人，从而规避该风险。">遗产税风险</term></td>
+          <td>NRA 持有美国境内资产遗产税免税额仅 $60,000，COIN 正股全额计入，超额最高征 40%。持仓市值较大时架构至关重要。</td>
+          <td>税务律师评估离岸持股公司可行性，持仓超 $200,000 时强制执行架构评估</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>W-8BEN 维护规则</h3>
+  <ul class="checklist">
+    <li class="required">每年 1 月 15 日前：确认 IBKR/BBAE 所有账户的 <term class="term" data-tip="W-8BEN：IRS 表格，NRA 用于证明非美国税务居民身份，申请资本利得免税和权利金非预扣豁免。有效期 3 年（或信息变更时立即失效）。过期将导致 IBKR 对所有收入自动预扣 30%，且补救程序繁琐耗时。">W-8BEN</term> 均在有效期内（有效期 3 年）</li>
+    <li class="required">身份信息或税务居民状态变更后 7 天内立即更新，过期将自动触发 30% 预扣</li>
+    <li class="required">每笔期权交易台账必须标记：税务事件类型 / 账户来源 / 是否被行权 / CNY 折算金额</li>
+    <li>每年整合所有账户税务文件，交同一 CPA 统一处理，避免漏报或重复申报</li>
+  </ul>
+</section>
+
+<!-- S03 -->
+<section class="section" id="s03">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <div>
+      <div class="section-title">账户架构与权限配置</div>
+      <div class="section-subtitle">执行前必须完成所有开通步骤</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>账户</th><th>角色</th><th>允许操作</th><th>权限要求</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>IBKR 主账户</td>
+          <td>核心执行账户</td>
+          <td>全部策略：Bull Put Spread、Iron Condor（第三层）、MSTR对冲腿（第二层）、CME BTC期权（第三层）、Covered Call</td>
+          <td><term class="term" data-tip="期权 Level 3：允许执行价差策略（Spreads），包括 Bull Put Spread、Bear Call Spread 和 Iron Condor。Level 4 进一步允许裸卖期权，通常不推荐 NRA 申请，保证金要求也更高。Portfolio Margin 需净值 ≥ $110,000。">期权 Level 3+，Margin Account</term>；第三层需额外申请期货账户权限（CME BTC期权）</td>
+        </tr>
+        <tr>
+          <td>BBAE 辅账户</td>
+          <td>正股备兑仓</td>
+          <td>仅 Covered Call（持有 COIN 正股时）</td>
+          <td>期权 Level 1，现金账户；执行前确认 NRA 账户具体期权限制</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>IBKR 开通清单（按顺序执行）</h3>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-step-num">1</div>
+      <div class="flow-step-body">
+        <strong>申请 Margin Account 保证金账户</strong>
+        <span>账户净值 ≥ $110,000 时，申请 <term class="term" data-tip="Portfolio Margin（组合保证金）：基于整个投资组合净风险敞口计算保证金需求，相比 Reg T 标准保证金通常可降低 50–70% 的资金占用，显著提升资本效率。适合持有对冲组合的策略型账户。">Portfolio Margin</term>，可显著降低对冲组合的保证金占用；否则使用 Reg T Margin</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">2</div>
+      <div class="flow-step-body">
+        <strong>申请期权权限至 Level 3（价差策略）</strong>
+        <span>填写期权交易经验表，说明价差策略经验；Level 4 为裸卖权限，一般不推荐，保证金要求更高</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">3</div>
+      <div class="flow-step-body">
+        <strong>第三层账户：额外申请期货账户权限</strong>
+        <span>用于交易 CME Micro Bitcoin 期权，需单独申请 Futures Approved 资格</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">4</div>
+      <div class="flow-step-body">
+        <strong>订阅实时行情数据</strong>
+        <span>COIN 需美股 Level 2 实时行情（约 $4/月）；第三层需 CME 行情（约 $30/月），在账户管理中心 → Market Data 中订阅</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">5</div>
+      <div class="flow-step-body">
+        <strong>确认 TWS Greeks 实时显示正常</strong>
+        <span>检查期权链界面实时显示 <term class="term" data-tip="Greeks（希腊字母）：描述期权价格对各因素敏感性的指标集合。Delta（标的价格变动敏感性）、Gamma（Delta 的变化率）、Theta（每日时间衰减速率）、Vega（隐含波动率变动敏感性）是风控的四大核心参数。">Delta / Gamma / Theta / Vega</term>，以及 COIN 和 BTC 的 IV 数值</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">6</div>
+      <div class="flow-step-body">
+        <strong>开通数据工具账户</strong>
+        <span><strong>OptionCharts.io</strong>（免费）：查询 COIN 历史 IVR；<strong>TradingView</strong>（Basic 免费）：BTC 趋势判断、COIN/BTC Beta 计算</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>资金分层架构</h3>
+  <div class="callout info">
+    <span class="callout-icon">ℹ</span>
+    <div>以下比例为强制约束，不得因追求更高收益而突破。COIN 历史最大单日跌幅超过 30%，极端波动时充足的流动性缓冲是账户生存的关键。</div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>层级</th><th>账户规模示例</th><th>流动性缓冲（≥55%）</th><th>策略执行资金（≤15%）</th><th>正股仓位（≤30%，可选）</th></tr></thead>
+      <tbody>
+        <tr><td>$100K 账户</td><td>$100,000</td><td>≥ $55,000</td><td>≤ $15,000</td><td>≤ $30,000</td></tr>
+        <tr><td>$300K 账户</td><td>$300,000</td><td>≥ $165,000</td><td>≤ $45,000</td><td>≤ $90,000</td></tr>
+        <tr><td>$700K 账户</td><td>$700,000</td><td>≥ $385,000</td><td>≤ $105,000</td><td>≤ $210,000</td></tr>
+        <tr><td>$2M 账户</td><td>$2,000,000</td><td>≥ $1,100,000</td><td>≤ $300,000</td><td>≤ $600,000</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- S04 -->
+<section class="section" id="s04">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <div>
+      <div class="section-title">市场状态引擎</div>
+      <div class="section-subtitle">每周一 09:30 执行 — 所有策略决策由此驱动，不凭主观覆盖</div>
+    </div>
+  </div>
+
+  <p>COIN 与 BTC 的 30 日滚动相关系数历史上通常 >0.85。本策略以 <strong>BTC 趋势状态</strong>作为宏观过滤器，以 <strong>COIN 的 IVR</strong> 作为微观触发器，双因子同时满足方可开仓。数据来源：TradingView → BTC/USD → 日线图，添加 MA20 和 MA50。</p>
+
+  <div class="state-grid">
+    <div class="state-card state-a">
+      <div class="state-card-header">
+        <span class="state-badge">A</span>
+        <span class="state-name">强势上涨</span>
+      </div>
+      <ul>
+        <li>BTC &gt; MA20 &gt; MA50，MA20 斜率向上</li>
+        <li>MA20 过去 5 日持续走高</li>
+        <li>BTC 创近 20 日新高</li>
+        <li><strong style="color:var(--green)">指令：暂停所有新 Put 仓位</strong></li>
+        <li>已持仓正常维护</li>
+        <li>可开新 Covered Call（看多时卖 Call 有被行权风险，需确认接受）</li>
+      </ul>
+    </div>
+    <div class="state-card state-b">
+      <div class="state-card-header">
+        <span class="state-badge">B</span>
+        <span class="state-name">震荡偏多（主执行区）</span>
+      </div>
+      <ul>
+        <li>BTC &gt; MA20（MA20 走平或微升）</li>
+        <li>或 BTC 在 MA20–MA50 之间偏上位置</li>
+        <li>MA20 斜率接近水平</li>
+        <li><strong style="color:var(--blue)">指令：全量执行主策略</strong></li>
+        <li>使用标准 Delta 矩阵参数</li>
+        <li>IV/HRV ≥ 1.20 时优先开仓</li>
+      </ul>
+    </div>
+    <div class="state-card state-c">
+      <div class="state-card-header">
+        <span class="state-badge">C</span>
+        <span class="state-name">震荡偏空</span>
+      </div>
+      <ul>
+        <li>BTC &lt; MA20，但 &gt; MA50</li>
+        <li>MA20 开始向下，但 MA50 仍支撑</li>
+        <li><strong style="color:var(--orange)">指令：谨慎执行，保守参数</strong></li>
+        <li>Delta 目标绝对值降低 0.03–0.05</li>
+        <li>OTM 距离要求提高至 ≥ 15%</li>
+        <li>IVR 要求提高至 ≥ 55%，合约数减半</li>
+      </ul>
+    </div>
+    <div class="state-card state-d">
+      <div class="state-card-header">
+        <span class="state-badge">D</span>
+        <span class="state-name">强势下跌</span>
+      </div>
+      <ul>
+        <li>BTC &lt; MA20 &lt; MA50</li>
+        <li>MA20 持续向下（死叉确立）</li>
+        <li><strong style="color:var(--red)">指令：全面禁止新开仓</strong></li>
+        <li>已持仓按熔断机制处理</li>
+        <li>检查保护性 Put 是否有效</li>
+        <li>等待状态回升至 B 或 C 再重新评估</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>COIN 个股专属事件日历</h3>
+  <p>以下情形，无论 BTC 处于何种市场状态，均须在窗口期内<strong>禁止新开仓位</strong>：</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>事件类型</th><th>禁止窗口</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>COIN 季度财报</td>
+          <td>发布前 5 个交易日至发布后 1 个交易日</td>
+          <td>通常每季末后约 3–4 周发布，提前查询 IBKR 或 Earnings Whispers 日历</td>
+        </tr>
+        <tr>
+          <td>SEC / CFTC 重大诉讼进展</td>
+          <td>官方公告日前后各 3 个交易日</td>
+          <td>Coinbase 与 SEC 的监管诉讼是 COIN 最大的独立尾部风险来源</td>
+        </tr>
+        <tr>
+          <td>美国加密监管重大立法</td>
+          <td>投票日前后各 5 个交易日</td>
+          <td>CLARITY Act 等重大法案投票，将造成整个加密板块 IV 大幅波动</td>
+        </tr>
+        <tr>
+          <td>BTC ETF 政策重大变化</td>
+          <td>当日及次日</td>
+          <td>直接影响 COIN 交易量预期，触发 IV 快速重新定价</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- S05 -->
+<section class="section" id="s05">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <div>
+      <div class="section-title">波动率校准体系</div>
+      <div class="section-subtitle">IVR + IV/HRV 双触发 — 缺一不可</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>IVR 计算方法</h4>
+      <div class="formula-box">
+IVR = (当前 IV − 52 周最低 IV)
+      ÷ (52 周最高 IV − 52 周最低 IV)
+      × 100%
+<div class="comment">数据来源：OptionCharts.io → 搜索 COIN → IV Rank 栏位
+更新频率：每周一，记录入交易台账</div>
+      </div>
+      <p style="font-size:13px;">IVR &gt; 50% 代表当前 IV 处于过去一年的相对高位，卖方在统计上具有优势。注意 IVR 描述的是相对高低，不是绝对水平。</p>
+    </div>
+    <div class="card">
+      <h4>IV/HRV 比值（核心套利触发器）</h4>
+      <div class="formula-box">
+IV/HRV = COIN 30日 <term class="term" data-tip="隐含波动率（IV）：从当前期权市价反推出的未来波动预期。本手册使用 30 日 ATM 期权的 IV 作为基准。">隐含波动率（IV）</term>
+          ÷ COIN 30日 <term class="term" data-tip="历史实现波动率（HRV）：过去 30 个交易日的实际价格变动年化标准差，代表已经发生的真实波动。数据来源：OptionCharts.io「Historical Vol」栏或 IBKR TWS 的 Volatility 模块。">历史实现波动率（HRV）</term>
+
+开仓必要条件：IV/HRV ≥ 1.20
+数据来源：OptionCharts.io「Historical Vol」栏
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>IVR 区间</th><th>市场特征</th><th>IV/HRV 要求</th><th>Delta 调整</th><th>操作指令</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>&lt; 30%</code></td>
+          <td>COIN 异常平静，权利金极薄</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge badge-red">暂停一切新仓</span>，整理台账</td>
+        </tr>
+        <tr>
+          <td><code>30% – 55%</code></td>
+          <td>正常波动，主要执行区间</td>
+          <td>≥ 1.20</td>
+          <td>标准矩阵</td>
+          <td><span class="badge badge-green">正常执行</span>，完整流程</td>
+        </tr>
+        <tr>
+          <td><code>55% – 80%</code></td>
+          <td>情绪活跃，IV 溢价丰厚</td>
+          <td>≥ 1.15</td>
+          <td>可 +0.03（更激进）</td>
+          <td><span class="badge badge-yellow">积极执行</span>，严格 EV 核算</td>
+        </tr>
+        <tr>
+          <td><code>&gt; 80%</code></td>
+          <td>极端恐慌，方向不确定</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge badge-red">暂停新仓</span>，持仓盈 50% 可提前平</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warning">
+    <span class="callout-icon">⚡</span>
+    <div><strong>COIN/BTC IV 比值监控（第二、三层专用）：</strong>在 IBKR TWS 期权链中分别查询 COIN 和 BTC 的 ATM 30日 IV，计算比值。比值 ≥ 1.35 时，COIN 相对 BTC 的波动率溢价进入积极可套利区间，是第二、三层策略的最优开仓时机。</div>
+  </div>
+</section>
+
+<!-- S06 -->
+<section class="section" id="s06">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <div>
+      <div class="section-title">流动性评分体系</div>
+      <div class="section-subtitle">每条腿独立评分 — 任一腿低于 7 分，该组合禁止执行</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>评分维度</th><th>权重</th><th>10 分标准</th><th>7 分标准（及格线）</th><th>3 分标准</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><term class="term" data-tip="日成交量：该行权价期权合约当日成交的合约张数。低成交量意味着流动性稀薄，大单进出容易造成不利价格冲击，且平仓时可能难以找到对手方。">日成交量</term></td>
+          <td><strong>&times; 40%</strong></td>
+          <td>&gt; 1,000 张</td>
+          <td>300 – 1,000 张</td>
+          <td>&lt; 300 张</td>
+        </tr>
+        <tr>
+          <td><term class="term" data-tip="买卖价差（Bid-Ask Spread）：期权买价与卖价之间的差额，代表立即成交的隐性交易成本。使用限价单挂中间价（Midpoint）可避免支付全部价差。COIN 期权的正常价差约 $0.05–$0.15，超过 $0.30 则流动性已经偏差。">买卖价差</term></td>
+          <td><strong>&times; 30%</strong></td>
+          <td>&lt; $0.10</td>
+          <td>$0.10 – $0.30</td>
+          <td>&gt; $0.30</td>
+        </tr>
+        <tr>
+          <td><term class="term" data-tip="未平仓合约量（Open Interest，OI）：当前市场上尚未结清的该合约总持仓数量。高 OI 代表该合约有足够市场深度，在需要平仓时不会无人接盘。OI 是衡量「市场深度」比单日成交量更稳定的指标。">未平仓合约量</term></td>
+          <td><strong>&times; 20%</strong></td>
+          <td>&gt; 5,000 张</td>
+          <td>1,500 – 5,000 张</td>
+          <td>&lt; 1,500 张</td>
+        </tr>
+        <tr>
+          <td>做市商数量</td>
+          <td><strong>&times; 10%</strong></td>
+          <td>≥ 5 家</td>
+          <td>3 – 4 家</td>
+          <td>≤ 2 家</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="formula-box">
+加权评分 = 成交量得分 × 0.40 + 价差得分 × 0.30 + OI 得分 × 0.20 + 做市商得分 × 0.10
+  </div>
+
+  <div class="card-grid-3">
+    <div class="card">
+      <h4 style="color:var(--green)">评分 ≥ 7 分</h4>
+      <p>正常执行。<term class="term" data-tip="Combo Order（组合订单）：IBKR 的功能，允许同时提交两腿或多腿期权组合，确保两腿原子性成交，避免单腿成交另一腿未成交造成的意外单向敞口。">限价单挂中间价</term>，等待 3 分钟成交。</p>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--yellow)">评分 4 – 6 分</h4>
+      <p>权利金预期打 8 折，行权价优先整数位，仅挂限价单，等待 5 分钟，不挂市价单。</p>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--red)">评分 ≤ 3 分</h4>
+      <p>禁止在该行权价开仓。移至相邻活跃整数行权价重新评分；相邻两个均不达标则放弃。</p>
+    </div>
+  </div>
+</section>
+
+<!-- S07 -->
+<section class="section" id="s07">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <div>
+      <div class="section-title">三层策略架构</div>
+      <div class="section-subtitle">按账户规模选择层级 — 不越级执行</div>
+    </div>
+  </div>
+
+  <div class="callout gold">
+    <span class="callout-icon">★</span>
+    <div><strong>分层设计的根本原因：</strong>原始跨市场套利（卖 COIN Put + 买 BTC Put）中，1 张 CME BTC 期权 = 5 BTC ≈ $340,000 敞口，对应约 100 张 COIN Put。这意味着账户规模低于 $1.5M 时，该对冲无法有效执行。三层架构根据资金规模提供完全可执行的替代方案，不妥协可执行性。</div>
+  </div>
+
+  <!-- TIER 1 -->
+  <div class="tier-card tier-1">
+    <div class="tier-header">
+      <span class="tier-icon">①</span>
+      <div class="tier-header-info">
+        <div class="tier-range">第一层：$50,000 – $300,000</div>
+        <div class="tier-desc">Bull Put Spread — 用买腿替代跨市场对冲，风险完全封顶</div>
+      </div>
+    </div>
+    <div class="tier-body">
+      <p>核心逻辑：以购入<term class="term" data-tip="Long Put（买入看跌期权）：在 Bull Put Spread 中，买腿的作用是设定最大亏损上限。无论 COIN 跌多深，买腿都可以以固定价格卖出股票，将最大亏损限制在「价差宽度 − 净权利金」这个固定金额。">买腿 Long Put</term> 的方式替代跨市场 BTC 对冲，以牺牲部分净权利金换取完全确定的风险上限和极简的执行逻辑。</p>
+
+      <div class="table-wrap" style="margin-top:12px">
+        <table>
+          <thead><tr><th>参数</th><th>状态 B（标准）</th><th>状态 C（保守）</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>卖腿 <term class="term" data-tip="Short Put Delta：卖出看跌期权对标的价格变动的敏感性绝对值。Delta -0.20 意味着标的下跌 $1 时，该期权价格上涨约 $0.20。绝对值越大代表行权价越接近市价，权利金越高但风险越大。">Delta 目标</term></td>
+              <td><code>-0.20 至 -0.25</code></td>
+              <td><code>-0.18 至 -0.22</code></td>
+            </tr>
+            <tr>
+              <td>最小 <term class="term" data-tip="OTM 距离（Out-of-The-Money）：行权价距当前股价的百分比距离。COIN 单日波动可达 10%+，因此要求比普通股票（通常 8%）更宽的安全缓冲区。">OTM 距离</term></td>
+              <td><code>≥ 10%</code>（$174 时行权价 ≤ $156）</td>
+              <td><code>≥ 12%</code>（$174 时行权价 ≤ $153）</td>
+            </tr>
+            <tr>
+              <td>价差宽度</td>
+              <td><code>$15 – $20</code></td>
+              <td><code>$15</code></td>
+            </tr>
+            <tr>
+              <td><term class="term" data-tip="DTE（Days to Expiration）：距期权到期的日历天数。DTE=30–45 天时，Theta 衰减够快而 Gamma 风险相对可控，是卖方策略的黄金执行区间。低于 21 天时 Gamma 风险急剧上升，需格外谨慎。">到期日 DTE</term></td>
+              <td><code>30 – 45 天</code></td>
+              <td><code>35 – 45 天</code>（避免近月 Gamma）</td>
+            </tr>
+            <tr>
+              <td>净权利金效率</td>
+              <td colspan="2">净权利金 ÷ 价差宽度 × 100% ≥ <strong>25%</strong>（低于此值不执行）</td>
+            </tr>
+            <tr>
+              <td>单笔最大风险</td>
+              <td colspan="2">≤ 账户总值 <strong>3%</strong>（$100K 账户单笔最大亏损 ≤ $3,000）</td>
+            </tr>
+            <tr>
+              <td>总保证金占用</td>
+              <td colspan="2">≤ 账户总值 <strong>15%</strong>，同时持仓最多 <strong>3 组</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Delta 矩阵 — 行权价选择指引</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>COIN 价格区间</th><th>状态 B 卖腿参考行权价</th><th>状态 C 卖腿参考行权价</th><th>买腿行权价</th></tr></thead>
+          <tbody>
+            <tr><td><code>$100 – $150</code></td><td>$88–$95（约 Delta -0.20 ~ -0.25）</td><td>$85–$92（更虚值）</td><td>卖腿 − $15</td></tr>
+            <tr><td><code>$150 – $220</code></td><td>$135–$145（约 Delta -0.20 ~ -0.25）</td><td>$130–$140</td><td>卖腿 − $15</td></tr>
+            <tr><td><code>$220 – $300</code></td><td>$195–$210（约 Delta -0.20 ~ -0.25）</td><td>$188–$202</td><td>卖腿 − $20</td></tr>
+            <tr><td><code>&gt; $300</code></td><td>$265–$285（约 Delta -0.20 ~ -0.25）</td><td>$258–$274</td><td>卖腿 − $20</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted)">注：以上均为参考区间。以实际期权链 Delta 读数为准，OTM 距离须在实际执行前再次验证满足要求。</p>
+    </div>
+  </div>
+
+  <!-- TIER 2 -->
+  <div class="tier-card tier-2">
+    <div class="tier-header">
+      <span class="tier-icon">②</span>
+      <div class="tier-header-info">
+        <div class="tier-range">第二层：$300,000 – $1,500,000</div>
+        <div class="tier-desc">Bull Put Spread + MSTR Put 代理对冲 — 无需期货权限的跨市场对冲</div>
+      </div>
+    </div>
+    <div class="tier-body">
+      <p><term class="term" data-tip="MicroStrategy（MSTR）：一家在纳斯达克上市的商业智能公司，持有超过 50 万枚 BTC（截至 2026 年初），其股价与 BTC 的 30 日滚动相关系数通常 >0.90，Beta 约 1.5–2.0。MSTR 期权在普通股票账户即可交易，无需期货权限，是小于 $1.5M 账户的最优 BTC 代理对冲工具。">MSTR（MicroStrategy）</term> 持有大量 BTC，其股价与 BTC 高度相关（相关系数通常 >0.90），且期权在普通股票账户即可交易。通过买入 MSTR Put 代理对冲系统性加密风险，解决了最小单位问题。</p>
+
+      <div class="callout info" style="margin:12px 0">
+        <span class="callout-icon">ℹ</span>
+        <div><strong>对冲局限性：</strong>MSTR Put 对冲的是系统性加密市场风险，无法对冲 COIN 的个股独立风险（如 SEC 诉讼、财报不及预期）。对冲有效性约为 70–85%，非 100%。若 COIN/MSTR 30 日相关系数降至 &lt;0.70，立即停止跨市场对冲，切换回纯第一层结构。</div>
+      </div>
+
+      <h4>MSTR Put 对冲比率计算公式</h4>
+      <div class="formula-box">
+N<sub>MSTR Put</sub> = N<sub>COIN Put</sub>
+                    × (|δ<sub>COIN</sub>| × P<sub>COIN</sub>)
+                    ÷ (|δ<sub>MSTR</sub>| × P<sub>MSTR</sub>)
+                    ÷ β<sub>MSTR/BTC</sub>
+
+<div class="comment">示例：COIN $174，MSTR $380，Delta 均 -0.20，β = 1.6：
+N_MSTR = 10 × (0.20 × 174) ÷ (0.20 × 380) ÷ 1.6 = 10 × 34.8 ÷ 76 ÷ 1.6 ≈ 3 张
+即 10 张 COIN Put 对应买入约 3 张 MSTR Put</div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>参数</th><th>设置</th></tr></thead>
+          <tbody>
+            <tr><td>触发条件</td><td>IV_COIN / IV_BTC ≥ 1.35，IVR 45%–80%，状态 B 或 C</td></tr>
+            <tr><td>MSTR Put 行权价</td><td>Delta 约 -0.15（比 COIN 卖腿更虚值，降低对冲成本）</td></tr>
+            <tr><td>MSTR Put 到期日</td><td>与 COIN 价差同月份，或提早 7–14 天（节省时间价值）</td></tr>
+            <tr><td>对冲成本上限</td><td>MSTR Put 权利金总成本 ≤ COIN 价差净权利金的 <strong>40%</strong>（保留 60% 净收益）</td></tr>
+            <tr><td>Beta 更新频率</td><td>每 2 周重新计算 MSTR/BTC 30 日滚动 Beta；偏差超过 0.3 时立即调整对冲张数</td></tr>
+            <tr><td>相关性硬约束</td><td>COIN/MSTR 30 日相关系数 &lt; 0.70 时，立即停止跨市场对冲，切换纯第一层</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>辅助策略：Iron Condor（高 IVR 环境专用）</h4>
+      <p>当 IVR &gt; 62%、状态 B、COIN 预期近期横盘时，可在 Bull Put Spread 基础上加入 Bear Call Spread，形成完整 Iron Condor，双侧收取权利金。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Iron Condor 参数</th><th>设置</th></tr></thead>
+          <tbody>
+            <tr><td>Put 侧（下方）</td><td>同第一层 Bull Put Spread 结构</td></tr>
+            <tr><td>Call 侧（上方）</td><td>卖 Call Delta +0.20，买 Call 高 $15–$20</td></tr>
+            <tr><td>EV 效率要求</td><td>两侧合计净权利金 ÷ 单侧价差宽度 ≥ <strong>30%</strong></td></tr>
+            <tr><td>平仓规则</td><td>总盈利达净权利金 50% 主动平；任一侧亏损达该侧价差 75% 时单独止损该侧</td></tr>
+            <tr><td>禁用条件</td><td>财报前 7 天禁止开新 Iron Condor（双侧风险不可控）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIER 3 -->
+  <div class="tier-card tier-3">
+    <div class="tier-header">
+      <span class="tier-icon">③</span>
+      <div class="tier-header-info">
+        <div class="tier-range">第三层：$1,500,000 – $5,000,000</div>
+        <div class="tier-desc">完整跨市场波动率套利 — CME Micro BTC 期权直接对冲</div>
+      </div>
+    </div>
+    <div class="tier-body">
+      <p>账户规模达 $1.5M+ 时，CME Micro BTC 期权（1 张 = 0.1 BTC ≈ $6,800）首次在实践上可精确对冲 COIN Put 仓位，实现真正的 <term class="term" data-tip="Delta 中性（Delta Neutral）：组合的总 Delta 接近零，意味着标的价格的小幅变动对组合总盈亏几乎无影响。这是机构级波动率套利的核心风控目标——通过对冲价格方向风险，单纯暴露于波动率回归的收益。">Delta 中性</term>跨市场波动率套利。</p>
+
+      <div class="callout warning" style="margin:12px 0">
+        <span class="callout-icon">⚡</span>
+        <div><strong>CME Micro BTC 期权规格：</strong>每张合约 = 0.1 BTC，当前约 $6,800 敞口（BTC ≈ $68,000）。日均成交量支持精确对冲，是第三层实现 Delta-Vega 双中性的执行工具。需额外订阅 CME 行情（约 $30/月）。</div>
+      </div>
+
+      <h4>CME BTC Put 张数计算</h4>
+      <div class="formula-box">
+N<sub>BTC Put</sub> = N<sub>COIN Put</sub>
+                   × (|δ<sub>COIN</sub>| × P<sub>COIN</sub>)
+                   ÷ (|δ<sub>BTC</sub>| × P<sub>BTC</sub> × 0.1)  ← 0.1 BTC/张
+                   × β<sub>COIN/BTC</sub>
+
+<div class="comment">示例：COIN $174，BTC $68,000，Delta 均 -0.20，β = 1.3：
+N_BTC = 100 × (0.20×174) ÷ (0.20×68000×0.1) × 1.3 = 100×34.8÷1360×1.3 ≈ 3.3 → 买 3 张
+即 100 张 COIN Put 需对应买入约 3 张 CME Micro BTC Put（0.1BTC/张）</div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>第三层专属参数</th><th>要求</th></tr></thead>
+          <tbody>
+            <tr><td>最小账户规模</td><td>$1,500,000（100 张 COIN Put 约占总账户 3–5%）</td></tr>
+            <tr><td>套利头寸上限</td><td>总账户 <strong>10%</strong>（同时运行 2 个独立套利组合）</td></tr>
+            <tr><td>组合总 Delta 目标</td><td>|Δ<sub>total</sub>| &lt; <strong>0.15</strong>（精度为第一层的 3 倍）</td></tr>
+            <tr><td>组合总 Vega 目标</td><td>总 Vega ≤ 账户净值 5%（防止 IV 大幅变动造成双向损失）</td></tr>
+            <tr><td>Beta 更新频率</td><td>每 2 周；波动超过 0.2 时立即调整对冲张数</td></tr>
+            <tr><td>再平衡触发条件</td><td>组合 Delta 偏移 &gt; 0.25，或 COIN/BTC 任一价格波动 &gt; 10%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S08 -->
+<section class="section" id="s08">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <div>
+      <div class="section-title">预期价值（EV）计算</div>
+      <div class="section-subtitle">每笔开仓前强制执行 — EV &lt; 净权利金 15% 不执行</div>
+    </div>
+  </div>
+
+  <p>EV 计算的核心在于利用<term class="term" data-tip="VRP 修正：当 IV 高于 HRV 时，期权的隐含概率高估了实际风险。通过将 Delta（即期权市场的「行权概率」估计）乘以 (HRV/IV) 系数进行修正，得到更接近真实的行权概率，从而准确计算统计期望值。这是策略正期望的数学来源。">波动率风险溢价（VRP）修正</term>后的真实行权概率，而非直接使用 Delta 所隐含的、被市场高估的概率。</p>
+
+  <div class="formula-box">
+<strong>第一步：胖尾修正概率</strong>
+P_conservative = |Delta<sub>卖腿</sub>| × 1.30
+<div class="comment">系数 1.30：COIN 价格分布比正态分布有更厚的尾部（加密资产跳空风险），
+胖尾修正将概率上调 30%。</div>
+
+<strong>第二步：VRP 修正（核心步骤）</strong>
+P_adj = P_conservative × (HRV ÷ IV)
+<div class="comment">当 IV &gt; HRV 时，P_adj &lt; P_conservative，即真实行权概率低于市场定价——这是卖方正期望的数学来源。</div>
+
+<strong>第三步：EV 计算</strong>
+EV = 净权利金 × (1 − P_adj) − 最大亏损 × P_adj
+
+<strong>执行门槛：EV &gt; 0 且 EV ÷ 净权利金 ≥ 15%</strong>
+  </div>
+
+  <h3>完整计算案例（当前市场：COIN $174，状态 B，IVR 58%）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>步骤</th><th>计算过程</th><th>结果</th><th>判断</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>市场环境确认</td>
+          <td>状态 B，IVR 58%，COIN 30日 IV = 82%，HRV = 60%，IV/HRV = 1.37</td>
+          <td>—</td>
+          <td><span class="badge badge-green">✓ IV/HRV ≥ 1.20</span></td>
+        </tr>
+        <tr>
+          <td>行权价选择</td>
+          <td>$174 × (1 − 10%) = $156.6 → 选 $155 Put（Delta 约 -0.22）；OTM = ($174−$155)÷$174 = 10.9%</td>
+          <td>卖腿 $155 Put，买腿 $140 Put</td>
+          <td><span class="badge badge-green">✓ OTM ≥ 10%</span></td>
+        </tr>
+        <tr>
+          <td>流动性评分</td>
+          <td>$155 Put：成交量 850 张、价差 $0.12、OI 4,200 张、做市商 4 家</td>
+          <td>加权得分 ≈ 8.1 分</td>
+          <td><span class="badge badge-green">✓ ≥ 7 分</span></td>
+        </tr>
+        <tr>
+          <td>权利金核算</td>
+          <td>$155 Put 中间价 $4.80；$140 Put 中间价 $1.90；净权利金 = $2.90/股</td>
+          <td>$290/组合；效率 = $2.90÷$15 = 19.3%</td>
+          <td><span class="badge badge-red">✗ 效率 &lt; 25%，需调整</span></td>
+        </tr>
+        <tr>
+          <td>调整：收窄价差</td>
+          <td>买腿改 $145 Put（价差 $10）；净权利金 = $4.80−$2.80 = $2.00；效率 = $2.00÷$10 = 20%</td>
+          <td>仍不足 25%，继续调整</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>调整：卖腿更激进</td>
+          <td>卖腿改 $158（Delta -0.24，OTM 9.2%... 不满足）→ 等待 IVR 升至 65%+ 再开仓</td>
+          <td><strong>本次不执行</strong></td>
+          <td><span class="badge badge-red">等待更好机会</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--green)">高 IVR 情景（IVR 68%，IV 92%）</td>
+          <td>$155 Put 权利金升至 $6.20；$140 Put $2.30；净权利金 $3.90；效率 = $3.90÷$15 = 26%</td>
+          <td>P_adj = (0.22×1.30)×(60/92) = 0.186；EV = $390×0.814 − $1,110×0.186 = $317−$206 = +$111</td>
+          <td><span class="badge badge-green">✓ EV/权利金 = 28.5% ≥ 15%，可执行</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout success">
+    <span class="callout-icon">✓</span>
+    <div>上述案例中刻意演示了「EV 不达标时的正确处理方式是等待，而不是凑合执行」。策略纪律的价值正体现于此——坚持只在统计优势明确时出手。</div>
+  </div>
+</section>
+
+<!-- S09 -->
+<section class="section" id="s09">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <div>
+      <div class="section-title">完整执行 SOP</div>
+      <div class="section-subtitle">五步骤 · 缺任一步中止 · 全程约 45 分钟</div>
+    </div>
+  </div>
+
+  <div class="callout danger">
+    <span class="callout-icon">⚠</span>
+    <div><strong>开仓前五项先决条件（任一不满足则中止）：</strong>① 市场状态 B 或 C &nbsp;② IVR 30%–80% 且 IV/HRV ≥ 1.20 &nbsp;③ 距最近重大事件 ≥ 5 个交易日 &nbsp;④ 账户执行资金层剩余保证金 ≥ 本笔最大亏损 × 1.5 &nbsp;⑤ W-8BEN 有效期内</div>
+  </div>
+
+  <div class="sop-steps">
+    <div class="sop-step">
+      <div class="sop-step-icon">🔍</div>
+      <div class="sop-step-content">
+        <strong><span class="time-badge">约 10 分钟</span>环境核查</strong>
+        <p>TradingView → BTC/USD 日线 → 记录 MA20/MA50 位置与斜率 → 判断市场状态 A/B/C/D。OptionCharts.io → 搜索 COIN → 记录 IVR、30 日 IV 绝对值、HRV 数值 → 计算 IV/HRV 比值。确认事件日历：未来 5 个交易日无财报、SEC 公告、重大立法。</p>
+      </div>
+    </div>
+    <div class="sop-step">
+      <div class="sop-step-icon">🎯</div>
+      <div class="sop-step-content">
+        <strong><span class="time-badge">约 10 分钟</span>行权价筛选与流动性评分</strong>
+        <p>查阅第 07 节 Delta 矩阵，根据当前价格区间和市场状态确定卖腿 Delta 目标区间。IBKR TWS 期权链 → 找到目标 Delta 区间内的具体行权价 → 验证 OTM 距离满足要求。选定买腿行权价（低于卖腿 $15–$20）→ 对主腿和保护腿分别执行流动性评分，均须 ≥ 7 分。</p>
+      </div>
+    </div>
+    <div class="sop-step">
+      <div class="sop-step-icon">📊</div>
+      <div class="sop-step-content">
+        <strong><span class="time-badge">约 10 分钟</span>EV 计算与仓位规模确认</strong>
+        <p>读取两腿中间价，计算净权利金和效率（≥ 25%）。执行第 08 节 EV 公式，确认 EV &gt; 0 且 EV ÷ 净权利金 ≥ 15%。计算合约数（不超过账户 3% 单笔上限），确认总保证金占用不超 15%。第二/三层：同步计算 MSTR/BTC Put 对冲张数，确认对冲成本 ≤ 净权利金 40%。</p>
+      </div>
+    </div>
+    <div class="sop-step">
+      <div class="sop-step-icon">⚡</div>
+      <div class="sop-step-content">
+        <strong><span class="time-badge">约 10 分钟</span>下单执行</strong>
+        <p>IBKR TWS → 使用 <term class="term" data-tip="Combo Order（组合订单）：IBKR 功能，允许将多腿期权组合作为单一订单同时提交，确保两腿原子性成交，彻底避免「单腿成交」风险——即一腿成交而另一腿未成交时产生的意外单向敞口。">Combo Order</term> 功能同时提交两腿（及对冲腿），挂净权利金中间价限价单。等待 3 分钟 → 未成交则以 $0.05 步长向不利方向调整，最多 3 次。第三次调整仍未成交 → 取消订单，记录「本次未成交」，下周重新评估。成交后立即截图，同步更新台账。</p>
+      </div>
+    </div>
+    <div class="sop-step">
+      <div class="sop-step-icon">✅</div>
+      <div class="sop-step-content">
+        <strong><span class="time-badge">约 5 分钟</span>风控复核</strong>
+        <p>计算所有持仓组合总 Delta，确认在限额内（第三层 |Δ| &lt; 0.15）。确认总保证金占用 ≤ 15%。记录本次开仓时 IVR、IV/HRV、市场状态、Beta 数值于台账。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S10 -->
+<section class="section" id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <div>
+      <div class="section-title">持仓管理规则</div>
+      <div class="section-subtitle">每 3 个交易日主动检查一次 · 以下信号触发时立即处理</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4 style="color:var(--green)">主动平仓信号（锁利离场）</h4>
+      <ul class="bullets">
+        <li>组合盈利达净权利金 <strong>50%</strong> → 立即提前平仓，释放保证金</li>
+        <li>COIN 价格大幅上涨 (&gt;20%)，卖腿更加虚值 → 可提前平仓</li>
+        <li>距到期日 ≤ 10 天且仍有盈利 → 强制平仓，避免 <term class="term" data-tip="Gamma 风险：临近到期时，期权的 Delta 对价格变动极度敏感，小幅价格变动可造成巨大的 P&L 波动。DTE 小于 10 天时，卖方的 Gamma 风险急剧上升，继续持有不划算。">Gamma 风险</term> 爆炸</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--red)">强制止损信号</h4>
+      <ul class="bullets">
+        <li>组合亏损达净权利金 <strong>200%</strong> → 当日收盘前无条件止损</li>
+        <li>COIN 单日跌幅 &gt; 10% → 暂停操作，评估是否触发 L2 熔断</li>
+        <li>L2 熔断触发 → 24 小时内平仓 50% 头寸</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>向外滚仓（Roll Out）操作规范</h3>
+  <p>当 COIN 跌至卖腿行权价的 <strong>8% 以内</strong>（危险区），评估是否滚仓：</p>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-step-num">1</div>
+      <div class="flow-step-body"><strong>平仓当前价差</strong><span>同时买回卖腿 + 卖出买腿，锁定已产生的亏损或小亏</span></div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">2</div>
+      <div class="flow-step-body"><strong>开立新价差</strong><span>到期日延后 30 天，卖腿行权价向下调整 8%–12%，买腿同步调整，维持 $15–$20 价差宽度</span></div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">3</div>
+      <div class="flow-step-body"><strong>净权利金必须为正</strong><span>滚仓后净权利金（新收 − 旧损）必须为正。无法实现净正权利金则放弃滚仓，直接止损平仓。</span></div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">4</div>
+      <div class="flow-step-body"><strong>限制滚仓次数</strong><span>同一仓位最多滚仓 <strong>1 次</strong>，不得连续滚仓拖延亏损——这是赌博，不是管理。</span></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h3>被行权接货处理流程</h3>
+  <div class="callout success">
+    <span class="callout-icon">✓</span>
+    <div><strong>被行权是策略的正常情形之一，不是失败。</strong>接货代表以卖腿行权价购入了 COIN 正股，实际成本 = 行权价 − 已收净权利金。接货后立即转入 Covered Call 摊薄模式。</div>
+  </div>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-step-num">T+0</div>
+      <div class="flow-step-body"><strong>确认接货并计算实际成本</strong><span>核实接货均价 = 卖腿行权价。实际成本 = 行权价 − 本笔已收净权利金/合约/100</span></div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">T+0</div>
+      <div class="flow-step-body"><strong>处理买腿 Long Put</strong><span>若买腿实值，卖出 Long Put（通常比行权更合算，可回收剩余时间价值）</span></div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">T+1</div>
+      <div class="flow-step-body"><strong>立即开备兑 Call 摊薄成本</strong><span>行权价选接货成本价 +10%–15%，Delta ≤ +0.25，DTE 25–35 天，收取权利金持续摊薄成本</span></div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">持续</div>
+      <div class="flow-step-body"><strong>Wash Sale 合规检查</strong><span>接货后 30 日内禁止主动卖出 COIN 正股，否则触发 Wash Sale，税务损失无法当期确认</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- S11 -->
+<section class="section" id="s11">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <div>
+      <div class="section-title">尾部风险保护</div>
+      <div class="section-subtitle">COIN 历史曾出现单月 -60% 的极端走势，保险不可省略</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <h4>季度灾难保险（保护性 Put）</h4>
+      <div class="table-wrap" style="margin-top:8px">
+        <table>
+          <tbody>
+            <tr><td>行权价</td><td>当前价格 × <strong>60%–70%</strong>（深度虚值）<br>$174 时参考 $104–$122</td></tr>
+            <tr><td>到期日</td><td>3–6 个月，按季度滚动</td></tr>
+            <tr><td>覆盖规模</td><td>覆盖 <strong>30%–50%</strong> 的总加密资产敞口（按名义价值）</td></tr>
+            <tr><td>年化预算</td><td>总加密资产敞口市值的 <strong>3%–5%</strong></td></tr>
+            <tr><td>最优买入时机</td><td>IVR &lt; 35% 时买入（保险便宜）；状态 D 即将触发前提早布局</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h4>黑天鹅应急时间轴</h4>
+      <div class="table-wrap" style="margin-top:8px">
+        <table>
+          <tbody>
+            <tr>
+              <td><strong>T+0<br>开盘 30 分钟</strong></td>
+              <td>不操作，观察价格稳定。确认账户无强平风险（可用保证金 &gt; 0）。检查保护性 Put 是否已升值。若保证金 Cushion &lt; 10%，立即减仓风险最大头寸。</td>
+            </tr>
+            <tr>
+              <td><strong>T+1</strong></td>
+              <td>判断事件性质（加密板块系统性 vs COIN 个股）。若为行业危机（FTX 级），COIN 可能短期承压后反弹；若为 COIN 个股问题（SEC 禁令），考虑平仓全部相关头寸。</td>
+            </tr>
+            <tr>
+              <td><strong>T+3–T+10</strong></td>
+              <td>市场企稳后重新评估 IVR（此时通常极高）。若状态回升至 B，且距下次事件 &gt; 5 天，可考虑小仓位（正常仓位 30%）试探性重启。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S12 -->
+<section class="section" id="s12">
+  <div class="section-header">
+    <span class="section-num">12</span>
+    <div>
+      <div class="section-title">三级熔断机制</div>
+      <div class="section-subtitle">强制执行 · 无例外 · 所有层级适用</div>
+    </div>
+  </div>
+
+  <div class="circuit-level l1">
+    <div class="circuit-header">
+      <div class="circuit-dot"></div>
+      <h4>L1 — 黄色预警</h4>
+    </div>
+    <div class="circuit-body">
+      <div class="trigger-list">
+        <span class="label">触发条件（任一满足）</span>
+        <li>COIN 单日波动幅度 &gt; 12%</li>
+        <li>任一组合浮亏 &gt; 净权利金的 120%</li>
+        <li>IV_COIN/IV_BTC &gt; 2.2 或 &lt; 0.9（比值异常）</li>
+        <li>账户保证金使用率 &gt; 18%</li>
+        <li>COIN/MSTR 相关性跌至 &lt; 0.70（第二层专属）</li>
+      </div>
+      <div class="action-list">
+        <span class="label">响应动作（当日完成）</span>
+        <li>暂停所有新开仓位</li>
+        <li>检查全部持仓 Delta 敞口</li>
+        <li>观察，不操作，做台账记录</li>
+        <li>次日触发条件消除后自动解除</li>
+      </div>
+    </div>
+  </div>
+
+  <div class="circuit-level l2">
+    <div class="circuit-header">
+      <div class="circuit-dot"></div>
+      <h4>L2 — 橙色警告</h4>
+    </div>
+    <div class="circuit-body">
+      <div class="trigger-list">
+        <span class="label">触发条件（任一满足）</span>
+        <li>COIN 3 日累计跌幅 &gt; 25%</li>
+        <li>账户保证金使用率 &gt; 20%</li>
+        <li>任一组合 Delta 绝对值 &gt; 0.30</li>
+        <li>L1 触发后 24 小时内未恢复</li>
+        <li>保护性 Put 全部到期，当前无尾部保护</li>
+      </div>
+      <div class="action-list">
+        <span class="label">响应动作（24 小时内执行）</span>
+        <li>平仓 50% 套利头寸（优先平亏损最大的组合）</li>
+        <li>调整剩余组合 Delta 至 &lt; 0.20</li>
+        <li>立即购买保护性 Put（若未配置）</li>
+        <li>暂停新开仓至少 2 周</li>
+      </div>
+    </div>
+  </div>
+
+  <div class="circuit-level l3">
+    <div class="circuit-header">
+      <div class="circuit-dot"></div>
+      <h4>L3 — 红色熔断</h4>
+    </div>
+    <div class="circuit-body">
+      <div class="trigger-list">
+        <span class="label">触发条件（任一满足）</span>
+        <li>COIN 5 日累计跌幅 &gt; 40%</li>
+        <li>券商发出强制平仓警告</li>
+        <li>美国颁布针对加密货币的全面禁令</li>
+        <li>主要加密交易所发生 FTX 级暴雷事件</li>
+        <li>账户净值亏损 &gt; 总值 15%</li>
+      </div>
+      <div class="action-list">
+        <span class="label">响应动作（立即执行，开盘后 30 分钟内）</span>
+        <li>市价平仓所有期权仓位</li>
+        <li>评估正股仓位是否需要减仓</li>
+        <li>暂停所有交易至少 1 个月</li>
+        <li>全面复盘，CPA 确认税务处理方式</li>
+        <li>重新评估策略适用性后方可恢复</li>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S13 -->
+<section class="section" id="s13">
+  <div class="section-header">
+    <span class="section-num">13</span>
+    <div>
+      <div class="section-title">月度操作清单</div>
+      <div class="section-subtitle">每月第一个周二执行 · 全程约 90 分钟 · 按顺序不跳步骤</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>阶段</th><th>时间</th><th>具体操作清单</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-blue">环境分析</span></td>
+          <td><code>30 分钟</code></td>
+          <td>
+            ① TradingView → BTC 日线 → 判断市场状态 A/B/C/D，记录 MA20/MA50 数值<br>
+            ② OptionCharts.io → COIN → 记录 IVR、30日 IV、HRV，计算 IV/HRV 比值<br>
+            ③ 第二/三层：计算 IV_COIN/IV_BTC 比值；更新 COIN/MSTR 30日滚动 Beta<br>
+            ④ 确认本月及下月 COIN 重大事件日历（财报日、SEC 听证日、重大立法投票）<br>
+            ⑤ 检查全部现有持仓：价格、Delta、到期日，确认无触发主动平仓条件
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-yellow">制定方案</span></td>
+          <td><code>25 分钟</code></td>
+          <td>
+            ① 根据市场状态和 IVR，判断本月是否执行新组合（状态 D 或 IVR &lt; 30% → 不执行，记录原因）<br>
+            ② 若执行：用 Delta 矩阵选卖腿行权价 → 流动性评分（两腿均 ≥ 7 分）→ EV 计算（EV ≥ 15%）<br>
+            ③ 第二/三层：计算 MSTR/BTC Put 对冲张数，确认对冲成本 ≤ 净权利金 40%<br>
+            ④ 计算执行后总保证金占用，确认不超上限 15%<br>
+            ⑤ 书面记录执行计划：行权价、到期日、合约数、预期权利金、EV 数值
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-green">执行交易</span></td>
+          <td><code>20 分钟</code></td>
+          <td>
+            ① IBKR TWS → Combo Order → 同时提交两腿（及对冲腿），挂净权利金限价单<br>
+            ② 等待 3 分钟 → 未成交则降 $0.05，最多调整 3 次<br>
+            ③ 第三次仍未成交 → 取消，记录「本月未成交」，下周重新评估<br>
+            ④ 成交后截图，立即更新台账
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-orange">风控复核</span></td>
+          <td><code>10 分钟</code></td>
+          <td>
+            ① 计算所有持仓总 Delta，确认在限额内<br>
+            ② 确认账户总保证金使用率 ≤ 15%<br>
+            ③ 检查保护性 Put 是否仍在有效期内且覆盖规模足够<br>
+            ④ 确认 W-8BEN 有效（每年 1 月额外专项检查）
+          </td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-gray">台账更新</span></td>
+          <td><code>5 分钟</code></td>
+          <td>
+            ① 更新 Excel 台账（见第 14 节格式）<br>
+            ② 记录本月净权利金收入、已实现盈亏、月化收益率<br>
+            ③ 标记税务事件（权利金收入 / 接货 / 资本利得），折算 CNY 金额<br>
+            ④ 若有被行权，红色标记，提醒 CPA 下季度审阅
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- S14 -->
+<section class="section" id="s14">
+  <div class="section-header">
+    <span class="section-num">14</span>
+    <div>
+      <div class="section-title">绩效追踪台账</div>
+      <div class="section-subtitle">每笔交易必填 · 为 CPA 申报提供完整依据</div>
+    </div>
+  </div>
+
+  <h3>台账必填字段</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>字段</th><th>填写示例</th><th>用途说明</th></tr></thead>
+      <tbody>
+        <tr><td><span class="log-field">组合 ID</span></td><td>COIN_BPS_20260415_001</td><td>唯一标识，便于追踪和 CPA 审阅</td></tr>
+        <tr><td><span class="log-field">开仓日期</span></td><td>2026-04-15（美东时间）</td><td>时效性追踪、税务年度归属</td></tr>
+        <tr><td><span class="log-field">卖腿（COIN Put）</span></td><td>$155 Put，25 张，$6.20，Delta -0.22</td><td>权利金收入（CPA 必需）</td></tr>
+        <tr><td><span class="log-field">买腿（COIN Put）</span></td><td>$140 Put，25 张，$2.30，Delta -0.10</td><td>对冲成本</td></tr>
+        <tr><td><span class="log-field">对冲腿（MSTR/BTC）</span></td><td>MSTR $320 Put，3 张，$4.80，Delta -0.15</td><td>第二/三层对冲成本（必填）</td></tr>
+        <tr><td><span class="log-field">净权利金</span></td><td>$3.90/股，$9,750 总（25张）</td><td>净收益计算基础</td></tr>
+        <tr><td><span class="log-field">开仓时 EV</span></td><td>EV = +$111/张，EV率 = 28.5% ✓</td><td><strong>纪律凭证，必须填写</strong></td></tr>
+        <tr><td><span class="log-field">市场状态 / IVR / IV/HRV</span></td><td>B / 68% / 1.53</td><td>策略合规性存档</td></tr>
+        <tr><td><span class="log-field">最大亏损（总）</span></td><td>$1,110/张 × 25 = $27,750</td><td>风险敞口确认</td></tr>
+        <tr><td><span class="log-field">平仓日期 / 原因</span></td><td>2026-05-10 / 盈利 50% 主动平</td><td>持仓周期分析</td></tr>
+        <tr><td><span class="log-field">最终净盈亏（USD）</span></td><td>+$4,875（$9,750 × 50%）</td><td>损益确认（CPA 必需）</td></tr>
+        <tr><td><span class="log-field">税务事件标记</span></td><td>权利金收入（资本利得）</td><td>CPA 分类申报依据</td></tr>
+        <tr><td><span class="log-field">CNY 折算</span></td><td>¥35,145（汇率 7.21）</td><td>中国税务申报备用</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>核心绩效指标</h3>
+  <div class="card-grid-3">
+    <div class="stat-card">
+      <div class="stat-label">月化权利金收益率目标</div>
+      <div class="stat-value">1.5% – 4%</div>
+      <div class="stat-note">对占用保证金计算，非总账户</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">策略胜率目标</div>
+      <div class="stat-value">&gt; 65%</div>
+      <div class="stat-note">盈利组合数 ÷ 总完结组合数</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">最大回撤控制目标</div>
+      <div class="stat-value">&lt; 15%</div>
+      <div class="stat-note">峰值净值至谷值净值</div>
+    </div>
+  </div>
+
+  <h3>真实年化收益预期（全账户口径，15% 保证金利用率）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>情景</th><th>全账户年化净回报</th><th>关键假设</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-green">乐观情景</span></td>
+          <td>25% – 45%</td>
+          <td>IVR 持续 60%+，IV/HRV 均值 1.45，无 L3 熔断，利用率达 80%</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">基准情景</span></td>
+          <td>12% – 22%</td>
+          <td>IVR 利用率 60%，IV/HRV 均值 1.30，偶发 L1/L2，部分接货转 Covered Call</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-orange">压力情景</span></td>
+          <td>-5% – +5%</td>
+          <td>触发 1 次 L2 熔断 + 多次 L1，SEC 诉讼造成 COIN 持续下压，接货后股价低迷</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-red">极端情景</span></td>
+          <td>-15% – -25%</td>
+          <td>COIN 单月暴跌 &gt; 50%，触发 L3 熔断，多头寸接货，保护 Put 覆盖不足</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:12.5px;color:var(--text-muted)">注：COIN 历史上曾出现从 $340 跌至 $33 的极端走势（2022 年）。极端情景并非理论假设，而是历史已经发生过的现实。策略的全部设计均以此为底线压力测试基础。</p>
+</section>
+
+<!-- S15 -->
+<section class="section" id="s15">
+  <div class="section-header">
+    <span class="section-num">15</span>
+    <div>
+      <div class="section-title">绝对纪律红线</div>
+      <div class="section-subtitle">违反任意一条，强制停盘 2 周并提交书面复盘</div>
+    </div>
+  </div>
+
+  <div class="redlines">
+    <div class="redline-item">
+      <span class="redline-num">RL-01</span>
+      <span class="redline-text"><strong>在市场状态 D，或 IVR &gt; 80% 时，开立任何新的卖方仓位。</strong><br>危机时期统计优势消失，卖方处于系统性劣势，此时收取的权利金无法补偿实际承担的风险。</span>
+    </div>
+    <div class="redline-item">
+      <span class="redline-num">RL-02</span>
+      <span class="redline-text"><strong>EV 计算未达标（&lt; 15%），仍强行开仓。</strong><br>这是情绪主导决策的最明确信号。打破 EV 过滤等同于放弃策略的数学根基，将「系统化收割」退化为「凭感觉赌博」。</span>
+    </div>
+    <div class="redline-item">
+      <span class="redline-num">RL-03</span>
+      <span class="redline-text"><strong>净权利金效率 &lt; 25%，仍强行执行该价差结构。</strong><br>低效率价差意味着买腿消耗了过多权利金，边际优势不足。应重新选择行权价或等待更高 IVR 环境。</span>
+    </div>
+    <div class="redline-item">
+      <span class="redline-num">RL-04</span>
+      <span class="redline-text"><strong>超出 15% 保证金占用上限加仓，或为弥补亏损而超限（「摊平」）。</strong><br>期权卖方账户爆仓的首要原因。极端行情中杠杆式加仓将使亏损呈指数级扩大，超出任何保护措施的保护范围。</span>
+    </div>
+    <div class="redline-item">
+      <span class="redline-num">RL-05</span>
+      <span class="redline-text"><strong>在 COIN 财报或 SEC 重大公告前 5 个交易日内，开立新的卖方仓位。</strong><br>事件驱动的 IV 急剧攀升使卖方处于极度不利地位，此时开仓的成本和风险高度不对称。</span>
+    </div>
+    <div class="redline-item">
+      <span class="redline-num">RL-06</span>
+      <span class="redline-text"><strong>同一仓位进行超过 1 次滚仓操作。</strong><br>连续滚仓是将亏损无限期拖延的错觉管理，本质是对不利局面的赌博式规避，最终往往造成更大损失。</span>
+    </div>
+    <div class="redline-item">
+      <span class="redline-num">RL-07</span>
+      <span class="redline-text"><strong>熔断机制触发后，以「等待反弹」为由拒不执行规定的风控动作。</strong><br>熔断机制的价值完全在于机械执行。任何理性化的拖延都使整个风控体系形同虚设，等同于没有熔断机制。</span>
+    </div>
+    <div class="redline-item">
+      <span class="redline-num">RL-08</span>
+      <span class="redline-text"><strong>在主动减仓 COIN 正股前，未检查过去 30 天是否存在接货记录（Wash Sale 风险）。</strong><br>违反 Wash Sale 规则将导致税务损失无法当期确认，且后续补救极为繁琐，是完全可以通过台账管理避免的风险。</span>
+    </div>
+  </div>
+</section>
+
+<!-- 策略信条 -->
+<div class="card" style="border-color:rgba(201,168,76,0.3);background:rgba(201,168,76,0.04);text-align:center;padding:36px 40px;margin-bottom:32px">
+  <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px">策略信条</div>
+  <p style="font-family:'Playfair Display',serif;font-size:19px;color:var(--text-primary);line-height:1.8;font-style:italic;max-width:660px;margin:0 auto">
+    "我们不预测 COIN 或 BTC 的价格方向。我们经营的是一家波动率保险公司——在市场高估 COIN 的不确定性时，系统性地收取这份恐慌溢价。大部分时间我们什么都不做；当三重条件同时满足时，我们用纪律和系统赚钱。坚持过滤，让概率和时间工作。"
+  </p>
+</div>
+
+<!-- 免责声明 -->
+<div class="disclaimer">
+  <strong>免责声明</strong><br>
+  本操作手册基于 Coinbase Global Inc. 历史数据、美股期权市场规则及 NRA 税务政策综合研究制定，<strong>不构成任何投资建议</strong>。期权交易存在本金全部损失的重大风险。COIN 受加密货币监管变化、BTC 市场波动、美国证券法律诉讼、宏观利率环境等多重因素影响，可能出现超出历史经验的极端行情。<br><br>
+  本手册所涉及的全部税务处理方式、遗产税规划方案，须在相关持牌 CPA、执业律师出具书面意见后方可执行。EV 计算基于历史统计假设，不保证未来每笔交易均具有正期望。所有历史回测与收益预期数据仅供参考，不代表未来实际收益。交易者须自行评估风险承受能力，并对一切投资决策及其税务后果承担完全责任。<br><br>
+  <strong>版本：V2.0 · 综合优化版 · 2026 年 4 月 12 日 · 客户内部文件 · 禁止对外传阅</strong>
+</div>
+
+</main>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navItems.forEach(item => {
+          item.style.borderLeftColor = 'transparent';
+          item.style.background = '';
+          item.style.color = '';
+        });
+        const active = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
+        if (active) {
+          active.style.borderLeftColor = 'var(--gold)';
+          active.style.background = 'var(--gold-dim)';
+          active.style.color = 'var(--gold-light)';
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
