@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 视频创作 · 行业作战室 · rhcloud</title>
+  <meta name="description" content="AI 视频创作行业Tokens销售速查：客户群、痛点、解决方案、成交话术">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── 行业子页面专属样式 ── */
+    .industry-page-hero {
+      background: linear-gradient(135deg, rgba(20,121,255,0.12) 0%, rgba(13,15,28,0) 100%);
+      border: 1px solid #1479FF33;
+      border-radius: var(--radius-xl);
+      padding: 28px 28px 24px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .industry-page-hero__num {
+      font-size: 80px;
+      font-weight: 900;
+      color: #1479FF18;
+      position: absolute;
+      right: 20px; top: 5px;
+      line-height: 1;
+      font-family: var(--font-mono);
+      pointer-events: none;
+    }
+    .industry-page-hero__badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(20,121,255,0.12); border: 1px solid #1479FF55;
+      border-radius: 20px; padding: 4px 12px;
+      font-size: 12px; color: #1479FF; font-weight: 600; margin-bottom: 10px;
+    }
+    .industry-page-hero__title {
+      font-size: 26px; font-weight: 800; color: #fff;
+      letter-spacing: -0.4px; margin-bottom: 4px;
+    }
+    .industry-page-hero__tagline { font-size: 14px; color: var(--text-muted); }
+
+    /* 区块标题 */
+    .block-header {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 17px; font-weight: 700; color: var(--text);
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .block-header__icon {
+      width: 32px; height: 32px;
+      background: rgba(20,121,255,0.12); border: 1px solid #1479FF44;
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      color: #1479FF; font-size: 14px;
+    }
+
+    /* 客户群信息行 */
+    .info-row {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row__label {
+      width: 80px; flex-shrink: 0; color: var(--text-muted); font-size: 12px;
+      padding-top: 2px;
+    }
+    .info-row__value { color: var(--text); line-height: 1.6; }
+
+    /* 场景卡片 */
+    .scenario-card {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
+      transition: border-color var(--trans);
+    }
+    .scenario-card:hover { border-color: #1479FF55; }
+    .scenario-card__icon { font-size: 22px; flex-shrink: 0; width: 28px; text-align: center; }
+    .scenario-card__name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .scenario-card__desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* 痛点条目 */
+    .pain-item {
+      background: var(--danger-bg); border: 1px solid var(--danger-border);
+      border-left: 4px solid var(--danger);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 12px 16px; margin-bottom: 10px;
+    }
+    .pain-item__data {
+      display: inline-block; background: var(--danger); color: #fff;
+      font-size: 12px; font-weight: 700; border-radius: 4px;
+      padding: 2px 8px; margin-bottom: 6px;
+    }
+    .pain-item__desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* 解决方案条目 */
+    .solution-item {
+      background: var(--success-bg); border: 1px solid var(--success-border);
+      border-left: 4px solid var(--success);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 12px 16px; margin-bottom: 10px;
+    }
+    .solution-item__pain {
+      font-size: 12px; font-weight: 700; color: var(--success); margin-bottom: 5px;
+    }
+    .solution-item__pain i { margin-right: 5px; }
+    .solution-item__sol { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+    /* 推荐模型卡片 */
+    .model-card {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .model-card__name {
+      font-size: 14px; font-weight: 700; color: #1479FF; flex: 1;
+    }
+    .model-card__name i { margin-right: 6px; font-size: 13px; }
+    .model-card__use { font-size: 13px; color: var(--text-muted); flex: 2; }
+    .model-card__level {
+      font-size: 11px; font-weight: 600; color: #1479FF;
+      background: rgba(20,121,255,0.12); border: 1px solid #1479FF44;
+      border-radius: 4px; padding: 2px 8px; white-space: nowrap;
+    }
+
+    /* 话术卡片 */
+    .script-box {
+      background: linear-gradient(135deg, rgba(20,121,255,0.06), rgba(20,121,255,0.02));
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-lg); padding: 20px 20px 16px;
+    }
+    .script-box__label {
+      font-size: 12px; font-weight: 700; color: var(--primary);
+      margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .script-box__text {
+      font-size: 15px; color: var(--text); line-height: 1.9;
+      margin-bottom: 14px;
+    }
+    .script-box__text .copy-target { display: inline; }
+
+    /* 实战提示 */
+    .tips-list {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .tips-list li {
+      font-size: 13px; color: var(--text-muted); line-height: 1.6;
+      padding: 10px 14px;
+      background: var(--warning-bg); border: 1px solid var(--warning-border);
+      border-left: 3px solid var(--warning);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .tips-list li::before { content: '💡 '; }
+
+    /* 红线 banner */
+    .redline-banner {
+      background: linear-gradient(135deg, rgba(255,77,79,0.10), rgba(255,77,79,0.05));
+      border: 1px solid var(--danger-border);
+      border-radius: var(--radius-lg); padding: 14px 18px;
+      margin-bottom: 24px; display: flex; align-items: flex-start; gap: 12px;
+    }
+    .redline-banner i { color: var(--danger); font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+    .redline-banner__title { font-size: 12px; font-weight: 700; color: var(--danger); margin-bottom: 4px; }
+    .redline-banner__row { font-size: 12px; line-height: 1.8; }
+    .redline-banner__yes { color: #6EE77D; }
+    .redline-banner__no  { color: #FF8888; }
+
+    /* 两列布局 */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 800px) {
+      .two-col { grid-template-columns: 1fr; }
+      .industry-page-hero__num { font-size: 50px; right: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 密码弹窗 -->
+<div id="pwd-overlay" class="hidden">
+  <div class="pwd-modal">
+    <div class="pwd-modal__logo">rh<span>cloud</span></div>
+    <div class="pwd-modal__subtitle">Tokens 销售作战学院 · 内部系统</div>
+    <div class="pwd-modal__label">请输入访问密码</div>
+    <input type="password" id="pwd-input" class="pwd-modal__input" placeholder="••••••" autocomplete="off">
+    <div id="pwd-error" class="pwd-modal__err"></div>
+    <div id="pwd-lock"  class="pwd-modal__lock"></div>
+    <button id="pwd-submit" class="btn btn-primary btn-block">进入作战学院</button>
+    <div class="pwd-modal__footer">如无密码，请联系培训负责人获取 · © rhcloud</div>
+  </div>
+</div>
+
+<!-- 顶部导航 -->
+<nav class="nav-top">
+  <div class="nav-top__logo">
+    <span class="nav-top__logo-dot"></span>
+    rhcloud 作战学院
+  </div>
+  <div class="nav-top__links">
+    <a href="index.html"     class="nav-top__link" data-page="index.html">首页</a>
+    <a href="basic.html"     class="nav-top__link" data-page="basic.html">基础认知</a>
+    <a href="business.html"  class="nav-top__link" data-page="business.html">业务认知</a>
+    <a href="target.html"    class="nav-top__link" data-page="target.html">目标客户</a>
+    <a href="prospect.html"  class="nav-top__link" data-page="prospect.html">客户挖掘</a>
+    <a href="industry.html"  class="nav-top__link" data-page="industry.html">行业作战室</a>
+    <a href="playbook.html"  class="nav-top__link" data-page="playbook.html">销售方法论</a>
+    <a href="scripts.html"   class="nav-top__link" data-page="scripts.html">话术库</a>
+    <a href="advantage.html" class="nav-top__link" data-page="advantage.html">平台优势</a>
+    <a href="tools.html"     class="nav-top__link" data-page="tools.html">实战工具</a>
+  </div>
+  <div class="nav-top__search">
+    <i class="fas fa-search nav-top__search-icon"></i>
+    <input type="text" id="search-input" placeholder="搜索话术、行业、术语…">
+    <div id="search-dropdown" class="search-dropdown"></div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- 行业切换导航 -->
+  <div class="industry-nav">
+    <a href="industry.html" class="industry-tag">← 全部行业</a>
+    <a href="industry-ai-video.html" class="industry-tag active">🎬 AI视频创作</a>
+    <a href="industry-video-platform.html" class="industry-tag">📺 视频聚合平台</a>
+    <a href="industry-education.html" class="industry-tag">🎓 在线教育</a>
+    <a href="industry-short-drama.html" class="industry-tag">📖 短剧/漫剧</a>
+    <a href="industry-ai-image.html" class="industry-tag">🖼️ AI影像工具</a>
+    <a href="industry-ai-social.html" class="industry-tag">💬 AI社交陪伴</a>
+    <a href="industry-game-npc.html" class="industry-tag">🎮 游戏NPC</a>
+    <a href="industry-live-ecommerce.html" class="industry-tag">📡 直播电商</a>
+    <a href="industry-security.html" class="industry-tag">🛡️ 安防/巡检</a>
+    <a href="industry-credit.html" class="industry-tag">📊 企业征信</a>
+    <a href="industry-logistics.html" class="industry-tag">🚛 智慧物流</a>
+    <a href="industry-hr.html" class="industry-tag">👥 招聘/HR</a>
+
+  </div>
+
+  <!-- 准入红线 -->
+  <div class="redline-banner">
+    <i class="fas fa-shield-halved"></i>
+    <div>
+      <div class="redline-banner__title">⚡ 客户准入红线（所有行业均适用）</div>
+      <div class="redline-banner__row">
+        <span class="redline-banner__yes">✅ 只做：</span>已在使用 Tokens 的中小企业 · 有AI业务落地 · 月用量 10万～5000万 Tokens
+      </div>
+      <div class="redline-banner__row">
+        <span class="redline-banner__no">❌ 不做：</span>个人开发者 · 政府/国企 · 头部互联网大厂 · 大模型研发原厂
+      </div>
+    </div>
+  </div>
+
+  <!-- 页面主标题 -->
+  <div class="industry-page-hero">
+    <div class="industry-page-hero__num">01</div>
+    <div class="industry-page-hero__badge">
+      <i class="fas fa-video"></i> 行业作战室 · 第 01 号
+    </div>
+    <div class="industry-page-hero__title">AI 视频创作</div>
+    <div class="industry-page-hero__tagline">视频生成 · 批量制作 · 成本优化</div>
+  </div>
+
+  <!-- ① 客户群 -->
+  <div class="section">
+    <div class="block-header">
+      <div class="block-header__icon"><i class="fas fa-building"></i></div>
+      ① 客户群画像
+    </div>
+    <div class="card" style="padding:4px 20px 8px">
+      
+              <div class="info-row">
+                <span class="info-row__label">企业类型</span>
+                <span class="info-row__value">AI视频工具公司、短视频MCN机构、广告创意制作公司</span>
+              </div>
+              <div class="info-row">
+                <span class="info-row__label">企业规模</span>
+                <span class="info-row__value">20～300人，有独立技术团队</span>
+              </div>
+              <div class="info-row">
+                <span class="info-row__label">月Tokens量</span>
+                <span class="info-row__value">50万～3000万Tokens/月</span>
+              </div>
+              <div class="info-row">
+                <span class="info-row__label">决策角色</span>
+                <span class="info-row__value">CTO / 技术总监 / 内容制作总监</span>
+              </div>
+    </div>
+  </div>
+
+  <!-- ② 核心使用场景 -->
+  <div class="section">
+    <div class="block-header">
+      <div class="block-header__icon"><i class="fas fa-bolt"></i></div>
+      ② 核心使用场景（高频 Tokens 消耗场景）
+    </div>
+    
+              <div class="scenario-card">
+                <div class="scenario-card__icon">🎬</div>
+                <div class="scenario-card__body">
+                  <div class="scenario-card__name">视频脚本批量生成</div>
+                  <div class="scenario-card__desc">每小时自动生成100+差异化脚本，品牌风格一致，输出即可用</div>
+                </div>
+              </div>
+              <div class="scenario-card">
+                <div class="scenario-card__icon">🖼️</div>
+                <div class="scenario-card__body">
+                  <div class="scenario-card__name">文生视频/图生视频</div>
+                  <div class="scenario-card__desc">多风格视频素材生成，支持批量调用多种视频生成模型</div>
+                </div>
+              </div>
+              <div class="scenario-card">
+                <div class="scenario-card__icon">🔊</div>
+                <div class="scenario-card__body">
+                  <div class="scenario-card__name">智能配音与字幕</div>
+                  <div class="scenario-card__desc">自动生成多语言字幕，AI配音覆盖多种音色，大幅降低后期成本</div>
+                </div>
+              </div>
+              <div class="scenario-card">
+                <div class="scenario-card__icon">🎨</div>
+                <div class="scenario-card__body">
+                  <div class="scenario-card__name">视觉风格迁移</div>
+                  <div class="scenario-card__desc">快速复刻热门视频风格，批量应用到素材库</div>
+                </div>
+              </div>
+  </div>
+
+  <!-- ③ 业务痛点 + ④ 解决方案（并列） -->
+  <div class="two-col" style="margin-bottom:40px">
+    <div>
+      <div class="block-header">
+        <div class="block-header__icon" style="background:rgba(255,77,79,0.12);border-color:rgba(255,77,79,0.3);color:var(--danger)"><i class="fas fa-triangle-exclamation"></i></div>
+        ③ 业务痛点
+      </div>
+      
+              <div class="pain-item">
+                <div class="pain-item__data">延迟>15分钟</div>
+                <div class="pain-item__desc">大促节点高峰期视频生成排队超15分钟，客户窗口期错失，直接丢单</div>
+              </div>
+              <div class="pain-item">
+                <div class="pain-item__data">成本占营收18%+</div>
+                <div class="pain-item__desc">月Tokens成本随业务量线性增长，难以控制，毛利率被持续压缩</div>
+              </div>
+              <div class="pain-item">
+                <div class="pain-item__data">一致性差</div>
+                <div class="pain-item__desc">批量生成时角色形象/品牌风格漂移，每批需人工大量修改，效率极低</div>
+              </div>
+              <div class="pain-item">
+                <div class="pain-item__data">接口多维护难</div>
+                <div class="pain-item__desc">同时接入多个视频平台API，接口不统一，开发维护成本居高不下</div>
+              </div>
+    </div>
+    <div>
+      <div class="block-header">
+        <div class="block-header__icon" style="background:var(--success-bg);border-color:var(--success-border);color:var(--success)"><i class="fas fa-shield-check"></i></div>
+        ④ rhcloud 解决方案
+      </div>
+      
+              <div class="solution-item">
+                <div class="solution-item__pain"><i class="fas fa-check-circle"></i> 解决：高峰排队问题</div>
+                <div class="solution-item__sol">专有集群独立通道，高峰期不受其他用户影响，排队时间降至&lt;1分钟，稳定性99.9%+</div>
+              </div>
+              <div class="solution-item">
+                <div class="solution-item__pain"><i class="fas fa-check-circle"></i> 解决：成本压缩</div>
+                <div class="solution-item__sol"><span data-tip='智能路由'>智能路由</span>自动匹配最优价格模型，综合成本降低<strong style='color:var(--success)'>30%</strong>，月省数万元</div>
+              </div>
+              <div class="solution-item">
+                <div class="solution-item__pain"><i class="fas fa-check-circle"></i> 解决：一致性保障</div>
+                <div class="solution-item__sol">超长<span data-tip='上下文窗口'>上下文窗口</span>支持多轮风格校正，角色/品牌一致性问题减少80%</div>
+              </div>
+              <div class="solution-item">
+                <div class="solution-item__pain"><i class="fas fa-check-circle"></i> 解决：统一接口</div>
+                <div class="solution-item__sol">一个接口接入rhcloud聚合平台，统一调用多种视频生成模型，维护成本降低60%</div>
+              </div>
+    </div>
+  </div>
+
+  <!-- ⑤ 推荐模型 -->
+  <div class="section">
+    <div class="block-header">
+      <div class="block-header__icon"><i class="fas fa-microchip"></i></div>
+      ⑤ 推荐模型（rhcloud 内部命名）
+    </div>
+    <div style="background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:var(--radius);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--warning)">
+      <i class="fas fa-lock" style="margin-right:6px"></i>
+      以下均为 rhcloud 内部模型命名，对客户使用此名称介绍即可，无需说明底层技术实现
+    </div>
+    
+              <div class="model-card">
+                <div class="model-card__name"><i class="fas fa-microchip"></i> rhcloud 视频生成版</div>
+                <div class="model-card__use">主力视频素材生成</div>
+                <span class="model-card__level">高性能</span>
+              </div>
+              <div class="model-card">
+                <div class="model-card__name"><i class="fas fa-microchip"></i> rhcloud 文本增强版</div>
+                <div class="model-card__use">脚本创作与优化</div>
+                <span class="model-card__level">均衡</span>
+              </div>
+              <div class="model-card">
+                <div class="model-card__name"><i class="fas fa-microchip"></i> rhcloud 图像生成版</div>
+                <div class="model-card__use">封面/分镜图像生成</div>
+                <span class="model-card__level">高性价比</span>
+              </div>
+  </div>
+
+  <!-- ⑥ 成交话术 -->
+  <div class="section">
+    <div class="block-header">
+      <div class="block-header__icon" style="background:var(--primary-dim);border-color:var(--primary-border);color:var(--primary)"><i class="fas fa-comment-dots"></i></div>
+      ⑥ 成交话术 · 一句话切入
+    </div>
+    <div class="script-box">
+      <div class="script-box__label">
+        <i class="fas fa-quote-left"></i> 推荐开场话术（适用：电话/微信初次触达）
+      </div>
+      <div class="script-box__text">
+        <span class="copy-target" id="main-script">您好，我了解到贵司在做AI视频业务，我们rhcloud专门为视频生成场景提供Tokens服务，帮助客户在大促高峰期不排队、不掉单，综合成本还能降30%左右。请问您们现在月均Tokens消耗大概在什么量级？</span>
+      </div>
+      <button class="btn btn-primary copy-btn" data-copy-target="main-script">
+        <i class="fas fa-copy"></i> 一键复制话术
+      </button>
+    </div>
+  </div>
+
+  <!-- 实战提示 + ROI 入口 -->
+  <div class="two-col" style="margin-bottom:40px">
+    <div>
+      <div class="block-header" style="margin-bottom:14px">
+        <div class="block-header__icon" style="background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning)"><i class="fas fa-lightbulb"></i></div>
+        实战提示
+      </div>
+      <ul class="tips-list">
+        <li>提前询问对方大促节点时间，高峰稳定性是最强打痛点</li>
+<li>强调'只改一行代码'就能接入，降低技术团队迁移顾虑</li>
+<li>可主动提供1%流量POC测试方案，降低决策风险</li>
+
+      </ul>
+    </div>
+    <div>
+      <div class="block-header" style="margin-bottom:14px">
+        <div class="block-header__icon" style="background:var(--orange-dim);border-color:rgba(255,106,0,0.3);color:var(--orange)"><i class="fas fa-calculator"></i></div>
+        ROI 计算器
+      </div>
+      <div class="card" style="padding:20px;display:flex;flex-direction:column;gap:12px;height:calc(100% - 46px)">
+        <div style="font-size:14px;color:var(--text-muted);line-height:1.7">
+          当场计算节省金额，让数据说话。<br>
+          输入客户当前月消耗量 → 系统输出节省金额 + 性能提升指标。
+        </div>
+        <a href="tools.html#roi" class="btn btn-orange" style="margin-top:auto">
+          <i class="fas fa-calculator"></i> 打开 ROI 计算器
+        </a>
+        <a href="tools.html#quiz" class="btn btn-secondary">
+          <i class="fas fa-clipboard-check"></i> 客户识别自查表
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部分页导航 -->
+  <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <a href="industry.html" class="btn btn-secondary">
+      <i class="fas fa-th-large"></i> 返回全部行业
+    </a>
+    <div style="display:flex;gap:8px">
+      <a href="scripts.html" class="btn btn-secondary">
+        <i class="fas fa-comment-dots"></i> 查看完整话术库
+      </a>
+      <a href="tools.html" class="btn btn-primary">
+        <i class="fas fa-tools"></i> 实战工具箱
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- 移动端底部导航 -->
+<nav class="nav-bottom">
+  <a href="index.html"    class="nav-bottom__item" data-page="index.html"><i class="fas fa-house"></i><span>首页</span></a>
+  <a href="industry.html" class="nav-bottom__item" data-page="industry.html"><i class="fas fa-building"></i><span>行业</span></a>
+  <a href="scripts.html"  class="nav-bottom__item" data-page="scripts.html"><i class="fas fa-comment-dots"></i><span>话术</span></a>
+  <a href="tools.html"    class="nav-bottom__item" data-page="tools.html"><i class="fas fa-calculator"></i><span>工具</span></a>
+  <a href="playbook.html" class="nav-bottom__item" data-page="playbook.html"><i class="fas fa-chess"></i><span>方法论</span></a>
+</nav>
+
+<div id="back-top" title="返回顶部"><i class="fas fa-chevron-up"></i></div>
+<div id="toast-container"></div>
+
+<footer class="footer">
+  <div style="margin-bottom:6px">© 2026 rhcloud · 阿里云核心代理商 · 大模型Tokens专业服务商</div>
+  <div>内部培训系统 · 请勿外传 | <a href="industry.html">← 行业作战室总览</a></div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  RHCloud.init('industry');
+
+  // 复制按钮：支持 data-copy-target 属性（读取对应元素的文本内容）
+  document.querySelectorAll('.copy-btn[data-copy-target]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var targetId = btn.getAttribute('data-copy-target');
+      var targetEl = document.getElementById(targetId);
+      if (!targetEl) return;
+      var text = targetEl.innerText || targetEl.textContent;
+      navigator.clipboard.writeText(text).then(function() {
+        var orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> 已复制 ✓';
+        btn.style.background = 'var(--success)';
+        btn.style.borderColor = 'var(--success)';
+        setTimeout(function() {
+          btn.innerHTML = orig;
+          btn.style.background = '';
+          btn.style.borderColor = '';
+        }, 2000);
+        RHCloud.showToast('话术已复制到剪贴板');
+      }).catch(function() {
+        var text2 = text;
+        var ta = document.createElement('textarea');
+        ta.value = text2;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        RHCloud.showToast('话术已复制');
+      });
+    });
+  });
+});
+</script>
+</body>
+</html>

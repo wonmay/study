@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>基础认知 · rhcloud Tokens 销售作战学院</title>
+  <meta name="description" content="零基础理解Tokens和大模型——AI的话费、市场地图、能力分类">
+
+  <!-- 图标库 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- 全局样式 -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* ══ 本页专属样式 ══ */
+
+    /* ── 页内锚点导航（三大子模块） ── */
+    .module-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 6px;
+    }
+    .module-nav__btn {
+      flex: 1;
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--trans);
+      font-family: var(--font);
+      white-space: nowrap;
+      text-align: center;
+    }
+    .module-nav__btn:hover { color: var(--text); background: var(--bg3); }
+    .module-nav__btn.active {
+      color: #fff;
+      background: var(--primary);
+      box-shadow: 0 2px 12px rgba(20,121,255,0.35);
+    }
+    .module-nav__btn i { margin-right: 6px; font-size: 13px; }
+
+    /* ── 模块面板 ── */
+    .module-panel { display: none; }
+    .module-panel.active { display: block; }
+
+    /* ══ 子模块1：Tokens ══ */
+
+    /* Token 英雄定义卡 */
+    .token-hero {
+      background: linear-gradient(135deg, rgba(20,121,255,0.12) 0%, rgba(255,106,0,0.08) 100%);
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+    .token-hero__icon {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, var(--primary), #5BA8FF);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 24px rgba(20,121,255,0.4);
+    }
+    .token-hero__body { flex: 1; }
+    .token-hero__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--primary-dim);
+      border: 1px solid var(--primary-border);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .token-hero__title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+    .token-hero__title span { color: var(--primary); }
+    .token-hero__subtitle { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+    .token-hero__metrics {
+      display: flex;
+      gap: 20px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+    .token-metric {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .token-metric__icon { font-size: 20px; }
+    .token-metric__text { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .token-metric__text strong { color: var(--text); display: block; font-size: 14px; }
+
+    /* Token 消耗动画 */
+    .token-anim-wrap {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      margin-bottom: 28px;
+    }
+    .token-anim-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .token-anim-title i { color: var(--primary); }
+    .token-flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .token-flow-step {
+      flex: 1;
+      min-width: 120px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 14px;
+      text-align: center;
+      position: relative;
+      transition: transform var(--trans), border-color var(--trans);
+    }
+    .token-flow-step:hover { transform: translateY(-3px); border-color: var(--primary-border); }
+    .token-flow-step__icon { font-size: 28px; margin-bottom: 8px; }
+    .token-flow-step__label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .token-flow-step__desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+    .token-flow-arrow {
+      font-size: 20px;
+      color: var(--primary);
+      padding: 0 8px;
+      flex-shrink: 0;
+      animation: arrow-pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes arrow-pulse {
+      0%, 100% { opacity: 0.4; transform: translateX(0); }
+      50% { opacity: 1; transform: translateX(4px); }
+    }
+    .token-flow-step.input-step { border-color: rgba(20,121,255,0.4); }
+    .token-flow-step.process-step { border-color: rgba(255,106,0,0.4); }
+    .token-flow-step.output-step { border-color: rgba(82,196,26,0.4); }
+    .token-flow-step.cost-step {
+      border-color: rgba(255,77,79,0.4);
+      background: rgba(255,77,79,0.06);
+    }
+
+    /* Token动画 SVG 区域 */
+    .token-visualizer {
+      margin-top: 20px;
+      background: var(--bg);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    .token-visualizer__label {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .token-particles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 60px;
+      align-items: flex-start;
+    }
+    .token-chip {
+      display: inline-flex;
+      align-items: center;
+      background: var(--primary-dim);
+      border: 1px solid var(--primary-border);
+      color: var(--primary);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      padding: 3px 8px;
+      border-radius: 4px;
+      animation: chip-in 0.3s ease both;
+    }
+    @keyframes chip-in {
+      from { opacity: 0; transform: scale(0.8) translateY(4px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .token-chip.consumed {
+      background: rgba(255,77,79,0.1);
+      border-color: rgba(255,77,79,0.3);
+      color: var(--danger);
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+    .visualizer-controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .viz-input {
+      flex: 1;
+      padding: 8px 12px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 13px;
+      font-family: var(--font);
+      min-width: 180px;
+    }
+    .viz-input:focus { border-color: var(--primary); outline: none; }
+    .viz-input::placeholder { color: var(--text-dim); }
+    .viz-btn {
+      padding: 8px 20px;
+      background: var(--primary);
+      border: none;
+      border-radius: var(--radius);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: all var(--trans);
+      white-space: nowrap;
+    }
+    .viz-btn:hover { background: #3A8FFF; transform: translateY(-1px); }
+
+    /* Token 成本示例 */
+    .cost-examples {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .cost-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 16px;
+      transition: all var(--trans);
+      cursor: default;
+    }
+    .cost-card:hover { border-color: var(--primary-border); transform: translateY(-2px); }
+    .cost-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .cost-card__type {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cost-card__badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .cost-card__badge.low  { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+    .cost-card__badge.mid  { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+    .cost-card__badge.high { background: var(--danger-bg);  color: var(--danger);  border: 1px solid var(--danger-border); }
+    .cost-card__sample {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--bg3);
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      line-height: 1.6;
+      font-style: italic;
+    }
+    .cost-card__tokens {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .cost-card__tokens span { font-size: 11px; color: var(--text-dim); font-weight: 400; }
+
+    /* ══ 子模块2：市场地图 ══ */
+
+    /* 模型卡片 */
+    .model-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      transition: all var(--trans);
+      cursor: default;
+      overflow: hidden;
+    }
+    .model-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-hover);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .model-card.rhcloud-supported {
+      border-color: rgba(82,196,26,0.35);
+    }
+    .model-card.rhcloud-supported::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--success), rgba(82,196,26,0));
+    }
+    .rhcloud-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .model-card__header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .model-card__logo {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      font-weight: 900;
+    }
+    .model-card__name { font-size: 15px; font-weight: 700; color: #fff; }
+    .model-card__org  { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .model-card__desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+    .model-card__meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .meta-tag {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    .meta-tag.cost-high  { background: var(--danger-bg);  color: var(--danger);  border: 1px solid var(--danger-border); }
+    .meta-tag.cost-mid   { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border);}
+    .meta-tag.cost-low   { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border);}
+    .meta-tag.industry   { background: var(--bg4); color: var(--text-muted); border: 1px solid var(--border); }
+    .meta-tag.open-src   { background: rgba(103,66,255,0.1); color: #A97CFF; border: 1px solid rgba(103,66,255,0.3); }
+    .meta-tag.closed-src { background: var(--bg4); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* ══ 子模块3：能力分类 ══ */
+    .capability-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: all var(--trans);
+      position: relative;
+      overflow: hidden;
+    }
+    .capability-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .capability-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    }
+    .capability-card.cap-text  { border-color: rgba(20,121,255,0.4); }
+    .capability-card.cap-image { border-color: rgba(103,66,255,0.4); }
+    .capability-card.cap-video { border-color: rgba(255,106,0,0.4); }
+    .capability-card.cap-multi { border-color: rgba(82,196,26,0.4); }
+    .capability-card.cap-text::after  { background: var(--primary); }
+    .capability-card.cap-image::after { background: #6742FF; }
+    .capability-card.cap-video::after { background: var(--orange); }
+    .capability-card.cap-multi::after { background: var(--success); }
+
+    .cap-icon-wrap {
+      width: 60px; height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+    .cap-text  .cap-icon-wrap { background: var(--primary-dim); }
+    .cap-image .cap-icon-wrap { background: rgba(103,66,255,0.12); }
+    .cap-video .cap-icon-wrap { background: var(--orange-dim); }
+    .cap-multi .cap-icon-wrap { background: var(--success-bg); }
+
+    .cap-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .cap-text  .cap-title { color: var(--primary); }
+    .cap-image .cap-title { color: #A97CFF; }
+    .cap-video .cap-title { color: var(--orange); }
+    .cap-multi .cap-title { color: var(--success); }
+
+    .cap-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+    .cap-models-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .cap-models {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .cap-model-tag {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .cap-scenes {
+      background: var(--bg3);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+    }
+    .cap-scenes-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .cap-scene-list li {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 3px 0;
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .cap-scene-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      font-size: 10px;
+    }
+    .cap-text  .cap-scene-list li::before { color: var(--primary); }
+    .cap-image .cap-scene-list li::before { color: #A97CFF; }
+    .cap-video .cap-scene-list li::before { color: var(--orange); }
+    .cap-multi .cap-scene-list li::before { color: var(--success); }
+
+    /* ── 知识小测 提示条 ── */
+    .knowledge-tip {
+      background: linear-gradient(135deg, rgba(20,121,255,0.08), rgba(255,106,0,0.05));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .knowledge-tip i { font-size: 22px; color: var(--warning); flex-shrink: 0; }
+    .knowledge-tip__text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    .knowledge-tip__text strong { color: var(--text); }
+
+    /* ── 学习进度提示 ── */
+    .progress-notice {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 10px 16px;
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+    }
+    .progress-notice i { color: var(--success); font-size: 16px; }
+
+    /* ── FAQ accordion 覆盖 ── */
+    .faq-count {
+      font-size: 12px;
+      color: var(--text-dim);
+      background: var(--bg3);
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: auto;
+    }
+
+    @media (max-width: 900px) {
+      .token-hero { flex-direction: column; text-align: center; }
+      .token-hero__metrics { justify-content: center; }
+      .cost-examples { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .module-nav { flex-direction: column; }
+      .token-flow { flex-wrap: nowrap; overflow-x: auto; }
+      .token-flow-step { min-width: 110px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════
+  密码弹窗遮罩
+══════════════════════════════════════════════════ -->
+<div id="pwd-overlay" class="hidden">
+  <div class="pwd-modal">
+    <div class="pwd-modal__logo">rh<span>cloud</span></div>
+    <div class="pwd-modal__subtitle">Tokens 销售作战学院 · 内部系统</div>
+    <div class="pwd-modal__label">请输入访问密码</div>
+    <input type="password" id="pwd-input" class="pwd-modal__input" placeholder="••••••" autocomplete="off">
+    <div id="pwd-error"  class="pwd-modal__err"></div>
+    <div id="pwd-lock"   class="pwd-modal__lock"></div>
+    <button id="pwd-submit" class="btn btn-primary btn-block">进入作战学院</button>
+    <div class="pwd-modal__footer">如无密码，请联系培训负责人获取 · © rhcloud</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+  顶部固定导航
+══════════════════════════════════════════════════ -->
+<nav class="nav-top">
+  <div class="nav-top__logo">
+    <span class="nav-top__logo-dot"></span>
+    rhcloud 作战学院
+  </div>
+  <div class="nav-top__links">
+    <a href="index.html"    class="nav-top__link" data-page="index.html">首页</a>
+    <a href="basic.html"    class="nav-top__link" data-page="basic.html">基础认知</a>
+    <a href="business.html" class="nav-top__link" data-page="business.html">业务认知</a>
+    <a href="target.html"   class="nav-top__link" data-page="target.html">目标客户</a>
+    <a href="prospect.html" class="nav-top__link" data-page="prospect.html">客户挖掘</a>
+    <a href="industry.html" class="nav-top__link" data-page="industry.html">行业作战室</a>
+    <a href="playbook.html" class="nav-top__link" data-page="playbook.html">销售方法论</a>
+    <a href="scripts.html"  class="nav-top__link" data-page="scripts.html">话术库</a>
+    <a href="advantage.html"class="nav-top__link" data-page="advantage.html">平台优势</a>
+    <a href="tools.html"    class="nav-top__link" data-page="tools.html">实战工具</a>
+  </div>
+  <div class="nav-top__search">
+    <i class="fas fa-search nav-top__search-icon"></i>
+    <input type="text" id="search-input" placeholder="搜索话术、行业、术语…">
+    <div id="search-dropdown" class="search-dropdown"></div>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════════════
+  主内容区
+══════════════════════════════════════════════════ -->
+<main class="page">
+
+  <!-- 页面头部 -->
+  <div class="page-header">
+    <div class="page-header__nav">
+      <a href="index.html">首页</a><span>›</span>基础认知
+    </div>
+    <div class="page-header__title">
+      <i class="fas fa-brain" style="color:var(--primary);font-size:22px;vertical-align:middle;margin-right:10px;"></i>
+      基础认知
+    </div>
+    <div class="page-header__desc">
+      零基础掌握大模型与<span data-tip="Tokens">Tokens</span>核心逻辑——读完本模块，你就能开口和客户谈业务
+    </div>
+  </div>
+
+  <!-- 已完成提示条 -->
+  <div class="progress-notice">
+    <i class="fas fa-circle-check"></i>
+    阅读完本页内容，系统将自动记录你的学习进度。建议从第一个子模块开始，按顺序阅读。
+  </div>
+
+  <!-- ── 子模块导航 ── -->
+  <div class="module-nav">
+    <button class="module-nav__btn active" data-target="panel-tokens">
+      <i class="fas fa-coins"></i>Tokens 通俗解读
+    </button>
+    <button class="module-nav__btn" data-target="panel-market">
+      <i class="fas fa-map"></i>大模型市场地图
+    </button>
+    <button class="module-nav__btn" data-target="panel-capability">
+      <i class="fas fa-layer-group"></i>模型能力分类
+    </button>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════
+    子模块1：Tokens 通俗解读
+  ════════════════════════════════════════════ -->
+  <div class="module-panel active" id="panel-tokens">
+
+    <!-- 英雄定义卡 -->
+    <div class="token-hero">
+      <div class="token-hero__icon">🪙</div>
+      <div class="token-hero__body">
+        <div class="token-hero__tag"><i class="fas fa-lightbulb"></i>&nbsp;核心定义</div>
+        <div class="token-hero__title">
+          <span data-tip="Tokens">Tokens</span> = AI 的 <span>「话费 / 流量」</span>
+        </div>
+        <div class="token-hero__subtitle">
+          就像手机打电话消耗话费、用流量看视频消耗流量套餐——你每次调用 AI，就会消耗 Tokens。
+          文字越长、问题越复杂，消耗的 Tokens 就越多，价格也越贵。
+        </div>
+        <div class="token-hero__metrics">
+          <div class="token-metric">
+            <div class="token-metric__icon">🔤</div>
+            <div class="token-metric__text">
+              <strong>1 Token ≈ 1.5 个中文字</strong>
+              或 4 个英文字母，AI 逐 Token 处理
+            </div>
+          </div>
+          <div class="token-metric">
+            <div class="token-metric__icon">📊</div>
+            <div class="token-metric__text">
+              <strong>输入 + 输出 都算钱</strong>
+              你发的问题 + AI 的回答，全部计费
+            </div>
+          </div>
+          <div class="token-metric">
+            <div class="token-metric__icon">⚡</div>
+            <div class="token-metric__text">
+              <strong><span data-tip="TPM">TPM</span> 决定速度</strong>
+              每分钟处理量越大，AI 回复越快，不卡顿
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 消耗量对比示例 -->
+    <div class="section">
+      <div class="section-title">
+        <i class="fas fa-chart-bar text-primary"></i>
+        不同任务的 Token 消耗对比
+      </div>
+      <p class="section-desc">同样是"问 AI"，复杂任务消耗远超简单问答——这是客户最关心的成本点</p>
+
+      <div class="cost-examples">
+        <div class="cost-card">
+          <div class="cost-card__header">
+            <div class="cost-card__type"><i class="fas fa-comment" style="color:var(--success)"></i> 简单问答</div>
+            <span class="cost-card__badge low">消耗低</span>
+          </div>
+          <div class="cost-card__sample">「今天天气怎么样？」<br>→「北京今天晴，25°C，适宜出行。」</div>
+          <div class="cost-card__tokens">约 50 Tokens <span>（不到 ¥0.01）</span></div>
+        </div>
+        <div class="cost-card">
+          <div class="cost-card__header">
+            <div class="cost-card__type"><i class="fas fa-file-alt" style="color:var(--warning)"></i> 文档摘要</div>
+            <span class="cost-card__badge mid">消耗中</span>
+          </div>
+          <div class="cost-card__sample">输入 3000 字合同，让 AI 总结关键条款并给出风险提示</div>
+          <div class="cost-card__tokens">约 2,500 Tokens <span>（≈ ¥0.05 ~ ¥0.2）</span></div>
+        </div>
+        <div class="cost-card">
+          <div class="cost-card__header">
+            <div class="cost-card__type"><i class="fas fa-robot" style="color:var(--danger)"></i> AI 智能体</div>
+            <span class="cost-card__badge high">消耗高</span>
+          </div>
+          <div class="cost-card__sample">多轮对话客服机器人，每次保留完整历史<span data-tip="上下文窗口">上下文</span>，长达 30 轮</div>
+          <div class="cost-card__tokens">单次可达 50,000+ Tokens <span>（月百万起）</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Token 可视化交互 -->
+    <div class="token-anim-wrap">
+      <div class="token-anim-title">
+        <i class="fas fa-wand-magic-sparkles"></i>
+        Token 消耗可视化演示
+        <span style="font-size:12px;color:var(--text-dim);font-weight:400">输入文字，实时看 Token 拆分</span>
+      </div>
+
+      <!-- 流程图 -->
+      <div class="token-flow">
+        <div class="token-flow-step input-step">
+          <div class="token-flow-step__icon">⌨️</div>
+          <div class="token-flow-step__label">① 你输入内容</div>
+          <div class="token-flow-step__desc">文字被拆成一个个 Token 单元</div>
+        </div>
+        <div class="token-flow-arrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="token-flow-step process-step">
+          <div class="token-flow-step__icon">🧠</div>
+          <div class="token-flow-step__label">② 大模型处理</div>
+          <div class="token-flow-step__desc">逐 Token 计算，消耗计算资源</div>
+        </div>
+        <div class="token-flow-arrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="token-flow-step output-step">
+          <div class="token-flow-step__icon">💬</div>
+          <div class="token-flow-step__label">③ AI 输出回答</div>
+          <div class="token-flow-step__desc">每个输出字符也是 Token</div>
+        </div>
+        <div class="token-flow-arrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="token-flow-step cost-step">
+          <div class="token-flow-step__icon">💸</div>
+          <div class="token-flow-step__label">④ 按量计费</div>
+          <div class="token-flow-step__desc">输入 + 输出 Tokens 合计收费</div>
+        </div>
+      </div>
+
+      <!-- 交互演示区 -->
+      <div class="token-visualizer">
+        <div class="token-visualizer__label">
+          <i class="fas fa-microscope" style="color:var(--primary)"></i>
+          输入任意文字，查看 Token 拆分效果（模拟演示）：
+        </div>
+        <div class="token-particles" id="token-particles">
+          <span class="token-chip">你</span>
+          <span class="token-chip">好</span>
+          <span class="token-chip">，</span>
+          <span class="token-chip">我</span>
+          <span class="token-chip">想</span>
+          <span class="token-chip">了解</span>
+          <span class="token-chip">大模型</span>
+          <span class="token-chip">的</span>
+          <span class="token-chip">收费</span>
+          <span class="token-chip">逻辑</span>
+        </div>
+        <div class="visualizer-controls">
+          <input type="text" class="viz-input" id="viz-input" placeholder="输入文字，例如：帮我写一份销售方案…" maxlength="80">
+          <button class="viz-btn" id="viz-btn"><i class="fas fa-bolt"></i>&nbsp;拆分 Tokens</button>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:12px;">
+          <span>共计：<strong id="token-count" style="color:var(--primary)">10</strong> Tokens</span>
+          <span>·</span>
+          <span>预估成本（通义千问价格）：<strong id="token-cost" style="color:var(--orange)">≈ ¥0.002</strong></span>
+          <span style="margin-left:auto;font-style:italic;opacity:0.7">*仅演示用，实际价格以平台报价为准</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 折叠面板 -->
+    <div class="section">
+      <div class="section-title">
+        <i class="fas fa-circle-question text-primary"></i>
+        销售常见疑问 · 标准答案
+        <span class="faq-count">8 条</span>
+      </div>
+      <p class="section-desc">客户问到这些时，你直接用这些话回答——零基础也能对答如流</p>
+
+      <div class="accordion">
+
+        <div class="accordion-item">
+          <div class="accordion-trigger">
+            <span><i class="fas fa-circle-question" style="color:var(--primary);margin-right:8px"></i>Token 和字数有什么关系？怎么估算费用？</span>
+            <i class="fas fa-chevron-down accordion-icon"></i>
+          </div>
+          <div class="accordion-body">
+            <p>简单记忆法：<strong style="color:var(--text)">1个中文字 ≈ 1.5 个Token，1个英文单词 ≈ 1 个Token</strong>。</p>
+            <p style="margin-top:8px">估算公式：月均字符数 ÷ 1.5 = 月均 Token 数，再乘以单价就是费用。大多数中小企业月消耗在 10万～1000万 Token 之间，月费用大概在几百到几万元不等。</p>
+            <p style="margin-top:8px;color:var(--text-muted);font-size:13px">💡 销售技巧：直接问客户"你们现在每月在 AI 上花多少钱"，从费用反推 Token 量，比讲概念更有效。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-trigger">
+            <span><i class="fas fa-circle-question" style="color:var(--primary);margin-right:8px"></i>客户问"<span data-tip="TPM">TPM</span> 是什么"，怎么用大白话解释？</span>
+            <i class="fas fa-chevron-down accordion-icon"></i>
+          </div>
+          <div class="accordion-body">
+            <p>TPM = <strong style="color:var(--text)">每分钟能处理多少个 Token</strong>，就像高速公路的车道数：车道越多，车跑得越快、不堵车。</p>
+            <p style="margin-top:8px">举个例子：TPM = 100万，意味着 AI 每分钟可以同时处理 100万字的请求。官网共享集群的 TPM 不稳定，高峰期可能只有 10万；rhcloud 专有集群保障在高 TPM 档位，吐字速度稳定。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-trigger">
+            <span><i class="fas fa-circle-question" style="color:var(--primary);margin-right:8px"></i><span data-tip="RPD">RPD</span> 超限会怎样？有没有办法解决？</span>
+            <i class="fas fa-chevron-down accordion-icon"></i>
+          </div>
+          <div class="accordion-body">
+            <p>RPD（每天请求次数上限）超限后，<strong style="color:var(--danger)">所有 API 请求会被直接拒绝、返回错误</strong>，用户侧表现就是"AI 不回复了"。</p>
+            <p style="margin-top:8px">官网免费额度的 RPD 通常很低（如几千次/天），付费套餐高些但也有限制。<strong style="color:var(--text)">rhcloud 专有集群的 RPD 远高于官网共享资源</strong>，且可按业务增长扩容，不会因为 RPD 卡脖子。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-trigger">
+            <span><i class="fas fa-circle-question" style="color:var(--primary);margin-right:8px"></i>客户说"我用的是 ChatGPT，为什么要换？"</span>
+            <i class="fas fa-chevron-down accordion-icon"></i>
+          </div>
+          <div class="accordion-body">
+            <p>个人用 ChatGPT 没问题，<strong style="color:var(--text)">企业生产环境用 ChatGPT 有三大风险</strong>：</p>
+            <ul style="margin-top:8px;padding-left:16px;display:flex;flex-direction:column;gap:6px;">
+              <li style="font-size:13px;color:var(--text-muted)">① <strong style="color:var(--text)">合规风险</strong>：数据出境，国内监管合规要求无法满足</li>
+              <li style="font-size:13px;color:var(--text-muted)">② <strong style="color:var(--text)">稳定性风险</strong>：国内访问需要工具，高峰期不稳定，影响业务</li>
+              <li style="font-size:13px;color:var(--text-muted)">③ <strong style="color:var(--text)">成本风险</strong>：GPT-4 价格远高于国内同等能力模型，性价比低</li>
+            </ul>
+            <p style="margin-top:8px;color:var(--text-muted);font-size:13px">💡 切入话术：「您现在是用个人账号还是企业 API？如果是生产环境，我们可以帮您做一个合规+降本的对比方案。」</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-trigger">
+            <span><i class="fas fa-circle-question" style="color:var(--primary);margin-right:8px"></i><span data-tip="开源模型">开源模型</span>和<span data-tip="闭源模型">闭源模型</span>，销售要怎么区分？</span>
+            <i class="fas fa-chevron-down accordion-icon"></i>
+          </div>
+          <div class="accordion-body">
+            <p>一句话区别：<strong style="color:var(--text)">开源 = 可以下载自己部署，闭源 = 只能通过 API 调用付费使用</strong>。</p>
+            <p style="margin-top:8px">对销售来说，这个技术细节不重要。关键是：<strong style="color:var(--text)">客户选哪个，取决于成本和效果平衡</strong>。DeepSeek 是开源但需要自建算力；GPT-4o 是闭源但效果顶尖成本高。rhcloud 把两类都接了，帮客户按需自动路由。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-trigger">
+            <span><i class="fas fa-circle-question" style="color:var(--primary);margin-right:8px"></i>什么是<span data-tip="上下文窗口">上下文窗口</span>？客户为什么关心这个？</span>
+            <i class="fas fa-chevron-down accordion-icon"></i>
+          </div>
+          <div class="accordion-body">
+            <p>上下文窗口 = <strong style="color:var(--text)">AI 一次能记住的对话长度</strong>。就像人的短期记忆，超过这个限制，AI 就"忘"了之前说的话。</p>
+            <p style="margin-top:8px">客户关心它，因为：① 做长文档分析，窗口不够就分析不完整；② 做多轮客服对话，窗口短了 AI 会答非所问；③ 窗口越大，单次消耗 Token 越多，成本越高。选模型时要结合实际场景匹配窗口大小。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-trigger">
+            <span><i class="fas fa-circle-question" style="color:var(--primary);margin-right:8px"></i>什么是<span data-tip="RAG">RAG</span>？和普通调用 AI 有什么区别？</span>
+            <i class="fas fa-chevron-down accordion-icon"></i>
+          </div>
+          <div class="accordion-body">
+            <p>RAG = <strong style="color:var(--text)">让 AI 先查资料再回答</strong>，而不是只靠自己的"记忆"。</p>
+            <p style="margin-top:8px">比喻：普通 AI 是闭卷考试，靠训练数据；RAG 是开卷考试，考前先检索文档。客户企业有大量内部知识库（产品手册、客服FAQ、合同文本），用 RAG 就能让 AI 读自家文档来回答，准确率大幅提升，Token 消耗也会增加（读文档也要算 Token）。</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-trigger">
+            <span><i class="fas fa-circle-question" style="color:var(--primary);margin-right:8px"></i>什么是<span data-tip="微调">微调</span>？客户需要微调吗？</span>
+            <i class="fas fa-chevron-down accordion-icon"></i>
+          </div>
+          <div class="accordion-body">
+            <p>微调 = <strong style="color:var(--text)">用自家业务数据继续训练 AI，让它更懂你的行业</strong>。就像新员工培训，让 AI 学你公司的话语风格和专业知识。</p>
+            <p style="margin-top:8px">但微调成本高、周期长，一般只有用量极大（月亿级 Token）且有专属需求的客户才值得。<strong style="color:var(--text)">大多数中小企业的需求，用好 Prompt（提示词）+<span data-tip="RAG">RAG</span> 就够了</strong>，不用微调。别主动推微调，免得吓到客户。</p>
+          </div>
+        </div>
+
+      </div><!-- /accordion -->
+    </div><!-- /section faq -->
+  </div><!-- /panel-tokens -->
+
+
+  <!-- ════════════════════════════════════════════
+    子模块2：大模型市场地图
+  ════════════════════════════════════════════ -->
+  <div class="module-panel" id="panel-market">
+
+    <div class="knowledge-tip">
+      <i class="fas fa-triangle-exclamation"></i>
+      <div class="knowledge-tip__text">
+        <strong>销售关键认知：</strong>
+        你不需要记住所有模型的技术参数，只需要知道「哪类客户适合用哪类模型」，这就是你的专业价值所在。
+        <strong style="color:var(--success)">绿色角标</strong> = rhcloud 平台已接入，可直接向客户推荐。
+      </div>
+    </div>
+
+    <!-- Tab 切换：全球 / 中国 -->
+    <div class="tab-wrap" style="margin-bottom:32px">
+      <div class="tab-bar">
+        <button class="tab-btn"><i class="fas fa-globe" style="margin-right:6px"></i>全球主流模型</button>
+        <button class="tab-btn"><i class="fas fa-flag" style="margin-right:6px"></i>中国优质模型</button>
+      </div>
+
+      <!-- 全球模型 -->
+      <div class="tab-panel">
+        <div class="grid-2" style="margin-top:20px">
+
+          <!-- GPT-4o -->
+          <div class="model-card">
+            <div class="model-card__header">
+              <div class="model-card__logo" style="background:linear-gradient(135deg,#10a37f,#1a7a5e)">🤖</div>
+              <div>
+                <div class="model-card__name">GPT-4o / o3</div>
+                <div class="model-card__org">OpenAI · 美国</div>
+              </div>
+            </div>
+            <div class="model-card__desc">
+              全球顶尖推理模型，<span data-tip="多模态">多模态</span>能力业内领先，能看图、写代码、分析文档。o3 版本推理能力更强，适合复杂业务场景。
+            </div>
+            <div class="model-card__meta">
+              <span class="meta-tag cost-high">💰 成本高</span>
+              <span class="meta-tag closed-src">🔒 <span data-tip="闭源模型">闭源</span></span>
+              <span class="meta-tag industry">法律 / 金融分析</span>
+              <span class="meta-tag industry">代码生成</span>
+            </div>
+          </div>
+
+          <!-- Gemini -->
+          <div class="model-card">
+            <div class="model-card__header">
+              <div class="model-card__logo" style="background:linear-gradient(135deg,#4285f4,#ea4335)">✨</div>
+              <div>
+                <div class="model-card__name">Gemini 2.0 / Ultra</div>
+                <div class="model-card__org">Google DeepMind · 美国</div>
+              </div>
+            </div>
+            <div class="model-card__desc">
+              Google 旗舰模型，超长<span data-tip="上下文窗口">上下文窗口</span>（可达 100万 Token），擅长长文档处理和多语言任务。
+            </div>
+            <div class="model-card__meta">
+              <span class="meta-tag cost-high">💰 成本高</span>
+              <span class="meta-tag closed-src">🔒 <span data-tip="闭源模型">闭源</span></span>
+              <span class="meta-tag industry">长文本分析</span>
+              <span class="meta-tag industry">多语言</span>
+            </div>
+          </div>
+
+          <!-- Claude -->
+          <div class="model-card">
+            <div class="model-card__header">
+              <div class="model-card__logo" style="background:linear-gradient(135deg,#d97706,#b45309)">🎭</div>
+              <div>
+                <div class="model-card__name">Claude 3.7 Sonnet</div>
+                <div class="model-card__org">Anthropic · 美国</div>
+              </div>
+            </div>
+            <div class="model-card__desc">
+              以安全性和指令遵循著称，长文写作质量高，适合内容创作和客服场景。推理能力强，被许多企业用于合规审查。
+            </div>
+            <div class="model-card__meta">
+              <span class="meta-tag cost-mid">⚡ 成本中</span>
+              <span class="meta-tag closed-src">🔒 <span data-tip="闭源模型">闭源</span></span>
+              <span class="meta-tag industry">内容创作</span>
+              <span class="meta-tag industry">合规审查</span>
+            </div>
+          </div>
+
+          <!-- Llama -->
+          <div class="model-card">
+            <div class="model-card__header">
+              <div class="model-card__logo" style="background:linear-gradient(135deg,#0866ff,#0d4fc7)">🦙</div>
+              <div>
+                <div class="model-card__name">Llama 3 系列</div>
+                <div class="model-card__org">Meta · 美国</div>
+              </div>
+            </div>
+            <div class="model-card__desc">
+              最主流<span data-tip="开源模型">开源模型</span>，可本地部署无需付 API 费用，但需要自备算力。中小企业一般不具备自建条件，可通过平台低价调用。
+            </div>
+            <div class="model-card__meta">
+              <span class="meta-tag cost-low">✅ 成本低</span>
+              <span class="meta-tag open-src">📖 <span data-tip="开源模型">开源</span></span>
+              <span class="meta-tag industry">通用任务</span>
+              <span class="meta-tag industry">成本敏感</span>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /tab 全球 -->
+
+      <!-- 中国模型 -->
+      <div class="tab-panel">
+        <div class="grid-2" style="margin-top:20px">
+
+          <!-- 通义千问 -->
+          <div class="model-card rhcloud-supported">
+            <div class="rhcloud-badge"><i class="fas fa-circle-check"></i> rhcloud 已接入</div>
+            <div class="model-card__header">
+              <div class="model-card__logo" style="background:linear-gradient(135deg,#6366f1,#4338ca)">千</div>
+              <div>
+                <div class="model-card__name">通义千问 Qwen 系列</div>
+                <div class="model-card__org">阿里云 · 中国</div>
+              </div>
+            </div>
+            <div class="model-card__desc">
+              阿里云自研旗舰模型，是 rhcloud 平台核心。有 Max/Plus/Turbo 多档位，覆盖从高精度到低成本的全部需求，支持中文指令理解优化。
+            </div>
+            <div class="model-card__meta">
+              <span class="meta-tag cost-mid">⚡ 成本中</span>
+              <span class="meta-tag closed-src">🔒 <span data-tip="闭源模型">闭源</span></span>
+              <span class="meta-tag industry">电商 / 教育</span>
+              <span class="meta-tag industry">客服机器人</span>
+            </div>
+          </div>
+
+          <!-- DeepSeek -->
+          <div class="model-card rhcloud-supported">
+            <div class="rhcloud-badge"><i class="fas fa-circle-check"></i> rhcloud 已接入</div>
+            <div class="model-card__header">
+              <div class="model-card__logo" style="background:linear-gradient(135deg,#3b82f6,#1e3a8a)">DS</div>
+              <div>
+                <div class="model-card__name">DeepSeek V3 / R1</div>
+                <div class="model-card__org">深度求索 · 中国</div>
+              </div>
+            </div>
+            <div class="model-card__desc">
+              全球最受关注的<span data-tip="开源模型">开源模型</span>，性价比极高，R1 版本推理能力媲美 GPT-o1。价格仅为 GPT-4o 的 1/10，是中小企业降本首选。
+            </div>
+            <div class="model-card__meta">
+              <span class="meta-tag cost-low">✅ 成本极低</span>
+              <span class="meta-tag open-src">📖 <span data-tip="开源模型">开源</span></span>
+              <span class="meta-tag industry">代码生成</span>
+              <span class="meta-tag industry">数学推理</span>
+            </div>
+          </div>
+
+          <!-- 豆包 -->
+          <div class="model-card rhcloud-supported">
+            <div class="rhcloud-badge"><i class="fas fa-circle-check"></i> rhcloud 已接入</div>
+            <div class="model-card__header">
+              <div class="model-card__logo" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)">🫘</div>
+              <div>
+                <div class="model-card__name">豆包 MarsCode / Pro</div>
+                <div class="model-card__org">字节跳动 · 中国</div>
+              </div>
+            </div>
+            <div class="model-card__desc">
+              字节旗舰对话模型，擅长娱乐内容和创意写作，支持多角色扮演，AI 社交陪伴、短剧生成场景效果突出。价格亲民，<span data-tip="RPD">RPD</span> 上限高。
+            </div>
+            <div class="model-card__meta">
+              <span class="meta-tag cost-low">✅ 成本低</span>
+              <span class="meta-tag closed-src">🔒 <span data-tip="闭源模型">闭源</span></span>
+              <span class="meta-tag industry">AI 社交</span>
+              <span class="meta-tag industry">短剧/娱乐</span>
+            </div>
+          </div>
+
+          <!-- 文心 -->
+          <div class="model-card">
+            <div class="model-card__header">
+              <div class="model-card__logo" style="background:linear-gradient(135deg,#ef4444,#b91c1c)">文</div>
+              <div>
+                <div class="model-card__name">文心一言 ERNIE 4.0</div>
+                <div class="model-card__org">百度 · 中国</div>
+              </div>
+            </div>
+            <div class="model-card__desc">
+              百度自研，内置百度搜索增强，中文理解和知识库丰富，适合需要联网信息检索的场景。对政务类项目友好度高。
+            </div>
+            <div class="model-card__meta">
+              <span class="meta-tag cost-mid">⚡ 成本中</span>
+              <span class="meta-tag closed-src">🔒 <span data-tip="闭源模型">闭源</span></span>
+              <span class="meta-tag industry">政务 / 媒体</span>
+              <span class="meta-tag industry">知识问答</span>
+            </div>
+          </div>
+
+          <!-- 星火 -->
+          <div class="model-card">
+            <div class="model-card__header">
+              <div class="model-card__logo" style="background:linear-gradient(135deg,#f59e0b,#d97706)">✦</div>
+              <div>
+                <div class="model-card__name">星火大模型 Spark 4.0</div>
+                <div class="model-card__org">科大讯飞 · 中国</div>
+              </div>
+            </div>
+            <div class="model-card__desc">
+              讯飞旗舰，语音识别和中文语义理解特别强，在教育行业有大量落地案例。适合题库出题、作文批改、语音交互场景。
+            </div>
+            <div class="model-card__meta">
+              <span class="meta-tag cost-mid">⚡ 成本中</span>
+              <span class="meta-tag closed-src">🔒 <span data-tip="闭源模型">闭源</span></span>
+              <span class="meta-tag industry">教育</span>
+              <span class="meta-tag industry">语音交互</span>
+            </div>
+          </div>
+
+          <!-- Qwen 视觉/视频 -->
+          <div class="model-card rhcloud-supported">
+            <div class="rhcloud-badge"><i class="fas fa-circle-check"></i> rhcloud 已接入</div>
+            <div class="model-card__header">
+              <div class="model-card__logo" style="background:linear-gradient(135deg,#10b981,#047857)">🎬</div>
+              <div>
+                <div class="model-card__name">视觉/视频生成模型</div>
+                <div class="model-card__org">阿里云 · 字节跳动 · 中国</div>
+              </div>
+            </div>
+            <div class="model-card__desc">
+              rhcloud 平台整合了<span data-tip="多模态">多模态</span>视觉生成能力，支持图像理解、图片生成、短视频生成等场景，以 rhcloud 内部统一命名接入，无需客户自行对接多个厂商。
+            </div>
+            <div class="model-card__meta">
+              <span class="meta-tag cost-mid">⚡ 成本中</span>
+              <span class="meta-tag open-src">📖 部分开源</span>
+              <span class="meta-tag industry">AI 视频</span>
+              <span class="meta-tag industry">图像创作</span>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /tab 中国 -->
+    </div><!-- /tab-wrap -->
+
+    <!-- 选模型速查提示 -->
+    <div class="alert alert-info">
+      <i class="fas fa-info-circle"></i>
+      <div>
+        <strong>销售核心认知：</strong>不要纠结哪个模型"最好"。<strong>最适合客户业务场景、成本最优的组合，才是最好的方案。</strong>
+        rhcloud 平台接入多个模型，可以通过<span data-tip="智能路由">智能路由</span>自动分配，不需要客户一个个去对接。这正是 rhcloud 的价值所在。
+      </div>
+    </div>
+
+  </div><!-- /panel-market -->
+
+
+  <!-- ════════════════════════════════════════════
+    子模块3：模型能力分类
+  ════════════════════════════════════════════ -->
+  <div class="module-panel" id="panel-capability">
+
+    <div class="knowledge-tip">
+      <i class="fas fa-triangle-exclamation"></i>
+      <div class="knowledge-tip__text">
+        <strong>销售使用场景：</strong>
+        当客户问「大模型能做什么」，你用这四类来回答就够了——不要讲技术原理，直接讲「用在哪里能省钱」。
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:32px">
+
+      <!-- 文本生成 -->
+      <div class="capability-card cap-text">
+        <div class="cap-icon-wrap"><i class="fas fa-pen-nib" style="color:var(--primary)"></i></div>
+        <div>
+          <div class="cap-title">📝 文本生成</div>
+          <div class="cap-desc">
+            最基础、最广泛的能力。AI 理解输入内容后，生成符合要求的文字输出，涵盖对话、写作、翻译、摘要、代码等一切文本任务。
+          </div>
+        </div>
+        <div>
+          <div class="cap-models-label">代表模型（rhcloud 已接入）</div>
+          <div class="cap-models">
+            <span class="cap-model-tag">通义千问 Qwen</span>
+            <span class="cap-model-tag">DeepSeek V3/R1</span>
+            <span class="cap-model-tag">豆包 MarsCode</span>
+          </div>
+        </div>
+        <div class="cap-scenes">
+          <div class="cap-scenes-title">典型应用场景</div>
+          <ul class="cap-scene-list" style="list-style:none">
+            <li>客服机器人 · 自动回复用户咨询</li>
+            <li>营销文案 · 批量生成商品描述/广告语</li>
+            <li>智能搜索 · 基于知识库（<span data-tip="RAG">RAG</span>）回答内部问题</li>
+            <li>代码助手 · 自动补全/审查/生成代码</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 图像生成 -->
+      <div class="capability-card cap-image">
+        <div class="cap-icon-wrap"><i class="fas fa-image" style="color:#A97CFF"></i></div>
+        <div>
+          <div class="cap-title">🖼️ 图像生成</div>
+          <div class="cap-desc">
+            输入文字描述（Prompt），AI 生成对应图片；或输入图片，AI 进行修复、增强、风格转换。电商、设计、影像类企业最常用。
+          </div>
+        </div>
+        <div>
+          <div class="cap-models-label">代表方向（rhcloud 统一接入）</div>
+          <div class="cap-models">
+            <span class="cap-model-tag">rhcloud 图像增强版</span>
+            <span class="cap-model-tag">rhcloud 创意生成版</span>
+          </div>
+        </div>
+        <div class="cap-scenes">
+          <div class="cap-scenes-title">典型应用场景</div>
+          <ul class="cap-scene-list" style="list-style:none">
+            <li>电商商品图 · 自动生成/背景替换/场景合成</li>
+            <li>AI 影像工具 · 老照片修复/超分辨率增强</li>
+            <li>设计辅助 · 根据文字描述快速出概念图</li>
+            <li>安防巡检 · 视觉识别异常物体（多模态）</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 视频生成 -->
+      <div class="capability-card cap-video">
+        <div class="cap-icon-wrap"><i class="fas fa-film" style="color:var(--orange)"></i></div>
+        <div>
+          <div class="cap-title">🎬 视频生成</div>
+          <div class="cap-desc">
+            由文字/图片生成视频片段，或对已有视频进行智能剪辑、特效添加、内容审核。AI 视频赛道是 2025 年 Token 消耗增速最快的方向。
+          </div>
+        </div>
+        <div>
+          <div class="cap-models-label">代表方向（rhcloud 统一接入）</div>
+          <div class="cap-models">
+            <span class="cap-model-tag">rhcloud 视频生成版</span>
+            <span class="cap-model-tag">rhcloud 视频增强版</span>
+          </div>
+        </div>
+        <div class="cap-scenes">
+          <div class="cap-scenes-title">典型应用场景</div>
+          <ul class="cap-scene-list" style="list-style:none">
+            <li>AI 视频创作平台 · 文生视频、图生视频</li>
+            <li>短剧/漫剧制作 · 角色一致性+场景连续性</li>
+            <li>视频聚合平台 · 内容审核+智能推荐</li>
+            <li>直播电商 · 实时内容合规过滤</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 多模态 -->
+      <div class="capability-card cap-multi">
+        <div class="cap-icon-wrap"><i class="fas fa-brain" style="color:var(--success)"></i></div>
+        <div>
+          <div class="cap-title">🌐 <span data-tip="多模态">多模态</span>理解</div>
+          <div class="cap-desc">
+            AI 同时理解图像 + 文字 + 语音，不只是聊天。就像人用眼睛+耳朵+大脑综合判断。企业级落地场景广泛，是未来主流方向。
+          </div>
+        </div>
+        <div>
+          <div class="cap-models-label">代表方向（rhcloud 统一接入）</div>
+          <div class="cap-models">
+            <span class="cap-model-tag">通义千问 VL</span>
+            <span class="cap-model-tag">rhcloud 视觉理解版</span>
+          </div>
+        </div>
+        <div class="cap-scenes">
+          <div class="cap-scenes-title">典型应用场景</div>
+          <ul class="cap-scene-list" style="list-style:none">
+            <li>智慧物流 · 识别货单/单据OCR+异常预警</li>
+            <li>安防巡检 · 摄像头画面实时分析</li>
+            <li>教育题库 · 读懂图文混排题目并解题</li>
+            <li>AI 面试 · 分析候选人表情+语言综合评分</li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- /grid-2 -->
+
+    <!-- 能力 × 行业 匹配提示 -->
+    <div class="section">
+      <div class="section-title">
+        <i class="fas fa-table-cells text-primary"></i>
+        能力 × 行业快速匹配
+      </div>
+      <p class="section-desc">见到客户，10 秒内判断他们用哪类能力，精准切入</p>
+
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>客户行业</th>
+              <th>主要用到的 AI 能力</th>
+              <th>核心关注指标</th>
+              <th>切入话术方向</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>AI 视频创作</strong></td>
+              <td><span style="color:var(--orange)">视频生成</span></td>
+              <td><span data-tip="TPM">TPM</span>、生成速度</td>
+              <td>「出片速度提升多少？」</td>
+            </tr>
+            <tr>
+              <td><strong>在线教育/题库</strong></td>
+              <td><span style="color:var(--primary)">文本生成</span> + <span style="color:var(--success)">多模态</span></td>
+              <td>准确率、成本</td>
+              <td>「题目批改效率提升几倍？」</td>
+            </tr>
+            <tr>
+              <td><strong>电商平台</strong></td>
+              <td><span style="color:var(--primary)">文本生成</span> + <span style="color:#A97CFF">图像生成</span></td>
+              <td><span data-tip="RPD">RPD</span>、并发量</td>
+              <td>「商品描述批量生成成本多少？」</td>
+            </tr>
+            <tr>
+              <td><strong>AI 社交/游戏 NPC</strong></td>
+              <td><span style="color:var(--primary)">文本生成</span></td>
+              <td>响应延迟、<span data-tip="上下文窗口">上下文</span>长度</td>
+              <td>「用户留存和体验能提升吗？」</td>
+            </tr>
+            <tr>
+              <td><strong>安防/物流</strong></td>
+              <td><span style="color:var(--success)">多模态</span> + <span style="color:#A97CFF">图像理解</span></td>
+              <td>识别准确率、实时性</td>
+              <td>「漏检率降低到多少？」</td>
+            </tr>
+            <tr>
+              <td><strong>招聘/HR Tech</strong></td>
+              <td><span style="color:var(--primary)">文本生成</span></td>
+              <td>批处理量、准确率</td>
+              <td>「简历筛选从几小时压缩到几分钟？」</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /panel-capability -->
+
+  <!-- ── 下一步引导 ── -->
+  <div class="section">
+    <div class="alert alert-success" style="display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:12px">
+        <i class="fas fa-circle-check" style="font-size:24px;color:var(--success);flex-shrink:0"></i>
+        <div>
+          <div style="font-weight:700;color:var(--text);margin-bottom:3px">恭喜你完成「基础认知」模块学习！</div>
+          <div style="font-size:13px;color:var(--text-muted)">接下来建议学习「业务认知」，了解 rhcloud 能卖什么、客户为什么选你。</div>
+        </div>
+      </div>
+      <a href="business.html" class="btn btn-primary" style="white-space:nowrap;flex-shrink:0">
+        下一模块：业务认知 <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+
+<!-- ══════════════════════════════════════════════════
+  移动端底部导航
+══════════════════════════════════════════════════ -->
+<nav class="nav-bottom">
+  <a href="index.html"    class="nav-bottom__item" data-page="index.html">
+    <i class="fas fa-house"></i><span>首页</span>
+  </a>
+  <a href="industry.html" class="nav-bottom__item" data-page="industry.html">
+    <i class="fas fa-building"></i><span>行业</span>
+  </a>
+  <a href="scripts.html"  class="nav-bottom__item" data-page="scripts.html">
+    <i class="fas fa-comment-dots"></i><span>话术</span>
+  </a>
+  <a href="tools.html"    class="nav-bottom__item" data-page="tools.html">
+    <i class="fas fa-calculator"></i><span>工具</span>
+  </a>
+  <a href="playbook.html" class="nav-bottom__item" data-page="playbook.html">
+    <i class="fas fa-chess"></i><span>方法论</span>
+  </a>
+</nav>
+
+
+<!-- 返回顶部 -->
+<div id="back-top" title="返回顶部">
+  <i class="fas fa-chevron-up"></i>
+</div>
+
+<!-- Toast 容器 -->
+<div id="toast-container"></div>
+
+
+<!-- ══════════════════════════════════════════════════
+  脚注
+══════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div style="margin-bottom:6px">
+    © 2026 rhcloud · 阿里云核心代理商 · 大模型Tokens专业服务商
+  </div>
+  <div>
+    培训负责人：training@rhcloud.com
+    &nbsp;|&nbsp;
+    内部系统 · 请勿外传
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════════════════
+  脚本
+══════════════════════════════════════════════════ -->
+<script src="js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ── 初始化全局功能 ──
+  RHCloud.init('basic');
+
+  // ══ 子模块导航切换 ══
+  const navBtns  = document.querySelectorAll('.module-nav__btn');
+  const panels   = document.querySelectorAll('.module-panel');
+
+  navBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const targetId = btn.getAttribute('data-target');
+      navBtns.forEach(function(b) { b.classList.remove('active'); });
+      panels.forEach(function(p)  { p.classList.remove('active'); });
+      btn.classList.add('active');
+      const panel = document.getElementById(targetId);
+      if (panel) panel.classList.add('active');
+      // 切换后滚动到顶部
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // ══ Token 可视化拆分演示 ══
+  const vizInput  = document.getElementById('viz-input');
+  const vizBtn    = document.getElementById('viz-btn');
+  const particles = document.getElementById('token-particles');
+  const countEl   = document.getElementById('token-count');
+  const costEl    = document.getElementById('token-cost');
+
+  // 简单的中文 Token 拆分模拟（演示用）
+  function simulateTokenize(text) {
+    if (!text.trim()) return [];
+    var tokens = [];
+    var i = 0;
+    while (i < text.length) {
+      var c = text.charCodeAt(i);
+      // 中文字符：约1.5个字=1Token，这里每个中文字单独显示
+      if (c >= 0x4e00 && c <= 0x9fff) {
+        // 随机组合1~3个字为一个token（演示）
+        var len = Math.random() > 0.6 ? 2 : 1;
+        len = Math.min(len, text.length - i);
+        // 确保全是中文
+        var chunk = '';
+        for (var j = 0; j < len; j++) {
+          var cc = text.charCodeAt(i + j);
+          if (cc >= 0x4e00 && cc <= 0x9fff) chunk += text[i + j];
+          else { len = j; break; }
+        }
+        if (!chunk) chunk = text[i];
+        tokens.push(chunk);
+        i += chunk.length;
+      } else if (c === 32 || c === 12288) {
+        // 空格
+        tokens.push('·');
+        i++;
+      } else if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) {
+        // 英文单词
+        var word = '';
+        while (i < text.length && ((text.charCodeAt(i) >= 65 && text.charCodeAt(i) <= 90) || (text.charCodeAt(i) >= 97 && text.charCodeAt(i) <= 122))) {
+          word += text[i]; i++;
+        }
+        tokens.push(word);
+      } else {
+        tokens.push(text[i]);
+        i++;
+      }
+    }
+    return tokens;
+  }
+
+  function renderTokens(tokens) {
+    particles.innerHTML = '';
+    tokens.forEach(function(t, idx) {
+      var chip = document.createElement('span');
+      chip.className = 'token-chip';
+      chip.textContent = t;
+      chip.style.animationDelay = (idx * 30) + 'ms';
+      particles.appendChild(chip);
+    });
+    var count = tokens.length;
+    countEl.textContent = count;
+    // 简单成本估算（通义千问 Turbo ≈ ¥0.0004/1K Token）
+    var cost = (count / 1000 * 0.0004).toFixed(4);
+    if (cost < 0.0001) cost = '<0.0001';
+    costEl.textContent = '≈ ¥' + cost;
+  }
+
+  vizBtn.addEventListener('click', function() {
+    var text = vizInput.value.trim();
+    if (!text) {
+      RHCloud.showToast('请先输入一段文字', 'warning');
+      return;
+    }
+    var tokens = simulateTokenize(text);
+    renderTokens(tokens);
+
+    // 动画：0.8s后消耗掉
+    setTimeout(function() {
+      var chips = particles.querySelectorAll('.token-chip');
+      chips.forEach(function(c, i) {
+        setTimeout(function() {
+          c.classList.add('consumed');
+        }, i * 40);
+      });
+    }, 800);
+  });
+
+  // 回车触发
+  vizInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') vizBtn.click();
+  });
+
+});
+</script>
+</body>
+</html>
